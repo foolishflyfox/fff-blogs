@@ -11,11 +11,14 @@ hero:
     alt: Myblog logo
   actions:
     - theme: brand
-      text: Markdown Examples
-      link: /markdown-examples
+      text: 读书博客
+      link: /book/overview
     - theme: alt
-      text: API Examples
-      link: /api-examples
+      text: 技术整理
+      link: /technology/overview
+    - theme: alt
+      text: 生活分享
+      link: /life/overview
 
 features:
   - title: 读书博客

@@ -50,19 +50,45 @@ export default defineConfig({
     // 可以自定义此项以替换导航中的默认站点标题 (应用配置中的 title)
     siteTitle: "fff blogs",
     nav: [
-      { text: "Home", link: "/" },
-      { text: "Examples", link: "/markdown-examples" },
+      { text: "首页", link: "/" },
+      { text: "读书", link: "/book/overview" },
+      { text: "技术", link: "/technology/overview" },
+      { text: "生活", link: "/life/overview" },
     ],
 
-    sidebar: [
-      {
-        text: "Examples",
-        items: [
-          { text: "Markdown Examples", link: "/markdown-examples" },
-          { text: "Runtime API Examples", link: "/api-examples" },
-        ],
-      },
-    ],
+    sidebar: {
+      "/book/": [
+        {
+          text: "书籍",
+          items: [
+            { text: "总览", link: "overview" },
+            {
+              text: "软件架构",
+              prefix: "architecture",
+              collapsed: false,
+              items: [
+                {
+                  text: "软件设计: 从专业到卓越",
+                  link: "software-design",
+                },
+              ],
+            },
+          ],
+        },
+      ].map((e) => addLinkPrefix(e, "/book")),
+      "/technology/": [
+        {
+          text: "技术",
+          items: [{ text: "总览", link: "overview" }],
+        },
+      ].map((e) => addLinkPrefix(e, "/technology")),
+      "/life/": [
+        {
+          text: "生活",
+          items: [{ text: "总览", link: "overview" }],
+        },
+      ].map((e) => addLinkPrefix(e, "/life")),
+    },
 
     socialLinks: [
       { icon: "github", link: "https://github.com/vuejs/vitepress" },
