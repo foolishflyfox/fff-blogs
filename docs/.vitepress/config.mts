@@ -1,4 +1,31 @@
-import { defineConfig } from "vitepress";
+import { DefaultTheme, defineConfig } from "vitepress";
+import { posix } from "path";
+
+type SidebarItemX = DefaultTheme.SidebarItem & {
+  prefix?: string;
+};
+
+/**
+ * 添加路径前缀
+ */
+function addLinkPrefix(
+  item: SidebarItemX,
+  prefix = ""
+): DefaultTheme.SidebarItem {
+  if (item.link !== undefined) {
+    item.link = posix.join(prefix, item.link);
+  } else {
+    let newPrefix = prefix;
+    if (item.prefix) {
+      newPrefix = posix.join(newPrefix, item.prefix);
+      delete item.prefix;
+    }
+    if (item.items?.length) {
+      item.items.forEach((e) => addLinkPrefix(e, newPrefix));
+    }
+  }
+  return item;
+}
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
