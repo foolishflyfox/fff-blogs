@@ -18,10 +18,13 @@ hero:
       link: /api-examples
 
 features:
-  - title: Feature A
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
-  - title: Feature B
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
-  - title: Feature C
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
+  - title: 读书博客
+    icon: 📚
+    details: 阅读好书，归纳要点，温故知新
+  - title: 技术分析
+    icon: 💻
+    details: 问题驱动，由浅入深，通俗易懂
+  - title: 日常分享
+    icon: 💐
+    details: 旅游、摄影、美食...，记录不负时光
 ---
