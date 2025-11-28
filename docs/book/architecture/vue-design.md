@@ -41,3 +41,13 @@ $("#app") // 获取 div
 - 纯编译时：在运行前，将用户提供的类 HTML 文本转换为 js 代码，运行时直接执行 js 实现可视化
 
 Svelte 是纯编译时的框架，Vue3 是运行时+编译时的架构，在保持灵活性的基础上尽可能地去优化。
+
+## 第 2 章 框架设计的核心要素
+
+框架应该提供友好的警告信息、控制台输出，可以提升用户的开发体验。
+
+框架应该能够控制自身代码的体积。
+
+框架要做到良好的 Tree-Shaking，Tree-Shaking 指的是消除那些永远不会被执行的代码，这就是排除 dead code，现在无论是 rollup.js 还是 webpack，都支持 Tree-Shaking。
+
+想要实现 Tree-Shaking，模块必须是 ESM（ES Module），因为 Tree-Shaking 依赖 ESM 的静态结构。
