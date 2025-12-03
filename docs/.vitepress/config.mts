@@ -85,7 +85,10 @@ export default defineConfig({
               text: "跟月影学可视化",
               prefix: "visualization-yueying",
               collapsed: true,
-              items: [{ text: "开篇词", link: "opening-verse" }],
+              items: [
+                { text: "开篇词", link: "opening-verse" },
+                { text: "可视化的四种方式", link: "01-visualize-ways" },
+              ],
             },
           ],
         },
