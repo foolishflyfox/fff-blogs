@@ -1,5 +1,5 @@
 <script setup>
-import { CssBarGraph, CssPieGraph } from './codes/01'
+import { CssBarGraph, CssPieGraph, SvgBarGraph, CanvasBarGraph } from './codes/01'
 </script>
 
 # 01 浏览器中实现可视化的四种方式
@@ -11,11 +11,9 @@ import { CssBarGraph, CssPieGraph } from './codes/01'
 3. Canvas2D
 4. WebGL
 
-## HTML + CSS
+## 方式一：HTML 与 CSS 实现可视化
 
-### HTML 与 CSS 如何实现可视化？
-
-#### 柱形图
+### 柱形图
 
 用 CSS 实现柱状图其实很简单，原理就是使用网络布局(Grid Layout) 加上线性渐变 (Linear-gradient)。例如柱状图：
 
@@ -134,7 +132,7 @@ background: linear-gradient(
 );
 ```
 
-#### 饼图
+### 饼图
 
 下面是使用圆锥渐变绘制的饼图：
 
@@ -171,3 +169,95 @@ background: linear-gradient(
 - `#f73 110deg`: 从 110° 开始 `#f73` 颜色；
 - `#f73 200deg`: 在 200° 结束 `#f73` 颜色；
 - `#ccc 200deg`: 从 200° 开始灰色，并持续到 360°；
+
+### HTML+CSS 实现可视化的缺点
+
+1. HTML 和 CSS 为网页布局而生，绘制可视化图表并不容易；
+2. 从 CSS 代码，很难看出数据与图形的对应关系，维护麻烦；
+3. 性能问题；
+
+## 方式二：SVG
+
+SVG（Scalable Vector Graphics，可缩放矢量图）是一种基于 XML 语法的图像格式，可以用图片(img 元素)的 src 属性加载。也可以内嵌 SVG 标签，并像普通 HTML 元素一样，利用 DOM API 操作 SVG 元素，甚至 CSS 也可以作用于内嵌的 SVG 元素。
+
+### 柱形图
+
+下面是用 SVG 绘制的柱形图。
+
+<SvgBarGraph />
+
+代码为：
+
+```html
+<!-- 在网页上显示大小为 300px 宽，450px 高 -->
+<!-- 视口(内部坐标系)：宽 60 单位，高 100 单位 -->
+<svg width="300px" height="450px" viewBox="0 0 60 100">
+  <!-- 将原点从左上角移到左下角，并翻转 Y 轴 -->
+  <!-- 创建了标准的数学坐标系：原点在左下角，Y 轴向上 -->
+  <g transform="translate(0, 100) scale(1, -1)">
+    <!-- 第一组 -->
+    <g>
+      <!-- x, y 为柱形左下角坐标，width 为柱形宽度，height 为柱形高度，fill 表示蓝色填充 -->
+      <rect x="1" y="0" width="10" height="25" fill="#37c" />
+      <rect x="13" y="0" width="10" height="26" fill="#37c" />
+      <rect x="25" y="0" width="10" height="40" fill="#37c" />
+      <rect x="37" y="0" width="10" height="45" fill="#37c" />
+      <rect x="49" y="0" width="10" height="68" fill="#37c" />
+    </g>
+    <g>
+      <rect x="1" y="0" width="10" height="15" fill="#3c7" />
+      <rect x="13" y="0" width="10" height="11" fill="#3c7" />
+      <rect x="25" y="0" width="10" height="17" fill="#3c7" />
+      <rect x="37" y="0" width="10" height="25" fill="#3c7" />
+      <rect x="49" y="0" width="10" height="37" fill="#3c7" />
+    </g>
+  </g>
+</svg>
+```
+
+在 SVG 代码中，`g` 表示分组，`rect` 表示矩形元素，除了 `rect` 外，SVG 还提供了丰富的图形元素，如椭圆、圆弧、多边形、贝塞尔曲线等等。
+
+SVG 绘制图表和 HTML+CSS 的方式差别不大，只是将 HTML 标签替换成 SVG 标签，应用了 SVG 支持的特殊属性。
+
+HTML 的不足之处在于 HTML 元素的形状一般是矩形，虽然用 CSS 辅助，也能绘制出各种其他形状，甚至不规则图形，但总体还是很麻烦。SVG 弥补了这个不足，让不规则图形绘制变得更简单。
+
+但是和 HTML 元素一样，还是存在性能问题。
+
+## 方式三：Canvas2D
+
+HTML+CSS 和 SVG 都属于**声明式**绘图系统，而 Canvas2D 是通过调用绘图指令进行图形绘制，是一种**指令式**的绘图系统。
+
+<CanvasBarGraph />
+
+对应的逻辑为：
+
+```js
+const dataset = {
+  total: [25, 26, 40, 45, 68],
+  current: [15, 11, 17, 25, 37],
+};
+// 柱数量
+const barCount = dataset.total.length;
+const canvas = document.querySelector(
+  "canvas#graph-bar"
+) as HTMLCanvasElement;
+const ctx = canvas.getContext("2d")!;
+// 每列的宽度
+const splitWidth = canvas.width / barCount;
+// 每个柱宽度
+const barWidth = 45;
+for (let i = 0; i < barCount; ++i) {
+  const x = i * splitWidth;
+  const totalY = Math.round(((100 - dataset.total[i]) * canvas.height) / 100);
+  const currentY = Math.round(
+    ((100 - dataset.current[i]) * canvas.height) / 100
+  );
+  const totalHeight = canvas.height - totalY;
+  const currentHeight = canvas.height - currentY;
+  ctx.fillStyle = "#37c";
+  ctx.fillRect(x, totalY, barWidth, totalHeight);
+  console.log(x, totalY, barWidth, totalHeight);
+  ctx.fillStyle = "#3c7";
+  ctx.fillRect(x, currentY, barWidth, currentHeight);
+}
+```
