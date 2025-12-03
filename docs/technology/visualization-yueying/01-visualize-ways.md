@@ -22,32 +22,43 @@ import { CssBarGraph } from './codes/01'
 其 CSS 代码如下：
 
 ```css
+/**
+  数据集：
+  dateset = {
+    current: [15, 11, 17, 25, 37],
+    total: [25, 26, 40, 45, 68]
+  }
+ */
 .bargraph {
-  display: grid;
-  width: 300px;
-  height: 450px;
-  padding: 10px;
-  grid-template-columns: repeat(5, 20%);
+  display: grid; /* 使用 Grid 布局 */
+  width: 300px; /* 图表总宽度 */
+  height: 450px; /* 图表总高度 */
+  padding: 10px; /* 内边距 */
+  grid-template-columns: repeat(5, 20%); /* 5各等宽列，每列占 20% */
 }
 .bargraph div {
+  /* 每个柱子左右 2px 外边距，形成间隔 */
   margin: 0 2px;
 }
 .bargraph div:nth-child(1) {
   background: linear-gradient(
-    to bottom,
-    transparent 75%,
-    #37c 0,
-    #37c 85%,
-    #3c7 0
+    /* 从上到下的渐变方向 */ to bottom,
+    /* 从顶部到 75% 的位置是透明 */ transparent 75%,
+    /* 从 75% 处开始变为蓝色 (#37c) */ #37c 0,
+    /* 蓝色持续到 85% 的位置 */ #37c 85%,
+    /* 从 85% 处开始变为绿色(#3c7)到底部 */ #3c7 0
   );
 }
 .bargraph div:nth-child(2) {
+  /** 标准写法 */
   background: linear-gradient(
     to bottom,
+    transparent 0%,
     transparent 74%,
-    #37c 0,
+    #37c 74%,
     #37c 89%,
-    #3c7 0
+    #3c7 89%,
+    #3c7 100%
   );
 }
 .bargraph div:nth-child(3) {
@@ -77,4 +88,46 @@ import { CssBarGraph } from './codes/01'
     #3c7 0
   );
 }
+```
+
+可以看到背景的设置类似：
+
+```css
+background: linear-gradient(
+  to bottom,
+  transparent 32%,
+  #37c 0,
+  #37c 63%,
+  #3c7 0
+);
+```
+
+**为什么这样写有效？**
+
+CSS 规定允许：
+
+1. 色标位置可以省略，浏览器会自动计算
+2. 如果省略第一个色标的位置，默认为 0%
+3. 如果省略最后一个色标的位置，默认为 100%
+4. 如果省略中间色标的位置，会在前一个和后一个位置之间平均分布
+
+在实践中，像 `#37c 0` 这种写法：
+
+- 浏览器会理解为 `#37c 0%`
+- 但前一个色标在 `75%`
+- 所以实际上是创建了一个从 `75%` 到 `0%` 的负向渐变
+- 浏览器会修正为两者都从 `75%` 开始
+
+上述写法的标准写法为：
+
+```css
+background: linear-gradient(
+  to bottom,
+  transparent 0%,
+  transparent 32%,
+  #37c 32%,
+  #37c 63%,
+  #3c7 63%,
+  #3c7 100%
+);
 ```
