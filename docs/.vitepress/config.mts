@@ -79,7 +79,15 @@ export default defineConfig({
       "/technology/": [
         {
           text: "技术",
-          items: [{ text: "总览", link: "overview" }],
+          items: [
+            { text: "总览", link: "overview" },
+            {
+              text: "跟月影学可视化",
+              prefix: "visualization-yueying",
+              collapsed: true,
+              items: [{ text: "开篇词", link: "opening-verse" }],
+            },
+          ],
         },
       ].map((e) => addLinkPrefix(e, "/technology")),
       "/life/": [
