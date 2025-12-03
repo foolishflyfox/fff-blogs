@@ -1,0 +1,7 @@
+/* 图的描述 */
+.graph-desc {
+  display: flex;
+  justify-content: center;
+  color: #aaa;
+  font-size: 0.8em;
+}

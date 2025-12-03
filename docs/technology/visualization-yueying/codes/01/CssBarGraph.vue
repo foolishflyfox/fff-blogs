@@ -1,7 +1,12 @@
 <template>
   <div>
-    <div class="bargraph">
-      <div v-for="i of 5" :key="i" />
+    <div class="justify-x-center">
+      <div class="bargraph">
+        <div v-for="i of 5" :key="i" />
+      </div>
+    </div>
+    <div class="graph-desc">
+      <div>用 HTML+CSS 绘制的柱状图</div>
     </div>
   </div>
 </template>
@@ -9,10 +14,6 @@
 <script setup lang="ts"></script>
 
 <style scoped>
-div:has(.bargraph) {
-  display: flex;
-  justify-content: center;
-}
 /**
   dateset = {
     current: [15, 11, 17, 25, 37],

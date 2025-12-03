@@ -1,0 +1,5 @@
+/* 水平居中 */
+.justify-x-center {
+  display: flex;
+  justify-content: center;
+}

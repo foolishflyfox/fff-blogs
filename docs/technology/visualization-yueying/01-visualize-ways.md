@@ -1,5 +1,5 @@
 <script setup>
-import { CssBarGraph } from './codes/01'
+import { CssBarGraph, CssPieGraph } from './codes/01'
 </script>
 
 # 01 浏览器中实现可视化的四种方式
@@ -15,7 +15,9 @@ import { CssBarGraph } from './codes/01'
 
 ### HTML 与 CSS 如何实现可视化？
 
-用 CSS 实现柱状图其实很简单，原始就是使用网络布局(Grid Layout) 加上线性渐变 (Linear-gradient)。例如柱状图：
+#### 柱形图
+
+用 CSS 实现柱状图其实很简单，原理就是使用网络布局(Grid Layout) 加上线性渐变 (Linear-gradient)。例如柱状图：
 
 <CssBarGraph />
 
@@ -131,3 +133,41 @@ background: linear-gradient(
   #3c7 100%
 );
 ```
+
+#### 饼图
+
+下面是使用圆锥渐变绘制的饼图：
+
+<CssPieGraph />
+
+其 CSS 代码如下：
+
+```css
+.piegraph {
+  display: inline-block;
+  width: 250px;
+  height: 250px;
+  border-radius: 50%; /* 使其成为圆形 */
+  background-image: conic-gradient(
+    #37c 30deg,
+    #3c7 30deg,
+    #3c7 65deg,
+    orange 65deg,
+    orange 110deg,
+    #f73 110deg,
+    #f73 200deg,
+    #ccc 200deg
+  );
+}
+```
+
+上述 `conic-gradient` 的属性含义为：
+
+- `#37c 30deg`: 从 0° 到 30° 为 `#37c` 颜色；
+- `#3c7 30deg`: 从 30° 到 30° 为从 `#37c` 到 `#3c7` 的渐变，但因为角度相同，表示从 `#37c` 到 `#3c7` 的突变；
+- `#3c7 65deg`: 从 30° 到 65° 为从 `3c7` 到 `3c7` 的渐变，因为颜色相同，表示纯色填充；
+- `orange 65deg`: 从 65° 开始颜色变为桔黄色；
+- `orange 110deg`: 在 110° 结束桔黄色；
+- `#f73 110deg`: 从 110° 开始 `#f73` 颜色；
+- `#f73 200deg`: 在 200° 结束 `#f73` 颜色；
+- `#ccc 200deg`: 从 200° 开始灰色，并持续到 360°；
