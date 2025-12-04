@@ -16,9 +16,7 @@ Canvas 时 HTML 元素，用 `<canvas />` 标签将它插入到 HTML 内容中�
 </body>
 ```
 
-注意：Canvas 元素上的 `width` 和 `height` 属性不等同于 Canvas 元素的 CSS 样式的属性。
-
-CSS 属性中的宽高影响 Canvas 在页面上呈现的大小，而 HTML 属性中的宽高则决定了 Canvas 的坐标系。
+注意：Canvas 元素上的 `width` 和 `height` 属性不等同于 Canvas 元素的 CSS 样式的属性。CSS 属性中的宽高影响 Canvas 在页面上呈现的大小，而 HTML 属性中的宽高则决定了 Canvas 的坐标系。
 
 我们称 Canvas 的 HTML 属性宽高为**画布宽高**，CSS 样式宽高为**样式宽高**。
 
@@ -30,7 +28,7 @@ Canvas 的坐标系和浏览器窗口的坐标系类似，它们都默认左上�
 
 ### 利用 Canvas 绘制几何图形
 
-第一步：获取 Canvas 上下文
+**第一步：获取 Canvas 上下文**
 
 ```js
 const canvas = document.querySelector("canvas");
@@ -39,10 +37,10 @@ const canvas = document.querySelector("canvas");
 获取了 canvas 元素后，就可以通过 `getContext` 拿到上下文对象：
 
 ```js
-const constext = canvas.getContext("2d");
+const context = canvas.getContext("2d");
 ```
 
-第二步，用 Canvas 上下文绘制图形
+**第二步，用 Canvas 上下文绘制图形**
 
 context 对象上的 API 大体可以分为两类：
 
@@ -56,7 +54,7 @@ const rectSize = [10, 10];
 context.fillStyle = "red";
 context.beginPath();
 context.rect(0.5 * canvas.width, 0.5 * canvas.height, ...rectSize);
-context fill();
+context.fill();
 ```
 
 3. 调用 `beginPath` 指令开始绘制图形
@@ -94,7 +92,7 @@ const cities = {
 }
 ```
 
-该对象中有 “城市 > 省份 > 中国” 这样的层级数据，我们要将它与绘图指令建立联系。即我们要将数据的层级、位置和要绘制的圆的半径、位置对应起来，将数据转换成图形信息。可以用 `d3.hierachy` 这个工具库转换数据，代码如下：
+该对象中有 “城市 > 省份 > 中国” 这样的层级数据，我们要将它与绘图指令建立联系。即我们要将数据的层级、位置和要绘制的圆的半径、位置对应起来，将数据转换成图形信息。可以用 `d3.hierarchy` 这个工具库转换数据，代码如下：
 
 ```js
 const regions = d3

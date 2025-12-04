@@ -34,7 +34,7 @@ import { CssBarGraph, CssPieGraph, SvgBarGraph, CanvasBarGraph } from './codes/0
   width: 300px; /* 图表总宽度 */
   height: 450px; /* 图表总高度 */
   padding: 10px; /* 内边距 */
-  grid-template-columns: repeat(5, 20%); /* 5各等宽列，每列占 20% */
+  grid-template-columns: repeat(5, 20%); /* 5个等宽列，每列占 20% */
 }
 .bargraph div {
   /* 每个柱子左右 2px 外边距，形成间隔 */
