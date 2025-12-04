@@ -95,10 +95,10 @@ const cities = {
 
 export function drawCities() {
   const regions = d3
-    .hierarchy(cities)
-    .sum((d) => 1)
-    .sort((a, b) => b.value! - a.value!);
+    .hierarchy(cities) // 把原始数据转成D3 能理解的树形结构对象，
+    .sum((d) => 1) // 计算各节点的 value 值
+    .sort((a, b) => b.value! - a.value!); // 将整颗树按节点的 value 值从大到小排序
   const pack = d3.pack().size([1600, 1600]).padding(3);
   const root = pack(regions as any);
-  console.log(root);
+  console.log("root = ", root);
 }
