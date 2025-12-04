@@ -8,10 +8,16 @@ importers:
 
   .:
     dependencies:
+      d3-hierarchy:
+        specifier: ^3.1.2
+        version: 3.1.2
       vue:
         specifier: ^3.5.25
         version: 3.5.25(typescript@5.9.3)
     devDependencies:
+      '@types/d3-hierarchy':
+        specifier: ^3.1.7
+        version: 3.1.7
       '@types/node':
         specifier: ^24.10.1
         version: 24.10.1
@@ -352,6 +358,9 @@ packages:
   '@shikijs/vscode-textmate@10.0.2':
     resolution: {integrity: sha512-83yeghZ2xxin3Nj8z1NMd/NCuca+gsYXswywDy5bHvwlWL8tpTQmzGeUuHd9FC3E/SBEMvzJRwWEOz5gGes9Qg==}
 
+  '@types/d3-hierarchy@3.1.7':
+    resolution: {integrity: sha512-tJFtNoYBtRtkNysX1Xq4sxtjK8YgoWUNpIiUee0/jHGRwqvzYxkq0hGVbbOGSz+JgFxxRu4K8nb3YpG3CMARtg==}
+
   '@types/estree@1.0.8':
     resolution: {integrity: sha512-dWHzHa2WqEXI/O1E9OjrocMTKJl2mSrEolh1Iomrv6U+JuNwaHXsXx9bLu5gG7BUWFIN0skIQJQ/L1rIex4X6w==}
 
@@ -503,6 +512,10 @@ packages:
 
   csstype@3.2.3:
     resolution: {integrity: sha512-z1HGKcYy2xA8AGQfwrn0PAy+PB7X/GSj3UVJW9qKyn43xWa+gl5nXmU4qqLMRzWVLFC8KusUX8T/0kCiOYpAIQ==}
+
+  d3-hierarchy@3.1.2:
+    resolution: {integrity: sha512-FX/9frcub54beBdugHjDCdikxThEqjnR93Qt7PvQTOHxyiNCAlvMrHhclk3cD5VeAaq9fxmfRp+CnWw9rEMBuA==}
+    engines: {node: '>=12'}
 
   dequal@2.0.3:
     resolution: {integrity: sha512-0je+qPKHEMohvfRTCEo3CrPG6cAzAYgmzKyxRiYSSDkS6eGJdyVJm7WaYA5ECaAD9wLB2T4EEeymA5aFVcYXCA==}
@@ -973,6 +986,8 @@ snapshots:
 
   '@shikijs/vscode-textmate@10.0.2': {}
 
+  '@types/d3-hierarchy@3.1.7': {}
+
   '@types/estree@1.0.8': {}
 
   '@types/hast@3.0.4':
@@ -1116,6 +1131,8 @@ snapshots:
       is-what: 5.5.0
 
   csstype@3.2.3: {}
+
+  d3-hierarchy@3.1.2: {}
 
   dequal@2.0.3: {}
 

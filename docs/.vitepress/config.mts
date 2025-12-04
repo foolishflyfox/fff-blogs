@@ -87,7 +87,8 @@ export default defineConfig({
               collapsed: true,
               items: [
                 { text: "开篇词", link: "opening-verse" },
-                { text: "可视化的四种方式", link: "01-visualize-ways" },
+                { text: "01.可视化的四种方式", link: "01-visualize-ways" },
+                { text: "02.Canvas 绘图", link: "02-canvas-draw" },
               ],
             },
           ],
