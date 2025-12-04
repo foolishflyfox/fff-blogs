@@ -144,6 +144,56 @@ const root = pack(regions as any);
 }
 ```
 
-我们需要的信息是数据中的 `x`、`y`、`r` 这些值是前面调用 `d3.hierarchy` 算出来的。接下来只需用 Canvas 将它们绘制出来就可以了。具体绘制过程只需要遍历数据，并根据数据内容绘制圆弧。
+我们需要的信息是数据中的 `x`、`y`、`r` 这些值是前面调用 `d3.hierarchy` 算出来的。接下来只需用 Canvas 将它们绘制出来就可以了。具体绘制过程只需要遍历数据，并根据数据内容绘制图形了，绘制图形的过程分为两步。
+
+第一步：在当前数据节点绘制一个圆，圆可以使用 `arc` 指令来绘制。`arc` 方法的五个参数分别是圆心的 x、y 坐标，半径 r、起始角度和结束角度，前三个参数就是数据中的 x、y 和 r。因为我们要绘制的是整个圆，所以后面的两个参数中起始角是 0，结束角是 2𝝅 。
+
+第二步：绘制图层后，如果这个数据节点有下一级数据，我们遍历它的下一级数据，然后递归地对这些数据调用绘图过程。如果没有下一级数据，说明当前数据为城市数据，那么我们直接给出城市的名字，这一步可以通过 `fillText` 指令来完成。具体的代码如下所示：
+
+```ts
+// 不同深度的节点使用不同的颜色作为背景色
+const bgColors = ["#eee", "#0bf", "#0f5"];
+// 设置绘图时的描边
+ctx.strokeStyle = "black";
+ctx.lineWidth = 3;
+ctx.font = `bold 30px Arial`;
+ctx.textAlign = "center"; // 设置文本水平居中
+ctx.textBaseline = "middle"; // 设置文本垂直居中
+ctx.translate(50, 50);
+function drawNode(node: d3.HierarchyCircularNode<any>) {
+  if (!node) return;
+  // 绘制本节点的圆
+  ctx.beginPath();
+  ctx.fillStyle = bgColors[node.depth];
+  ctx.arc(node.x, node.y, node.r, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.stroke();
+  if (node.children?.length) {
+    // 如果有子节点，递归绘制子节点
+    for (const subNode of node.children) {
+      drawNode(subNode);
+    }
+  } else {
+    // 城市，绘制文本
+    ctx.fillStyle = "#000";
+    const cityName = node.data.name as string;
+    ctx.fillText(cityName, node.x, node.y);
+  }
+}
+drawNode(root);
+```
+
+实现效果如下：
 
 <CitiesTopo />
+
+## Canvas 的优缺点
+
+优点：
+
+- Canvas 是一个非常简单易用的图形系统，通过一组简单的绘图指令，能够方便快捷地绘制出各种复杂的几何图形；
+- Canvas 渲染起来非常高效，即使是绘制大量轮廓非常复杂的几何图形，Canvas 只需调用一组简单的绘图指令就能高效完成渲染；
+
+缺点：
+
+- 很难直接抽取其中的图形对象进行单独操作；
