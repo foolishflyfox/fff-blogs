@@ -38,20 +38,26 @@
 
 从数值上看，是对应坐标相加。
 
-todo:
+## 笛卡尔坐标系
+
+向量在笛卡尔坐标系中的表示：$A = \begin{pmatrix}x \\ y \end{pmatrix}$；向量的转置可表示为 $A^T = (x, y)$，向量的模长可表示为 $\|A\| = \sqrt{x^2 + y^2}$
 
 ## 向量点乘
 
-向量点乘的应用：
+向量点乘: $\vec{a}\cdot\vec{b} = \|\vec{a}\|\|\vec{b}\|\cos{\theta}$
 
-1. 求两个向量的夹角
+向量夹角余弦计算：
 
 $$
-\begin{pmatrix}
-0&1&1\\
-1&1&0\\
-1&0&1\\
-\end{pmatrix}
+\cos\theta = \frac{\vec{a}\cdot\vec{b}}{\|\vec{a}\|\|\vec{b}\|}
 $$
+
+对于单位向量的夹角余弦计算：$\cos\theta = \hat{a}\cdot\hat{b}$
+
+点乘符合的运算规则：
+
+- 交换律：$\vec{a}\cdot\vec{b}=\vec{b}\cdot\vec{a}$
+- 分配率：$\vec{a}\cdot(\vec{b}+\vec{c})=\vec{a}\cdot\vec{b}+\vec{a}\cdot\vec{c}$
+- 结合律：$(k\vec{a})\cdot\vec{b}=\vec{a}\cdot(k\vec{b})=k(\vec{a}\cdot\vec{b})$
 
 ## 向量叉乘
