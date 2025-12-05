@@ -96,7 +96,17 @@ export default defineConfig({
               text: "现代计算机图形学入门",
               prefix: "games101",
               collapsed: true,
-              items: [{ text: "概览", link: "overview" }],
+              items: [
+                { text: "概览", link: "overview" },
+                {
+                  text: "计算机视觉概述",
+                  link: "01-overview-of-computer-graphics",
+                },
+                {
+                  text: "线性代数",
+                  link: "02-review-of-linear-algebra",
+                },
+              ],
             },
           ],
         },
@@ -112,6 +122,9 @@ export default defineConfig({
     socialLinks: [
       { icon: "github", link: "https://github.com/vuejs/vitepress" },
     ],
+  },
+  markdown: {
+    math: true,
   },
   vite: {
     server: {
