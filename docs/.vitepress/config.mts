@@ -92,6 +92,12 @@ export default defineConfig({
                 { text: "03.SVG 绘图", link: "03-svg-draw" },
               ],
             },
+            {
+              text: "现代计算机图形学入门",
+              prefix: "games101",
+              collapsed: true,
+              items: [{ text: "概览", link: "overview" }],
+            },
           ],
         },
       ].map((e) => addLinkPrefix(e, "/technology")),
