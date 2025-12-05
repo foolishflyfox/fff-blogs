@@ -2,7 +2,7 @@
 import { CssBarGraph, CssPieGraph, SvgBarGraph, CanvasBarGraph } from './codes/01'
 </script>
 
-# 01 浏览器中实现可视化的四种方式
+# 01. 浏览器中实现可视化的四种方式
 
 渲染引擎绘制图形的方式：
 

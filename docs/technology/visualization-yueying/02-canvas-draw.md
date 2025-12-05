@@ -2,7 +2,7 @@
 import { CitiesTopo } from './codes/02';
 </script>
 
-# 02 指令式绘图系统：如何用 Canvas 绘制层次关系图
+# 02. 指令式绘图系统 - Canvas 绘图
 
 ## 如何用 Canvas 绘制几何图形？
 
