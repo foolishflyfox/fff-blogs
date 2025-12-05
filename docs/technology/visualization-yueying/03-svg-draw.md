@@ -1,5 +1,5 @@
 <script setup>
-import { SimpleCircleSvg } from './codes/03'
+import { SimpleCircleSvg, CitiesTopoSvg, CitiesTopoSvgDynamic } from './codes/03'
 </script>
 
 # 03. 声明式图形系统 - SVG 绘图
@@ -35,3 +35,123 @@ SVG 坐标系和 Canvas 坐标系完全一样，都是以图像左上角为原�
 下面就是上述 SVG 的显示了：
 
 <SimpleCircleSvg />
+
+## 利用 SVG 绘制层次关系图
+
+下面我们使用 SVG 的方式绘制第二节中用 Canvas 绘制的城市关系图。
+
+首先，我们需要获取 SVG 对象。
+
+```js
+const svgroot = document.querySelector("svg");
+```
+
+然后通过创建 SVG 元素，并将元素添加到 DOM 文档中，让图形显示出来，具体代码如下：
+
+```ts
+const bgColors = ["#eee", "#0bf", "#0f5"];
+function drawNode(node: d3.HierarchyCircularNode<any>) {
+  if (!node) return;
+  const circle = document.createElementNS(
+    "http://www.w3.org/2000/svg",
+    "circle"
+  );
+  circle.setAttribute("cx", String(node.x));
+  circle.setAttribute("cy", String(node.y));
+  circle.setAttribute("r", String(node.r));
+  circle.setAttribute("fill", bgColors[node.depth]);
+  circle.setAttribute("stroke", "black");
+  circle.setAttribute("stroke-width", "1");
+  svgroot.append(circle);
+  if (node.children?.length) {
+    // 绘制子节点
+    for (const subNode of node.children) {
+      drawNode(subNode);
+    }
+  } else {
+    // 绘制文本
+    const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+    text.setAttribute("fill", "black");
+    text.setAttribute("font-family", "Arial");
+    text.setAttribute("font-size", "12px");
+    text.setAttribute("text-anchor", "middle");
+    text.setAttribute("x", String(node.x));
+    text.setAttribute("y", String(node.y));
+    text.textContent = node.data.name;
+    svgroot.appendChild(text);
+  }
+}
+drawNode(root);
+```
+
+我们使用 `document.createElementNS` 方法来创建 SVG 元素，这与创建普通的 HTML 元素的方法 `document.createElement` 不同。其中第一个参数是名字空间，第二个参数是要创建的元素标签名，因为要绘制的是圆形，所以我们创建了 `circle` 元素。设置属性后，将 circle 添加到 svgroot 中。
+
+之后递归创建子节点，并添加文本元素。
+
+显示效果如下：
+
+<CitiesTopoSvg />
+
+## SVG 和 Canvas 的不同点
+
+### 写法上的不同
+
+SVG 是以创建图形元素绘图的“声明式”绘图系统，Canvas 是执行绘图指令的“指令式”绘图系统。
+
+SVG 的渲染性能相对比较低。
+
+### 用户交互实现上的不同
+
+因为 SVG 的一个图形对应一个元素，所以很容易给 SVG 图形元素添加对应的鼠标事件。但 Canvas 不容易做到。
+
+下面是使用 svg 添加鼠标监听事件的一个例子：
+
+```ts
+// 实现交互功能
+const curTargetText = document.createElementNS(
+  "http://www.w3.org/2000/svg",
+  "text"
+);
+curTargetText.setAttribute("fill", "orange");
+curTargetText.setAttribute("font-family", "Arial");
+curTargetText.setAttribute("font-size", "36px");
+curTargetText.setAttribute("text-anchor", "start");
+curTargetText.setAttribute("x", "0");
+curTargetText.setAttribute("y", "30");
+curTargetText.textContent = "";
+svgroot.appendChild(curTargetText);
+let preCircle: SVGCircleElement | undefined;
+let preCircleOriginColor: string | null = null;
+svgroot.addEventListener("mousemove", (evt) => {
+  let target = evt.target as HTMLElement;
+  if (target.nodeName === "text") {
+    const targetText = target as unknown as SVGTextElement;
+    curTargetText.textContent = targetText.textContent;
+  } else if (target.nodeName === "circle") {
+    const targetCircle = target as unknown as SVGCircleElement;
+    if (targetCircle === preCircle) {
+      // 圆形节点没变，直接返回
+      return;
+    }
+    curTargetText.textContent = "";
+    if (preCircleOriginColor) {
+      preCircle?.setAttribute("fill", preCircleOriginColor);
+    }
+    preCircleOriginColor = targetCircle.getAttribute("fill");
+    preCircle = targetCircle;
+    targetCircle.setAttribute("fill", "orange");
+  } else if (target.nodeName === "svg") {
+    if (preCircleOriginColor) {
+      preCircle?.setAttribute("fill", preCircleOriginColor);
+      preCircle = undefined;
+      preCircleOriginColor = null;
+    }
+  }
+});
+```
+
+通过 `svgroot.addEventListener` 添加了对 SVG 元素的鼠标事件监听。
+
+你可以将鼠标移动到层级图上验证一下效果：
+
+<CitiesTopoSvgDynamic />
