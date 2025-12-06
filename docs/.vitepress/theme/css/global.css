@@ -1,0 +1,144 @@
+/* 参考 rollup 项目的 docs/vitepress/theme/custom.css */
+:root {
+  /* 主品牌色：以 #00bfff 为基础 */
+  --vp-c-brand: hsl(195 100% 55%);
+  --vp-c-brand-light: hsl(195 100% 70%);
+  --vp-c-brand-lighter: hsl(195 100% 80%);
+  --vp-c-brand-dark: hsl(195 85% 45%);
+  --vp-c-brand-darker: hsl(195 85% 35%);
+
+  /* 首页标题渐变（保留你原本的多色过渡风格） */
+  --vp-home-hero-name-color: transparent;
+  --vp-home-hero-name-background: -webkit-linear-gradient(
+    120deg,
+    hsl(195 100% 60%),
+    /* 主色亮度 */ hsl(200 100% 60%) 35%,
+    /* 更偏青一点 */ hsl(210 96% 62%) 45%,
+    /* 靛蓝色过渡 */ hsl(195 100% 60%) 65%,
+    /* 回到主色 */ hsl(205 70% 50%) /* 稍深的蓝色 */
+  );
+
+  /* 首页 Hero 背景模糊渐变 */
+  /* --vp-home-hero-image-background-image: linear-gradient(
+    -45deg,
+    hsl(195 100% 60% / 80%),
+    hsl(200 100% 60% / 80%) 40%,
+    hsl(210 96% 62% / 80%) 45%,
+    hsl(195 100% 60% / 80%) 60%,
+    hsl(205 70% 50% / 80%)
+  );
+  --vp-home-hero-image-filter: blur(40px); */
+
+  /* 辅助灰色（不变） */
+  --vp-c-gray-light-3: #d1d1d1;
+  --vp-c-gray-light-5: #f2f2f2;
+  --vp-c-gray-dark-2: #484848;
+  --vp-c-gray-dark-3: #3a3a3a;
+
+  /* 思维导图线宽 */
+  --markmap-line-width: 5px;
+}
+
+@media (min-width: 640px) {
+  :root {
+    --vp-home-hero-image-filter: blur(56px);
+  }
+}
+
+@media (min-width: 960px) {
+  :root {
+    --vp-home-hero-image-filter: blur(72px);
+  }
+}
+
+.vp-doc h4 {
+  margin-top: 24px;
+}
+
+.vp-doc tr.transposed-table:nth-child(2n) {
+  background: transparent;
+}
+
+.vp-doc tr.transposed-table:nth-child(2n + 1) {
+  background: var(--vp-c-bg-soft);
+}
+
+.vp-doc tr.transposed-table > th {
+  white-space: nowrap;
+}
+
+svg[id^="mermaid-"] {
+  line-height: 1.5;
+  background-color: transparent !important;
+}
+
+svg[id^="mermaid-"] .edgeLabel {
+  padding: 0 !important;
+}
+
+.dark svg[id^="mermaid-"] .flowchart-link {
+  stroke: lightgrey !important;
+}
+
+.dark svg[id^="mermaid-"] .marker {
+  stroke: lightgrey !important;
+  fill: lightgrey !important;
+}
+
+.dark svg[id^="mermaid-"] .edgeLabel {
+  background-color: #585858 !important;
+}
+
+.dark svg[id^="mermaid-"] span {
+  color: #ccc !important;
+}
+
+/* 设置类图中类背景色的明暗主题切换 */
+.dark svg[id^="mermaid-"] .basic.label-container {
+  fill: #aaa8 !important;
+}
+
+/* 解决 mermaid 绘图时，类图的线条为 1， 导致虚线显示问题*/
+svg[id^="mermaid-"] path.edge-thickness-normal.edge-pattern-solid.relation {
+  stroke-width: 1.1 !important;
+}
+/* 解决 mermaid 绘图时，类图中类的边框为 1，导致虚线显示问题 */
+svg[id^="mermaid-"] .node path {
+  stroke-width: 1.5 !important;
+}
+
+/* 解决思维导图连接线与文本下划线错位问题 */
+.markmap-svg.markmap path.markmap-link {
+  stroke-width: var(--markmap-line-width);
+}
+.markmap-node > line {
+  stroke-width: var(--markmap-line-width);
+}
+.markmap-node {
+  /* 思维导图字体大小 */
+  font-size: 28px;
+  /* 思维导图字体加粗 */
+  font-weight: 500;
+  /* 思维导图行高 */
+  line-height: 36px;
+}
+
+tr:has(.ar) {
+  background-color: #10b98124 !important;
+}
+
+button.raw-style {
+  border: 1px black solid;
+  padding: 1px 6px;
+  margin: 2px;
+  font-size: 12px;
+  background-color: #eee !important;
+  border-radius: 3px;
+  line-height: normal;
+}
+button.raw-style:hover {
+  background: #bbb !important;
+}
+button.raw-style:active {
+  background: #ddd !important;
+}

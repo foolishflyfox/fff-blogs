@@ -1,9 +1,22 @@
 import { DefaultTheme, defineConfig } from "vitepress";
 import { posix } from "path";
+import { Transformer } from "markmap-lib";
 
 type SidebarItemX = DefaultTheme.SidebarItem & {
   prefix?: string;
 };
+
+// 思维导图支持步骤一
+const transformer = new Transformer();
+function escapeHtml(unsafe: any) {
+  return unsafe
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+////结束思维导图设置/////
 
 /**
  * 添加路径前缀
@@ -73,6 +86,12 @@ export default defineConfig({
                 },
               ],
             },
+            {
+              text: "HTML5 Canvas 核心技术",
+              prefix: "html5-canvas",
+              collapsed: true,
+              items: [{ text: "预览", link: "overview" }],
+            },
           ],
         },
       ].map((e) => addLinkPrefix(e, "/book")),
@@ -125,6 +144,25 @@ export default defineConfig({
   },
   markdown: {
     math: true,
+    config: (md) => {
+      // 思维导图支持步骤二
+      const temp = md.renderer.rules.fence?.bind(md.renderer.rules)!;
+      md.renderer.rules.fence = (tokens, idx, options, env, slf) => {
+        const token = tokens[idx];
+        if (token.info === "mindmap") {
+          try {
+            const { root } = transformer.transform(token.content.trim());
+            return `<svg class="markmap-svg" data-json='${escapeHtml(
+              JSON.stringify(root)
+            )}'></svg>`;
+          } catch (ex) {
+            return `<pre>${ex}</pre>`;
+          }
+        }
+        return temp(tokens, idx, options, env, slf);
+      };
+      ////结束思维导图设置////
+    },
   },
   vite: {
     server: {
