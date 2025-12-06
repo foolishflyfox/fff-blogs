@@ -57,4 +57,21 @@ function draw() {
 
 :::danger 特别注意
 **当 canvas 元素的大小不符合其绘图表面的大小时，浏览器就会对绘图表面进行缩放，使其符合 canvas 元素的大小。**
+
+推荐通过 `width` 与 `height` 属性而非 CSS 来修改 canvas 元素的大小。如果使用 CSS 来修改元素的大小，同时又没有指定 canvas 元素的 `width` 与 `height` 属性，可能导致图形变形。
 :::
+
+canvas 元素并未提供很多 API，它只提供了两个属性与三个方法。
+
+两个属性：
+
+- `width`：canvas 元素的逻辑宽度(绘图表面的宽度)，默认为 300
+- `height`：canvas 元素的逻辑高度(绘图表面的高度)，默认为 150
+
+三个方法：
+
+- `getContext()`: 获取绘图环境对象
+- `toDataURL(type, quality)`: 返回一个数据地址（data URL，base64 编码），可以将它设定为 img 元素的 src 属性值。
+  - `type` 参数：指定图像类型，例如 `image/jpeg` 或 `image/png`，默认值为 `image/png`
+  - `quality`: 0 ～ 1.0 之间的 `double` 值，表示 JPEG 图像的显示质量，当 `type` 为 `image/jpeg` 时有效
+- `toBlob(callback, type, args...)`

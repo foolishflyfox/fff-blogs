@@ -19,6 +19,9 @@ function draw(context: CanvasRenderingContext2D, canvas: HTMLCanvasElement) {
     canvas.width / 2 - 150,
     canvas.height / 2 + 15
   );
+  //   setTimeout(() => {
+  //     console.log("@@@", canvas.toDataURL("image/png"));
+  //   }, 1000);
 }
 </script>
 

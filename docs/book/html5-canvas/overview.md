@@ -10,6 +10,7 @@
 - `height` 画布逻辑高
 ### 方法
 - `getContext` 获取绘图环境
+- `toDataURL` 生成 Base64 URL
 ## context 绘图环境
 ### 属性
 - `font`: 字体
