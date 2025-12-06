@@ -80,3 +80,26 @@ canvas 元素并未提供很多 API，它只提供了两个属性与三个方法
   - `quality`: 0 ～ 1.0 之间的 `double` 值，表示 JPEG 图像的显示质量，当 `type` 为 `image/jpeg` 时有效
 
 ## Canvas 的绘图环境
+
+canvas 元素仅仅是为了充当绘图环境对象的容器而存在的，该环境对象提供全部的绘制功能。
+
+在 JavaScript 代码中，很少会用到 canvas 元素本身。通常使用 canvas 绘图环境对象提供的强大的 API。下面是 2d 绘图的全部属性，除了指向 canvas 元素自身的 canvas 属性外，其余的 2d 绘图环境属性都与绘图操作有关。
+
+- `canvas`: 该绘图环境所属的 canvas 对象。该属性常用于获取 canvas 的宽度与高度，分别调用 `context.canvas.width` 与 `context.canvas.height` 即可
+- `fillstyle`: 设置用于填充的颜色、渐变色或图案，默认为 `#000000`
+- `font`: 设置调用 `fillText()` 或 `strokeText()` 时使用的字型
+- `globalAlpha`: 全局透明度设置，取值范围为 0 ~ 1 的小数，浏览器会将每个像素的 `alpha` 值与该值相乘，在绘制图像时也是如此，默认值为 1
+- `globalCompsiteOperation`: 该值决定了浏览器将某个物体绘制在其他物体之上时，所采用的绘制方式，默认为 `source-over`
+- `lineCap`: 浏览器绘制线段的端点形状，可取 `butt` / `square` / `round`，默认为 `butt`
+- `lineWidth`: 指定线段的屏幕像素宽度，必须是非负、非无穷的 double 值，默认为 1.0
+- `lineJoin`: 指定线段拐点的形状，可取 `bevel` / `round` / `miter`，默认为 `miter`
+- `miterLimit`: 当 `lineJoin` 为 `miter` 时，用于指定最大斜接长度，如果斜接长度超过 `miterLimiter` 的值，边角会以 `lineJoin` 为 `bevel` 的方式来显示，默认值为 10
+- `shadowBlur`: 阴影的模糊级数，非负值，默认为 0
+- `shadowColor`: 阴影颜色，通常采用半透明色作为该属性值，以便让背景能显示出来，默认为透明色
+- `shadowOffsetX`: 阴影的水平方向偏移量，单位为像素，默认为 0
+- `shadowOffsetY`: 阴影的垂直方向偏移量，单位为像素，默认为 0
+- `strokeStyle`: 描边时的绘制风格，可以是纯色、渐变色或图案，默认为 `#000000`
+- `textAlign`: 指定 `fillText()` 或 `strokeText()` 绘制文本时，文本的水平对齐方式，默认为 `start`
+- `textBaseline`: 指定 `fillText()` 或 `strokeText()` 绘制文本时，文本的垂直对齐方式，默认为 `alphabetic`
+
+### canvas 状态的保存与恢复

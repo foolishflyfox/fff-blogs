@@ -10,7 +10,7 @@ const props = withDefaults(
     width?: number;
     height?: number;
     backgroundColor?: string;
-    draw: (ctx: CanvasRenderingContext2D, canvas: HTMLCanvasElement) => void;
+    draw: (ctx: CanvasRenderingContext2D) => void;
   }>(),
   {
     width: 200,
@@ -25,7 +25,7 @@ onMounted(() => {
   if (canvasRef.value) {
     const canvas = canvasRef.value;
     const ctx = canvas.getContext("2d")!;
-    props.draw(ctx, canvas);
+    props.draw(ctx);
   }
 });
 </script>

@@ -5,7 +5,9 @@
 <script setup lang="ts">
 import CanvasContainer from "../CanvasContainer.vue";
 
-function draw(context: CanvasRenderingContext2D, canvas: HTMLCanvasElement) {
+function draw(context: CanvasRenderingContext2D) {
+  console.log("@@@", context.textBaseline);
+  const canvas = context.canvas;
   context.font = "38pt Arial";
   context.fillStyle = "cornflowerblue";
   context.strokeStyle = "blue";
@@ -19,10 +21,6 @@ function draw(context: CanvasRenderingContext2D, canvas: HTMLCanvasElement) {
     canvas.width / 2 - 150,
     canvas.height / 2 + 15
   );
-  //   setTimeout(() => {
-  //     console.log("@@@", canvas.toDataURL("image/png"));
-  //   }, 1000);
-  //   canvas.toBlob()
 }
 </script>
 
