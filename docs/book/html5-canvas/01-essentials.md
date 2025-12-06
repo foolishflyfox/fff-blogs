@@ -72,6 +72,11 @@ canvas 元素并未提供很多 API，它只提供了两个属性与三个方法
 
 - `getContext()`: 获取绘图环境对象
 - `toDataURL(type, quality)`: 返回一个数据地址（data URL，base64 编码），可以将它设定为 img 元素的 src 属性值。
-  - `type` 参数：指定图像类型，例如 `image/jpeg` 或 `image/png`，默认值为 `image/png`
+  - `type` ：指定图像类型，例如 `image/jpeg` 或 `image/png`，默认值为 `image/png`
   - `quality`: 0 ～ 1.0 之间的 `double` 值，表示 JPEG 图像的显示质量，当 `type` 为 `image/jpeg` 时有效
-- `toBlob(callback, type, args...)`
+- `toBlob(callback, type, quality)`: 创建一个用于表示此 canvas 元素图像文件的 Blob
+  - `callback`: 一个回调函数，入参为 `Blob` 类型，处理生成的 blob
+  - `type`: 指定图像类型，例如 `image/jpeg` 或 `image/png`，默认值为 `image/png`
+  - `quality`: 0 ～ 1.0 之间的 `double` 值，表示 JPEG 图像的显示质量，当 `type` 为 `image/jpeg` 时有效
+
+## Canvas 的绘图环境

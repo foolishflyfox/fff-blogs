@@ -11,6 +11,7 @@
 ### 方法
 - `getContext` 获取绘图环境
 - `toDataURL` 生成 Base64 URL
+- `toBlob` 生成类文件 Blob 对象
 ## context 绘图环境
 ### 属性
 - `font`: 字体

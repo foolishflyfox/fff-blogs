@@ -22,6 +22,7 @@ function draw(context: CanvasRenderingContext2D, canvas: HTMLCanvasElement) {
   //   setTimeout(() => {
   //     console.log("@@@", canvas.toDataURL("image/png"));
   //   }, 1000);
+  //   canvas.toBlob()
 }
 </script>
 
