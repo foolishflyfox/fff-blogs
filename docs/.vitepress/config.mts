@@ -90,7 +90,10 @@ export default defineConfig({
               text: "HTML5 Canvas 核心技术",
               prefix: "html5-canvas",
               collapsed: true,
-              items: [{ text: "预览", link: "overview" }],
+              items: [
+                { text: "预览", link: "overview" },
+                { text: "基础知识", link: "01-essentials" },
+              ],
             },
           ],
         },
