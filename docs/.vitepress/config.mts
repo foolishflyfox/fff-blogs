@@ -146,6 +146,16 @@ export default defineConfig({
     ],
   },
   markdown: {
+    // true: 全部显示; false: 全部不显示; number: 只有代码行数 ≥ 该值时才显示
+    lineNumbers: true,
+    // 全局设置自定义标题
+    container: {
+      tipLabel: "提示",
+      warningLabel: "警告",
+      dangerLabel: "危险",
+      infoLabel: "信息",
+      detailsLabel: "详细信息",
+    },
     math: true,
     config: (md) => {
       // 思维导图支持步骤二
