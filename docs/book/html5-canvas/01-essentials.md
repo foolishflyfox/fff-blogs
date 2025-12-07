@@ -1,5 +1,5 @@
 <script setup>
-import { HelloDemo, SimpleClock, SpriteCoordinate } from "./codes/01";
+import { HelloDemo, SimpleClock, SpriteCoordinate, BouncingBalls } from "./codes/01";
 </script>
 
 # 01. 基础知识
@@ -403,3 +403,67 @@ function draw(context: CanvasRenderingContext2D) {
 如果激活 `keydown` 事件的那个按键会打印出某个字符，那么浏览器在触发 `keyup` 事件之前先产生 `keypress` 事件。如果在一段时间内持续地按住某个可以打印出字符的键，那么浏览器就会在 `keydown` 与 `keyup` 事件之间产生一系列的 `keypress` 事件。
 
 ## 绘制表面的保存与恢复
+
+Canvas 绘图环境对象除了可以通过 `save()` 对配置属性进行保存与恢复外，另外一个关键功能就是可以对绘图表面自身进行保存与恢复。这种绘制表面的保存与恢复功能，可以让开发者在绘图表面进行临时性的绘制动作，例如绘制像皮带、辅助线(guidewire)或注解(annotation)。
+
+通过 `getImageData()` 与 `putImageData()` 可以保存与恢复绘图环境的绘图表面图像，这两个函数也可以实现图像滤镜：先获取图像数据，然后处理，最后将它恢复到 canvas 之上。
+
+:::tip
+
+**立即模式绘图系统**
+
+canvas 元素采用 “立即模式”(immediate-mode) 来绘制图形，这意味着它会立刻将你所指定的内容绘制在 canvas 上，然后忘记刚才绘制的内容，这表示 canvas 中不包含将要绘制的图形对象列表。在 SVG 中，则会维护一份所绘图形对象的列表，这些绘图系统称为 **保留模式(retained-mod)绘图系统**。
+
+:::
+
+通过保存与恢复绘图表面来绘制辅助线的代码：
+
+```js
+const canvas = document.getElementById("canvas");
+const context = canvas.getContext("2d");
+... ...
+// 保留与恢复绘图表面
+function saveDrawingSurface() {
+  drawingSurfaceImageData = context.getImageData(0, 0, canvas.width, canvas.height);
+}
+function restoreDrawingSurface() {
+  context.putImageData(drawingSurfaceImageData, 0, 0);
+}
+// 事件处理
+canvas.onmousedown = function (e) {
+  saveDrawingSurface();
+  ... ...
+}
+canvas.onmousemove = function (e) {
+  const loc = windowToCanvas(e);
+  if (dragging) {
+    restoreDrawingSurface();
+    ... ...
+    if (guidewires) {
+      drawGuidewires(mousedown.x, mousedown.y);
+    }
+  }
+}
+canvas.onmouseup = function (e){
+  ... ...
+  restoreDrawingSurface();
+}
+```
+
+## 在 Canvas 中使用 HTML 元素
+
+在实现网络应用程序时，我们经常将一个或更多的 canvas 元素与其他 HTML 空间结合起来使用，以便让用户可以通过输入数值或其他方式来控制应用程序。
+
+要将其他 HTML 控件与 canvas 结合起来，首先想到的办法是将控件嵌入到 canvas 元素中。不过这不可行，因为任何放入 canvas 元素主体部分的东西，只有在浏览器不支持 canvas 元素时才会显示出来。因此控件必须放在 canvas 元素之外。
+
+为了让 HTML 控件看起来像是在 canvas 范围内，可以使用 CSS 将这些控件放在 canvas 之上，下面的应用演示了这个效果。
+
+<BouncingBalls />
+
+该应用程序显示了 100 个运动的小球，并提供了一个用于启动或停止动画效果的链接。这个存在于 div 元素中的链接是半透明的，并且浮动在 canvas 之上。
+
+:::tip
+
+Canvas 规范中说，应该优先考虑使用内置的 HTML 控件，而非使用 CanvasAPI 来从头实现控件。这通常是个好的建议。要想用 Canvas API 来编写全新的控件，一般涉及大量的工作。在大多数情况下，如果有某种更为简单的方法可用，我们就不要为了实现它而花费那么多功夫。
+
+:::
