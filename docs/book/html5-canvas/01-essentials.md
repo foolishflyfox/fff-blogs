@@ -1,5 +1,13 @@
 <script setup>
-import { HelloDemo, SimpleClock, SpriteCoordinate, BouncingBalls } from "./codes/01";
+import { 
+  HelloDemo, 
+  SimpleClock, 
+  SpriteCoordinate, 
+  BouncingBalls, 
+  RubberArea, 
+  SimpleClockSnapshot,
+  SimpleClockOfflineScreen 
+} from "./codes/01";
 </script>
 
 # 01. 基础知识
@@ -456,6 +464,8 @@ canvas.onmouseup = function (e){
 
 要将其他 HTML 控件与 canvas 结合起来，首先想到的办法是将控件嵌入到 canvas 元素中。不过这不可行，因为任何放入 canvas 元素主体部分的东西，只有在浏览器不支持 canvas 元素时才会显示出来。因此控件必须放在 canvas 元素之外。
 
+### 弹力球应用
+
 为了让 HTML 控件看起来像是在 canvas 范围内，可以使用 CSS 将这些控件放在 canvas 之上，下面的应用演示了这个效果。
 
 <BouncingBalls />
@@ -467,3 +477,40 @@ canvas.onmouseup = function (e){
 Canvas 规范中说，应该优先考虑使用内置的 HTML 控件，而非使用 CanvasAPI 来从头实现控件。这通常是个好的建议。要想用 Canvas API 来编写全新的控件，一般涉及大量的工作。在大多数情况下，如果有某种更为简单的方法可用，我们就不要为了实现它而花费那么多功夫。
 
 :::
+
+### 橡皮筋选择器应用
+
+下面的应用采用了一种名为“橡皮筋式”(rubberbanding) 选取框的技术，让用户在 canvas 中选择某个区域。起初，该 canvas 会显示一幅图像，当选定图像的某一部分时，应用程序就会将你所选的这部分区域放大。
+
+<RubberArea />
+
+## 打印 Canvas 的内容
+
+可以将 canvas 作为图像来访问，现在浏览器支持将 canvas 对象保存为 png 图片。下面的应用实现了一个对 canvas 进行截图的功能。
+
+<SimpleClockSnapshot />
+
+在点击截图按钮后，会执行如下步骤：
+
+1. 调用 `toDataURL()` 方法获取图片数据地址
+2. 使用图片数据地址设置 `<img />` 标签的 `src` 字段
+3. 隐藏 `canvas` 元素并显示 `img` 元素
+
+## 离屏 canvas
+
+Canvas 技术的另一项重要功能就是可以创建并操作离屏 canvas。举例来说，多数情况下可以将背景存储在一个或多个离屏 canvas 中，并将这些离屏 canvas 中的某一部分复制到屏幕上，可以大幅提高应用程序的性能。
+
+下面就是一个离屏 canvas 的例子，显示的时钟是一个 png 图片，通过离屏的 canvas 创建：
+
+<SimpleClockOfflineScreen />
+
+代码中通过以下代码创建 canvas 元素：
+
+```ts
+const canvas = document.createElement("canvas") as HTMLCanvasElement;
+canvas.width = 200;
+canvas.height = 200;
+const context = canvas.getContext("2d")!;
+```
+
+该 canvas 不会加入到 DOM 中，并定时通过 `canvas.toDataURL()` 创建图片地址，并更新 img 标签的 src 属性。

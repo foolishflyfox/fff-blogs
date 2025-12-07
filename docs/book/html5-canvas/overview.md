@@ -41,4 +41,5 @@
 - `restore`: 恢复 canvas 状态
 - `fillText`: 填充文本
 - `strokeText`: 描边文本
+- `drawImage`: 绘制图片
 ```
