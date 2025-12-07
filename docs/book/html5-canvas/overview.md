@@ -31,6 +31,8 @@
 - `textAlign`: 文本水平对齐方式
 - `textBaseline`: 文本垂直对齐方式
 ### 方法
+- `save`: 保存 canvas 状态
+- `restore`: 恢复 canvas 状态
 - `fillText`: 填充文本
 - `strokeText`: 描边文本
 ```

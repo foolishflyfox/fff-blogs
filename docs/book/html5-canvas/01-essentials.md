@@ -1,5 +1,5 @@
 <script setup>
-import {HelloDemo} from "./codes/01";
+import { HelloDemo, SimpleClock } from "./codes/01";
 </script>
 
 # 01. 基础知识
@@ -103,3 +103,130 @@ canvas 元素仅仅是为了充当绘图环境对象的容器而存在的，该�
 - `textBaseline`: 指定 `fillText()` 或 `strokeText()` 绘制文本时，文本的垂直对齐方式，默认为 `alphabetic`
 
 ### canvas 状态的保存与恢复
+
+在进行绘图操作时，需要频繁设置这些值。很多时候只想临时性地改变这些属性。`context` 提供了 `save()` 和 `restore()` 方法，用于保存及恢复当前 canvas 绘图环境的所有属性。
+
+下面是使用的代码示例：
+
+```js
+function drawGrid(strokeStyle, fillStyle) {
+    controlContext.save(); // 将绘图环境配置保存到栈中
+    controlContext.strokeStyle = strokeStyle;
+    controlContext.fillStyle = fillStyle;
+    // 绘制网格线
+    ... ...
+    controlContext.restore(); // 从栈中恢复绘图环境配置
+}
+```
+
+:::tip
+**`save()` 与 `restore()` 方法可以嵌套调用**
+
+绘图环境的 `save()` 方法会将当前的绘图环境压入堆栈顶部。对应的 `restore()` 方法则会从堆栈顶部弹出一组状态信息，并据此恢复当前环境的各个状态，这意味着可以嵌套式地调用 `save()`/`restore()` 方法。
+:::
+
+canvas 状态包括当前的坐标变换(transformation)信息、剪辑区域(clipping region)以及所有 canvas 绘图环境对象的属性。
+
+## 基本的绘制操作
+
+下面是一个时钟程序。
+
+<SimpleClock />
+
+它用到了如下的 canvas 绘图 API：
+
+- `arc()`
+- `beginPath()`
+- `clearRect()`
+- `fillText()`
+- `moveTo()`
+- `lineTo()`
+- `fill()`
+- `stroke()`
+- `save()`
+- `restore()`
+
+Canvas 可以让开发者先创建不可见的路径，稍后再调用 `stroke()` 来描绘路径的边缘，或调用 `fill()` 来对路径的内部进行填充，使路径变得可见，可以调用 `beginPath()` 方法开始定义某一段路径。
+
+其代码如下所示：
+
+```ts
+let timerId: number | undefined;
+function draw(ctx: CanvasRenderingContext2D) {
+  const canvas = ctx.canvas;
+  function drawClock() {
+    const date = new Date();
+    const hours = date.getHours();
+    const minutes = date.getMinutes();
+    const seconds = date.getSeconds();
+    ctx.clearRect(0, 0, canvas.width, canvas.width);
+    ctx.fillStyle = "#000";
+    ctx.strokeStyle = "#000";
+    ctx.lineWidth = 3;
+    ctx.font = "10pt Arial";
+    // 设置文本居中
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    // 中心点位置
+    const cx = canvas.width / 2;
+    const cy = canvas.height / 2;
+    const r = canvas.width / 2 - 20;
+    // 绘制时钟外面的圆
+    ctx.beginPath();
+    ctx.arc(cx, cy, r, 0, Math.PI * 2);
+    ctx.stroke();
+    // 绘制中心
+    ctx.beginPath();
+    ctx.arc(cx, cy, 5, 0, Math.PI * 2);
+    ctx.fill();
+    // 绘制外部的时间数字
+    for (let i = 1; i < 13; i++) {
+      const textR = r + 10;
+      const radian = -Math.PI / 2 + i * (Math.PI / 6);
+      const textX = cx + textR * Math.cos(radian);
+      const textY = cy + textR * Math.sin(radian);
+      ctx.fillText(String(i), textX, textY);
+    }
+    // 绘制时针
+    ctx.save();
+    ctx.lineWidth = 5; // 时针宽度
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    const realHour = (hours * 3600 + minutes * 60 + seconds) / 3600;
+    const hourRadian = -Math.PI / 2 + ((realHour % 12) * Math.PI) / 6;
+    const hourRadius = r - 20;
+    const hourX = cx + hourRadius * Math.cos(hourRadian);
+    const hourY = cy + hourRadius * Math.sin(hourRadian);
+    ctx.lineTo(hourX, hourY);
+    ctx.stroke();
+    ctx.restore();
+    // 绘制分针
+    ctx.save();
+    ctx.lineWidth = 3; // 分针宽度
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    const realMinute = (minutes * 60 + seconds) / 60;
+    const minuteRadian = -Math.PI / 2 + ((realMinute % 60) * Math.PI) / 30;
+    const minuteRadius = r - 12;
+    const minuteX = cx + minuteRadius * Math.cos(minuteRadian);
+    const minuteY = cy + minuteRadius * Math.sin(minuteRadian);
+    ctx.lineTo(minuteX, minuteY);
+    ctx.stroke();
+    ctx.restore();
+    // 绘制秒针
+    ctx.save();
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    const secondRadian = -Math.PI / 2 + (seconds * Math.PI) / 30;
+    const secondRadius = r - 7;
+    const secondX = cx + secondRadius * Math.cos(secondRadian);
+    const secondY = cy + secondRadius * Math.sin(secondRadian);
+    ctx.lineTo(secondX, secondY);
+    ctx.stroke();
+    ctx.restore();
+  }
+  drawClock();
+  timerId = window.setInterval(drawClock, 1000);
+}
+```
