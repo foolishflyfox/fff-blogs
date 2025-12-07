@@ -52,7 +52,7 @@ function draw() {
 `fillStyle` 与 `strokeStyle` 属性可以是 CSS 格式的颜色、渐变色或是图案。
 
 ::: warning
-**在设置 canvas 的宽度与高度时，不能使用 `px` 后缀**。虽然支持 Canvas 的浏览器普遍允许在设置 canvas 元素的 width 与 height 属性时使用 `px` 后缀，但这不是 Canvas 规范，根据规范书，这些属性的取值，只能是非负整数。
+**在设置 canvas 的宽度与高度时，不应使用 `px` 后缀**。虽然支持 Canvas 的浏览器普遍允许在设置 canvas 元素的 width 与 height 属性时使用 `px` 后缀，但这不是 Canvas 规范，根据规范书，这些属性的取值，只能是非负整数。
 :::
 
 ::: tip
@@ -514,3 +514,7 @@ const context = canvas.getContext("2d")!;
 ```
 
 该 canvas 不会加入到 DOM 中，并定时通过 `canvas.toDataURL()` 创建图片地址，并更新 img 标签的 src 属性。
+
+## 基础数学知识简介
+
+如果想用 Canvas 实现一些有趣的功能，那必须很好地掌握一些基础的数学知识，尤其是线性代数、三角函数方面。
