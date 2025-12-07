@@ -1,5 +1,5 @@
 <script setup>
-import { HelloDemo, SimpleClock } from "./codes/01";
+import { HelloDemo, SimpleClock, SpriteCoordinate } from "./codes/01";
 </script>
 
 # 01. 基础知识
@@ -230,3 +230,41 @@ function draw(ctx: CanvasRenderingContext2D) {
   timerId = window.setInterval(drawClock, 1000);
 }
 ```
+
+## 事件处理
+
+HTML5 应用程序是以事件来驱动的。几乎所有基于 Canvas 的应用程序都会处理鼠标和触摸事件。
+
+### 鼠标事件
+
+监听 “按下鼠标事件” 代码：
+
+```js
+canvas.onmousedown = function (e) {
+    // 处理鼠标事件
+    ... ...
+}
+```
+
+也可以通过 `addEventListener()` 方法来注册监听器：
+
+```js
+canvas.addEventListener("mousedown", function (e) {
+    // 处理鼠标事件
+    ... ...
+});
+```
+
+除了 `onmousedow` 外，也可以使用 `onmousemove` / `onmouseup` / `onmouseout` 来注册监听器。
+
+:::tip
+使用 `onmousedown`、`onmousemove` 方式注册监听器比调用 `addEventListener` 要稍简单，但如果要向鼠标事件注册想多个监听器的话，就的使用 `addEventListener()` 了。多个监听器满足：
+
+- 执行顺序：按注册顺序执行
+- 重复注册同一个函数：一次触发只会执行一次
+
+:::
+
+浏览器通过事件对象传递给监听器的鼠标坐标是窗口坐标（window coordinate），而不是 canvas 自身的坐标。
+
+<SpriteCoordinate />

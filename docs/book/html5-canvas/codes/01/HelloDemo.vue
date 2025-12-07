@@ -6,7 +6,6 @@
 import CanvasContainer from "../CanvasContainer.vue";
 
 function draw(context: CanvasRenderingContext2D) {
-  console.log("@@@", context.textBaseline);
   const canvas = context.canvas;
   context.font = "38pt Arial";
   context.fillStyle = "cornflowerblue";

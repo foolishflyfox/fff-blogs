@@ -8,10 +8,16 @@
 ### 属性
 - `width` 画布逻辑宽
 - `height` 画布逻辑高
+- `onmousedown`: 鼠标按下处理函数
+- `onmouseup`: 鼠标松开处理函数
+- `onmouseover`: 鼠标悬停处理函数
+- `onmouseout`: 鼠标离开处理函数
 ### 方法
 - `getContext` 获取绘图环境
 - `toDataURL` 生成 Base64 URL
 - `toBlob` 生成类文件 Blob 对象
+- `addEventListener`: 事件处理注册
+- `removeEventListener`: 事件处理注销
 ## context 绘图环境
 ### 属性
 - `canvas`: 所属 canvas 对象
