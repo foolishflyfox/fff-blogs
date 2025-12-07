@@ -267,4 +267,139 @@ canvas.addEventListener("mousedown", function (e) {
 
 浏览器通过事件对象传递给监听器的鼠标坐标是窗口坐标（window coordinate），而不是 canvas 自身的坐标。
 
+大部分情况下，开发者需要知道的是发生鼠标事件的点相对于 canvas 的位置，而不是在整个窗口中的位置，所以必须进行坐标转换。
+
+下面是一个精灵表（sprite sheet）坐标查看器。精灵表指的是一张包含许多动画图像的图片。在动画的播放过程中，每次都要在精灵表中选取一张图像显示出来，这意味着你必须知道精灵表中每张图像的精确坐标。
+
+你可以将鼠标移动到下面的图片中，查看鼠标位置对应的图片坐标，同时还会在屏幕上绘制辅助线：
+
 <SpriteCoordinate />
+
+该应用程序向 canvas 注册了一个 `mousemove` 事件监听器，等到浏览器回调这个监听器时，应用程序会将相对于窗口的鼠标转换为 canvas 坐标。转换工作是通过类似下面这样的 `windowToCanvas()` 方法来完成：
+
+```ts
+/**
+ * window 坐标到 canvas 坐标转换
+ */
+function windowPosToCanvasPos(windowX: number, windowY: number) {
+  const bbox = canvas.getBoundingClientRect();
+  return {
+    x: (windowX - bbox.left) * (canvas.width / bbox.width),
+    y: (windowY - bbox.top) * (canvas.height / bbox.height),
+  };
+}
+canvas.onmousemove = (e) => {
+  // 坐标转换
+  const canvasPos = windowPosToCanvasPos(e.clientX, e.clientY);
+  drawBackground(); // 绘制背景线
+  drawSpritesheet(); // 显示精灵图
+  drawGridelines(canvasPos.x, canvasPos.y); // 绘制辅助线
+  updateReadout(canvasPos.x, canvasPos.y); // 更新坐标值
+};
+```
+
+上述 `windowPosToCanvasPost()` 方法在 canvas 对象上调用 `getBoundingClientRect()` 方法获取 canvas 元素的边界框(bounding box)。该边界框的坐标是相对于整个窗口的，`windowPosToCanvasPost()` 方法返回一个对象，其 `x` 与 `y` 属性分别对应于鼠标在 canvas 之中的坐标。
+
+**注意：`windowPosToCanvasPost()` 不只是将 canvas 边界框的 x、y 坐标从窗口坐标中减去，还在 canvas 元素大小与绘图表面大小不一致时对 x、y 坐标进行了缩放。**
+
+下面是精灵图坐标查看器的 HTML 代码：
+
+```ts
+function draw(context: CanvasRenderingContext2D) {
+  const canvas = context.canvas;
+  const spritesheet = new Image();
+  // 显示坐标的值的元素
+  const readout = document.querySelector("#readout") as HTMLSpanElement;
+  // 绘制图片
+  function drawSpritesheet() {
+    context.drawImage(spritesheet, 0, 0);
+  }
+  spritesheet.src = "../shared/images/running-sprite-sheet.png";
+
+  /**
+   * 绘制作为背景的横线
+   */
+  function drawBackground() {
+    const VERTICAL_LINE_SPACING = 12;
+    let i = canvas.height;
+    context.clearRect(0, 0, canvas.width, canvas.height);
+    context.strokeStyle = "lightgray";
+    context.lineWidth = 0.5;
+    while (i > VERTICAL_LINE_SPACING * 4) {
+      context.beginPath();
+      context.moveTo(0, i);
+      context.lineTo(canvas.width, i);
+      context.stroke();
+      i -= VERTICAL_LINE_SPACING;
+    }
+  }
+  /**
+   * 绘制定位线
+   */
+  function drawGridelines(x: number, y: number) {
+    context.strokeStyle = "rgba(0, 0, 230, 0.8)";
+    context.lineWidth = 0.5;
+    // 绘制水平线
+    context.beginPath();
+    context.moveTo(0, y);
+    context.lineTo(canvas.width, y);
+    context.stroke();
+    // 绘制垂直线
+    context.beginPath();
+    context.moveTo(x, 0);
+    context.lineTo(x, canvas.height);
+    context.stroke();
+  }
+  /**
+   * 更新显示的坐标值
+   */
+  function updateReadout(x: number, y: number) {
+    readout.innerHTML = `(${x.toFixed(0)}, ${y.toFixed(0)})`;
+  }
+  /**
+   * window 坐标到 canvas 坐标转换
+   */
+  function windowPosToCanvasPos(windowX: number, windowY: number) {
+    const bbox = canvas.getBoundingClientRect();
+    return {
+      x: (windowX - bbox.left) * (canvas.width / bbox.width),
+      y: (windowY - bbox.top) * (canvas.height / bbox.height),
+    };
+  }
+
+  drawBackground();
+  spritesheet.onload = function (e) {
+    drawSpritesheet();
+  };
+  // 处理鼠标移动事件
+  canvas.onmousemove = (e) => {
+    const canvasPos = windowPosToCanvasPos(e.clientX, e.clientY);
+    drawBackground();
+    drawSpritesheet();
+    drawGridelines(canvasPos.x, canvasPos.y);
+    updateReadout(canvasPos.x, canvasPos.y);
+  };
+}
+```
+
+:::tip
+
+**小技巧：让浏览器不再干预事件处理**
+
+对象事件中有一个 `preventDefault()` 方法，可以阻止浏览器对该事件作出默认的反映。
+
+:::
+
+### 键盘事件
+
+当在浏览器窗口中按下某个键时，浏览器将生成键盘事件。这些事件发生在拥有焦点的 HTML 元素身上。假如没有元素拥有焦点，那么事件的发生将会移到 window 与 document 对象上。
+
+**canvas 是一个不可获取焦点的元素，所以 canvas 元素上新增键盘事件监听器是徒劳的。如果想要检测键盘事件的话，应该在 document 或 window 对象上新增键盘事件监听器才对。**
+
+一共有三种键盘事件：`keydown` / `keypress` / `keyup`。
+
+`keydown` 与 `keyup` 是底层事件，几乎每次按键时浏览器都会触发这些事件。
+
+如果激活 `keydown` 事件的那个按键会打印出某个字符，那么浏览器在触发 `keyup` 事件之前先产生 `keypress` 事件。如果在一段时间内持续地按住某个可以打印出字符的键，那么浏览器就会在 `keydown` 与 `keyup` 事件之间产生一系列的 `keypress` 事件。
+
+## 绘制表面的保存与恢复
