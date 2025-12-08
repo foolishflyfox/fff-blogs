@@ -8,3 +8,5 @@ export { default as ButtonShadow } from "./ButtonShadow.vue";
 export { default as StrokeFillDemo } from "./StrokeFillDemo.vue";
 export { default as CutoutTwoCircle } from "./CutoutTwoCircle.vue";
 export { default as MultiCutout } from "./MultiCutout.vue";
+export { default as SimpleLine } from "./SimpleLine.vue";
+export { default as OnePixelGrid } from "./OnePixelGrid.vue";

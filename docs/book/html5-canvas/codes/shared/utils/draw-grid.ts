@@ -7,15 +7,15 @@ export function drawGrid(
   const canvas = ctx.canvas;
   ctx.save();
   ctx.strokeStyle = color;
-  ctx.lineWidth = 1;
-  for (let i = stepx; i < canvas.width; i += stepx) {
+  ctx.lineWidth = 0.5;
+  for (let i = stepx + 0.5; i < canvas.width; i += stepx) {
     ctx.beginPath();
     ctx.moveTo(i, 0);
     ctx.lineTo(i, canvas.height);
     ctx.stroke();
   }
   const finalStepy = stepy ?? stepx;
-  for (let i = finalStepy; i < canvas.height; i += finalStepy) {
+  for (let i = finalStepy + 0.5; i < canvas.height; i += finalStepy) {
     ctx.beginPath();
     ctx.moveTo(0, i);
     ctx.lineTo(canvas.width, i);

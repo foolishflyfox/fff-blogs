@@ -9,7 +9,9 @@ import {
     ButtonShadow,
     StrokeFillDemo,
     CutoutTwoCircle,
-    MultiCutout
+    MultiCutout,
+    SimpleLine,
+    OnePixelGrid
 } from './codes/02';
 </script>
 
@@ -448,3 +450,59 @@ ctx.stroke();
 ```
 
 ## 线段
+
+Canvas 绘图环境提供了两个可以用来创建线性路径的方法：`moveTo()` 与 `lineTo()`。要使线性路径呈现在 canvas 中，必须在创建路径后调用 `stroke()` 方法。这样才能画出如下所示的线段：
+
+<SimpleLine />
+
+代码如下：
+
+```ts
+ctx.lineWidth = 1;
+// 绘制第一根线段
+ctx.beginPath();
+ctx.moveTo(50, 10);
+ctx.lineTo(450, 10);
+ctx.stroke();
+// 绘制第二根线段
+ctx.beginPath();
+ctx.moveTo(50.5, 50.5);
+ctx.lineTo(450.5, 50.5);
+ctx.stroke();
+```
+
+可以看到，尽管我们将 `lineWidth` 设成了 1，但是第一根线段画出的是 2 个像素宽度。
+
+这是因为在某 2 个像素的边界处绘制一条 1 像素宽的线段，那么改线段实际上会占据 2 个像素，如下图所示：
+
+<img src="./codes/shared/images/2-19.png" width="300" />
+
+canvas 会试着将半个像素画在边界处中线的右边，将另外半个像素画在边界中线的左边，然而在一个整像素的范围内绘制半个像素宽的线段是不可能的，所以左右两个方向上的半像素都被扩展为 1 个像素，变为了 2 像素宽。
+
+如果绘制像素在某 2 个像素之间，那就不会出现上述问题：
+
+<img src="./codes/shared/images/2-20.png" width="300" />
+
+下面我们来绘制真正 1 像素的网格线：
+
+<OnePixelGrid />
+
+绘制网格的代码如下：
+
+```ts
+ctx.lineWidth = 0.5;
+for (let i = stepx + 0.5; i < canvas.width; i += stepx) {
+  ctx.beginPath();
+  ctx.moveTo(i, 0);
+  ctx.lineTo(i, canvas.height);
+  ctx.stroke();
+}
+for (let i = stepy + 0.5; i < canvas.height; i += stepy) {
+  ctx.beginPath();
+  ctx.moveTo(0, i);
+  ctx.lineTo(canvas.width, i);
+  ctx.stroke();
+}
+```
+
+### 坐标轴绘制
