@@ -4,3 +4,8 @@ declare module "*?url" {
   const src: string;
   export default src;
 }
+
+interface Pos {
+  x: number;
+  y: number;
+}

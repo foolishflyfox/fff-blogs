@@ -4,7 +4,8 @@ import {
     ColorOpacityDemo,
     LineGradientDemo,
     RadialGradientDemo,
-    ConicGradientDemo
+    ConicGradientDemo,
+    ImageFillPattern,
 } from './codes/02';
 </script>
 
@@ -230,3 +231,26 @@ ctx.fill();
 ```
 
 ### 图案
+
+除了颜色与渐变色，Canvas 也允许使用图案来对图形和文本进行描边与填充。这里的图案可以是以下三种之一：image 元素 / canvas 元素或 video 元素。
+
+可以用 `createPattern()` 方法来创建图案，该方法接收两个参数：图案本身以及表示如何重复图案的字符串，可以为 `repeat`/`repeat-x`/`repeat-y`或`no-repeat`。下面的应用演示了不同重复方式的效果：
+
+<ImageFillPattern />
+
+代码如下：
+
+```ts
+const image = new Image();
+const { width: cw, height: ch } = ctx.canvas;
+changeImagePattern = (patterStr: string) => {
+  ctx.clearRect(0, 0, cw, ch);
+  const pattern = ctx.createPattern(image, patterStr)!;
+  ctx.fillStyle = pattern;
+  ctx.fillRect(0, 0, cw, ch);
+};
+image.onload = () => changeImagePattern(imagePattern.value);
+image.src = redBallUrl;
+```
+
+应用程序调用 `createPattern()` 方法来创建一个新的 CanvasPattern 对象，该对象没有操作其内容的属性或方法。
