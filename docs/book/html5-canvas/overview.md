@@ -41,8 +41,10 @@
 - `save`: 保存 canvas 状态
 - `restore`: 恢复 canvas 状态
 #### 创建
-##### `createLinearGradient`: 渐变色
+##### `createLinearGradient`: 线性渐变
 - `addColorStop`: 添加颜色停止点
+##### `createRadialGradient`: 放射渐变
+- - `addColorStop`: 添加颜色停止点
 #### 绘制
 - `fillText`: 填充文本
 - `strokeText`: 描边文本
