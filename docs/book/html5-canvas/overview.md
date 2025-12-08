@@ -55,4 +55,9 @@
 - `clearRect`: 清除矩形区域
 - `strokeRect`: 矩形描边
 - `fillRect`: 矩形填充
+- `arc`: 绘制圆弧
+- `beginPath`: 开始新路径
+- `closePath`: 闭合当前路径
+- `stroke`: 当前路径描边
+- `fill`: 当前路径填充
 ```

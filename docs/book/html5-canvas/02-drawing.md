@@ -7,6 +7,7 @@ import {
     ConicGradientDemo,
     ImageFillPattern,
     ButtonShadow,
+    StrokeFillDemo,
 } from './codes/02';
 </script>
 
@@ -298,3 +299,76 @@ ctx.fillRect(150, 20, 100, 100);
 如果要绘制的是简单图形、文本或图像，那么其阴影的绘制可能不会带来性能问题，但如果对 canvas 中的动画运用阴影效果，那么其性能肯定比不用阴影效果要差。
 
 :::
+
+## 路径、描边与填充
+
+`strokeRect()`、`fillRect()`、`strokeText()`、`fillText()` 都是立即绘制的。绘制其他图形，例如贝塞尔曲线这样复杂的图形，都是基于路径的 (path)。
+
+大多数绘制系统，如 SVG、Apple 的 Cocoa 框架、Adobe Illustrator 等，都是基于路径的。使用这些绘制系统时，你需要先定义一个路径，再对其进行描边或填充，或者在描边的同时进行填充。
+
+下面的应用演示了这三种绘制方式：
+
+<StrokeFillDemo />
+
+对应代码如下：
+
+```ts
+drawGrid(ctx, "#ccc", 10);
+ctx.font = "48px Helvtica";
+ctx.strokeStyle = "blue";
+ctx.fillStyle = "red";
+ctx.lineWidth = 2;
+// 文本绘制
+ctx.strokeText("Stroke", 60, 110);
+ctx.fillText("Fill", 440, 110);
+ctx.strokeText("Stroke & Fill", 650, 110);
+ctx.fillText("Stroke & Fill", 650, 110);
+// 矩形绘制
+ctx.lineWidth = 5;
+ctx.beginPath();
+ctx.rect(80, 150, 160, 100);
+ctx.stroke();
+ctx.beginPath();
+ctx.rect(400, 150, 150, 100);
+ctx.fill();
+ctx.beginPath();
+ctx.rect(750, 150, 150, 100);
+ctx.stroke();
+ctx.fill();
+// 开放圆弧
+ctx.beginPath();
+ctx.arc(150, 370, 60, 0, (Math.PI * 3) / 2);
+ctx.stroke();
+ctx.beginPath();
+ctx.arc(475, 370, 60, 0, (Math.PI * 3) / 2);
+ctx.fill();
+ctx.beginPath();
+ctx.arc(820, 370, 60, 0, (Math.PI * 3) / 2);
+ctx.stroke();
+ctx.fill();
+// 闭合圆弧
+ctx.beginPath();
+ctx.arc(150, 550, 60, 0, (Math.PI * 3) / 2);
+ctx.closePath();
+ctx.stroke();
+ctx.beginPath();
+ctx.arc(475, 550, 60, 0, (Math.PI * 3) / 2);
+ctx.closePath();
+ctx.fill();
+ctx.beginPath();
+ctx.arc(820, 550, 60, 0, (Math.PI * 3) / 2);
+ctx.closePath();
+ctx.stroke();
+ctx.fill();
+```
+
+下面是代码中用到的方法的说明：
+
+- `arc()`: 在当前路径中增加一段表示圆弧或圆形的子路径
+- `beginPath()`: 开始一段新路径
+- `closePath()`: 显式地封闭某段开放路径，常用于封闭圆弧路径以及由曲线或线段所创建的开放路径
+- `fill()`: 使用 `fillStyle` 对当前路径的内部进行填充
+- `rect()`: 绘制矩形路径
+- `stroke()`: 使用 `strokeStyle` 来描绘当前路径的轮廓线
+
+### 路径与子路径

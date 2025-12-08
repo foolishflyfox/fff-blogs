@@ -5,3 +5,4 @@ export { default as RadialGradientDemo } from "./RadialGradientDemo.vue";
 export { default as ConicGradientDemo } from "./ConicGradientDemo.vue";
 export { default as ImageFillPattern } from "./ImageFillPattern.vue";
 export { default as ButtonShadow } from "./ButtonShadow.vue";
+export { default as StrokeFillDemo } from "./StrokeFillDemo.vue";

@@ -19,6 +19,7 @@
 
 <script setup lang="ts">
 import { onUnmounted, ref } from "vue";
+import { drawGrid as drawGridUtil } from "../shared/utils";
 import CanvasContainer from "../CanvasContainer.vue";
 
 const canvasWidth = 750;
@@ -65,28 +66,11 @@ class Ball {
   }
 }
 function draw(ctx: CanvasRenderingContext2D) {
-  const canvas = ctx.canvas;
   // 初始化球信息
   const balls = Array.from({ length: 100 }).map(() => new Ball());
   // 绘制网格线
   function drawGrid() {
-    const gridSize = 10;
-    ctx.save();
-    ctx.strokeStyle = "#ccc";
-    ctx.lineWidth = 1;
-    for (let i = gridSize; i < canvas.width; i += gridSize) {
-      ctx.beginPath();
-      ctx.moveTo(i, 0);
-      ctx.lineTo(i, canvas.height);
-      ctx.stroke();
-    }
-    for (let i = gridSize; i < canvas.height; i += gridSize) {
-      ctx.beginPath();
-      ctx.moveTo(0, i);
-      ctx.lineTo(canvas.width, i);
-      ctx.stroke();
-    }
-    ctx.restore();
+    drawGridUtil(ctx, "#ccc", 10);
   }
   function redraw() {
     // 暂停状态

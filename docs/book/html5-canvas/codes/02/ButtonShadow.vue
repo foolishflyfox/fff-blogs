@@ -13,8 +13,7 @@ function draw(ctx: CanvasRenderingContext2D) {
   ctx.shadowOffsetX = 10;
   ctx.shadowOffsetY = 10;
   ctx.beginPath();
-  ctx.rect(20, 20, 100, 100);
-  ctx.stroke();
+  ctx.strokeRect(20, 20, 100, 100);
   ctx.beginPath();
   ctx.fillStyle = "#fff";
   ctx.fillRect(150, 20, 100, 100);
