@@ -6,6 +6,7 @@ import {
     RadialGradientDemo,
     ConicGradientDemo,
     ImageFillPattern,
+    ButtonShadow,
 } from './codes/02';
 </script>
 
@@ -254,3 +255,38 @@ image.src = redBallUrl;
 ```
 
 应用程序调用 `createPattern()` 方法来创建一个新的 CanvasPattern 对象，该对象没有操作其内容的属性或方法。
+
+## 阴影
+
+在 canvas 中，不管要画的是图形、文本还是图像，都可以通过修改绘图环境中的以下 4 个属性值来指定阴影效果：
+
+- `shadowColor`: CSS3 格式的颜色，默认为 `rgba(0, 0, 0, 0)`，是全透明的
+- `shadowOffsetX`: 从图形或文本到阴影的水平像素偏移，默认为 0
+- `shadowOffsetY`: 从图形或文本到阴影的垂直像素偏移，默认为 0
+- `shadowBlur`: 一个与像素无关的值，用于高斯模糊方程中，以便对阴影进行模糊化处理，默认为 0
+
+如果满足以下条件，那么使用 Canvas 的绘图环境对象就可以绘制阴影效果：
+
+1. 指定的 `shadowColor` 值不是全透明的
+2. `shadowOffsetX` / `shadowOffsetX` / `shadowBlur` 中的值不全为 0
+
+下面的应用分别为描边时使用阴影的效果(左)与填充时使用阴影的效果(右):
+
+<ButtonShadow />
+
+对应代码为：
+
+```ts
+ctx.strokeStyle = "black";
+ctx.lineWidth = 5;
+ctx.shadowColor = "#888e";
+ctx.shadowBlur = 10;
+ctx.shadowOffsetX = 10;
+ctx.shadowOffsetY = 10;
+ctx.beginPath();
+ctx.rect(20, 20, 100, 100);
+ctx.stroke();
+ctx.beginPath();
+ctx.fillStyle = "#fff";
+ctx.fillRect(150, 20, 100, 100);
+```
