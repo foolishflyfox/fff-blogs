@@ -6,3 +6,5 @@ export { default as ConicGradientDemo } from "./ConicGradientDemo.vue";
 export { default as ImageFillPattern } from "./ImageFillPattern.vue";
 export { default as ButtonShadow } from "./ButtonShadow.vue";
 export { default as StrokeFillDemo } from "./StrokeFillDemo.vue";
+export { default as CutoutTwoCircle } from "./CutoutTwoCircle.vue";
+export { default as MultiCutout } from "./MultiCutout.vue";

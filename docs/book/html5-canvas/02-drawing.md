@@ -8,6 +8,8 @@ import {
     ImageFillPattern,
     ButtonShadow,
     StrokeFillDemo,
+    CutoutTwoCircle,
+    MultiCutout
 } from './codes/02';
 </script>
 
@@ -372,3 +374,77 @@ ctx.fill();
 - `stroke()`: 使用 `strokeStyle` 来描绘当前路径的轮廓线
 
 ### 路径与子路径
+
+在某一时刻，canvas 中只能有一条路径存在，Canvas 规范将其称为“当前路径”(current path)。该路径可以包含许多子路径(subpath)。而子路径又是由两个或更多的点组成。
+
+填充路径时使用“非零环绕规则”。
+
+非零环绕规则：对于路径中任意给定区域，从该区域内部画一条足够长的线段，使此线段的终点完全落在路径范围之外。将计数器初始化为 0，然后每当这条线段与路径上的直线或曲线相交时，就改变计数器的值。如果是与路径的顺时针部分相交，则加 1，如果是与路径的逆时针部分相交，则减 1。若计数器的最终值不是 0，那么此区域就在路径里面，在调用 `fill()` 方法时，浏览器就会对其进行填充。如果最终值是 0，那么此区域就不在路径内部，不进行填充。
+
+### 剪纸效果
+
+下面是运用所学到路径、阴影以及非零环绕原则等知识，实现了如下的剪纸(cutout) 效果：
+
+<CutoutTwoCircle />
+
+下面是绘制剪纸中双圆的实现：
+
+```ts
+function drawTwoArcs() {
+  ctx.save();
+  ctx.beginPath();
+  // 外部圆，逆时针方向绘制
+  ctx.arc(300, 180, 150, 0, Math.PI * 2, true);
+  // 内部圆，根据传入的参数决定
+  ctx.arc(300, 180, 100, 0, Math.PI * 2, sameDirection.value);
+  ctx.shadowColor = "rgba(0, 0, 0, 0.8)";
+  ctx.shadowOffsetX = 12;
+  ctx.shadowOffsetY = 12;
+  ctx.shadowBlur = 15;
+  ctx.fill();
+  ctx.restore();
+  ctx.stroke();
+}
+```
+
+下面是在矩形内剪出了三个图形：
+
+<MultiCutout />
+
+绘制代码如下：
+
+```ts
+drawGrid(ctx, "lightgray", 10);
+ctx.fillStyle = "#d2a641";
+ctx.strokeStyle = "#9b7a2f";
+ctx.lineWidth = 2;
+ctx.shadowBlur = 20;
+ctx.shadowOffsetX = 10;
+ctx.shadowOffsetY = 10;
+ctx.shadowColor = "rgba(200, 200, 0, 0.5)";
+
+ctx.beginPath();
+// 顺时针绘制外部矩形(默认就是顺时针的)
+ctx.rect(100, 30, 300, 300);
+
+// 逆时针绘制内部矩形
+ctx.moveTo(280, 50);
+ctx.lineTo(280, 80);
+ctx.lineTo(340, 80);
+ctx.lineTo(340, 50);
+ctx.closePath();
+
+// 逆时针绘制三角形
+ctx.moveTo(250, 120);
+ctx.lineTo(200, 190);
+ctx.lineTo(350, 190);
+ctx.closePath();
+
+// 逆时针绘制圆形
+ctx.moveTo(310, 270); // 移动到圆形绘制的起始点位置
+ctx.arc(280, 270, 30, 0, 2 * Math.PI, true);
+ctx.fill();
+ctx.stroke();
+```
+
+## 线段
