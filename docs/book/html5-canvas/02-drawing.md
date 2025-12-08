@@ -1,5 +1,9 @@
 <script setup>
-import { SimpleRect, ColorOpacityDemo } from './codes/02';
+import { 
+    SimpleRect, 
+    ColorOpacityDemo,
+    LineGradientDemo
+} from './codes/02';
 </script>
 
 # 02. 绘制
@@ -116,3 +120,55 @@ context.canvas.onmousedown = () => {
 - `cadetblue`: 军服蓝
 
 ## 渐变色与图案
+
+### 渐变色
+
+Canvas 支持线性渐变(linear gradient)与放射渐变(radial gradient)。
+
+#### 线性渐变
+
+下面是线性渐变的示例：
+
+<LineGradientDemo />
+
+该应用通过调用 `createLinearGradient()` 方法来创建线性渐变。需要向该方法传入两个点的 x、y 坐标，两点之间的连线就是 canvas 建立颜色渐变效果的依据。
+
+调用 `createLinearGradient()` 方法后，会返回一个 CanvasGradient 实例。最后，应用将该渐变色设置为 `fillStyle` 属性值。这样，接下来调用 `fill()` 方法时，都会使用此渐变色进行填充。
+
+在创建好渐变色后后，通过调用 `CanvasGradient` 中唯一的方法 `addColorStop()` 来向渐变色中增加“颜色停止点”（color stop），该方法接受两个参数：一个是位于 0 ～ 1.0 之间的 double 值，代表颜色停止点在渐变线上的位置，另一个是 DOMString 类型的 CSS3 颜色字符串。
+
+下面是该线性渐变应用的代码：
+
+```ts
+const cw = ctx.canvas.width;
+const ch = ctx.canvas.height;
+const gradients = [
+  ctx.createLinearGradient(0, 0, cw / 2, 0),
+  ctx.createLinearGradient(0, 0, 0, ch / 2),
+  ctx.createLinearGradient(0, ch / 2, 0, ch * 0.75),
+  ctx.createLinearGradient(cw / 2, ch / 2, cw, ch),
+];
+gradients.forEach((g) => {
+  g.addColorStop(0, "blue");
+  g.addColorStop(0.25, "white");
+  g.addColorStop(0.5, "purple");
+  g.addColorStop(0.75, "red");
+  g.addColorStop(1, "yellow");
+});
+ctx.strokeStyle = "#000";
+ctx.lineWidth = 3;
+// 要绘制的四个矩形的左上角坐标
+const poses = [
+  [0, 0],
+  [cw / 2, 0],
+  [0, ch / 2],
+  [cw / 2, ch / 2],
+];
+for (let i = 0; i < 4; i++) {
+  ctx.fillStyle = gradients[i];
+  ctx.beginPath();
+  ctx.rect(poses[i][0], poses[i][1], cw / 2, ch / 2);
+  ctx.fill();
+  ctx.stroke();
+}
+```

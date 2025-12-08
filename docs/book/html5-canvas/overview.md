@@ -37,8 +37,13 @@
 - `textAlign`: 文本水平对齐方式
 - `textBaseline`: 文本垂直对齐方式
 ### 方法
+#### 状态
 - `save`: 保存 canvas 状态
 - `restore`: 恢复 canvas 状态
+#### 创建
+##### `createLinearGradient`: 渐变色
+- `addColorStop`: 添加颜色停止点
+#### 绘制
 - `fillText`: 填充文本
 - `strokeText`: 描边文本
 - `drawImage`: 绘制图片
