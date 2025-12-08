@@ -42,4 +42,7 @@
 - `fillText`: 填充文本
 - `strokeText`: 描边文本
 - `drawImage`: 绘制图片
+- `clearRect`: 清除矩形区域
+- `strokeRect`: 矩形描边
+- `fillRect`: 矩形填充
 ```
