@@ -3,7 +3,8 @@ import {
     SimpleRect, 
     ColorOpacityDemo,
     LineGradientDemo,
-    RadialGradientDemo
+    RadialGradientDemo,
+    ConicGradientDemo
 } from './codes/02';
 </script>
 
@@ -174,7 +175,7 @@ for (let i = 0; i < 4; i++) {
 }
 ```
 
-#### 放射渐变
+#### 放射渐变(也成径向渐变)
 
 创建线性渐变时，需要指定一条渐变线。要创建放射渐变，必须指定两个圆形，它们表示某个圆锥的起始部位，放射渐变的效果如下所示：
 
@@ -205,3 +206,27 @@ ctx.fill();
 该代码在 canvas 底部指定了一个半径为 10px 的小圆，又在顶部指定了一个半径为 100px 的大圆，然后根据这两个圆来创建放射渐变效果。这两个圆在水平方向上都与 canvas 呈居中对齐的关系。
 
 该代码将整个 canvas 都以该渐变色来填充。然而与线性渐变不同，放射渐变的填充范围仅局限于传递给 `createRadialGradient()` 方法的那两个圆形所定义的圆锥区域内，而不是像线性渐变那样使用最后一个渐变色来填充渐变线以外的区域。
+
+#### 锥形渐变
+
+锥形渐变是径向颜色保持不变，沿着中心的环颜色渐变，如下应用所示：
+
+<ConicGradientDemo />
+
+代码如下：
+
+```ts
+const { width: cw, height: ch } = ctx.canvas;
+// 第一个参数为起始弧度，后两个参数表示中心点的位置
+const gradient = ctx.createConicGradient(Math.PI / 2, cw / 2, ch / 2);
+gradient.addColorStop(0, "blue");
+gradient.addColorStop(0.25, "white");
+gradient.addColorStop(0.5, "purple");
+gradient.addColorStop(0.75, "red");
+gradient.addColorStop(1, "yellow");
+ctx.fillStyle = gradient;
+ctx.rect(0, 0, cw, ch);
+ctx.fill();
+```
+
+### 图案
