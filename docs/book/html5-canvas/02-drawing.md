@@ -15,6 +15,7 @@ import {
     CoordinateAxis,
     RudderLineDrawer,
     OldDashedLine,
+    NewDashedLine,
 } from './codes/02';
 </script>
 
@@ -609,3 +610,45 @@ drawDashLine(20, ch - 20, 20, 20, 10);
 ```
 
 #### 新的绘制方式
+
+下面的应用是通过 `setLineDash()` 函数设置虚线，其参数为一个数字数组，表示线段和空白的长度。
+
+<NewDashedLine />
+
+代码如下：
+
+```ts
+const { width: cw, height: ch } = ctx.canvas;
+ctx.strokeStyle = "blue";
+ctx.lineWidth = 3;
+
+// 线段与空白的长度都为10
+ctx.setLineDash([10]);
+ctx.beginPath();
+ctx.moveTo(20, 20);
+ctx.lineTo(cw - 20, 20);
+ctx.stroke();
+
+// 线段与空白的长度分别为 15、6
+ctx.setLineDash([15, 6]);
+ctx.beginPath();
+ctx.moveTo(cw - 20, 20);
+ctx.lineTo(cw - 20, ch - 20);
+ctx.stroke();
+
+// 按 5、20、10、5、20、10 ...，轮流安排线段与空白
+ctx.setLineDash([5, 20, 10]);
+ctx.beginPath();
+ctx.moveTo(cw - 20, ch - 20);
+ctx.lineTo(20, ch - 20);
+ctx.stroke();
+
+// 恢复实线
+ctx.setLineDash([]);
+ctx.beginPath();
+ctx.moveTo(20, ch - 20);
+ctx.lineTo(20, 20);
+ctx.stroke();
+```
+
+可以通过 `getLineDash()` 函数获取虚线的模式设置。另外，还可以通过 `lineDashOffset` 属性设置虚线绘制的偏移。
