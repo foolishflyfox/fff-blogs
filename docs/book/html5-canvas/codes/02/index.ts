@@ -16,3 +16,4 @@ export { default as OldDashedLine } from "./OldDashedLine.vue";
 export { default as NewDashedLine } from "./NewDashedLine.vue";
 export { default as LineCapDemo } from "./LineCapDemo.vue";
 export { default as LineJoinDemo } from "./LineJoinDemo.vue";
+export { default as RudderCircleDrawer } from "./RudderCircleDrawer.vue";

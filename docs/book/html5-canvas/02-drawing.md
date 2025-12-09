@@ -18,6 +18,7 @@ import {
     NewDashedLine,
     LineCapDemo,
     LineJoinDemo,
+    RudderCircleDrawer,
 } from './codes/02';
 </script>
 
@@ -678,3 +679,19 @@ ctx.stroke();
 <img src="./codes/shared/images/2-30.png" width="500"/>
 
 可以看到，如果两个线段的夹角很小的话，那么斜接线长度可能非常长。如果斜接线的长度太长，其比值超过了指定的 miterLimit 属性的话，那么浏览器将会以 `bevel` 样式来处理两个线段的结合处，`miterLimit` 默认值为 10。
+
+## 圆弧与圆形的绘制
+
+Canvas 绘图环境提供了两个用于绘制圆弧与圆形的方法：`arc()` 与 `arcTo()`。
+
+### arc() 的用法
+
+`arc()` 方法有 6 个参数：`arc(x, y, radius, startAngle, endAngle, counterClockwise)`，前 2 个参数表示圆心坐标，第 3 个参数表示圆半径，第 4 个参数和第 5 个参数分别表示浏览器在圆周上绘制圆弧的起始角度和结束角度，最后一个是可选参数，表示绘制圆弧的方向，`false` 是默认值，表示顺时针绘制圆弧，如果是 `true` 表示逆时针绘制圆弧。
+
+`arc()` 方法所绘制的可能不仅仅是一段圆弧，如果当前路径中有子路径的话，那么浏览器会将子路径的终点与圆弧的起点用线段连接起来。
+
+### 以橡皮筋辅助线来协助用户画圆
+
+下面的应用程序允许用户以拖动鼠标的方式画圆。当拖动鼠标时，该应用程序会持续地绘制圆形：
+
+<RudderCircleDrawer />

@@ -1,20 +1,48 @@
 <template>
   <div style="position: relative">
     <div style="position: absolute; left: 10px; top: 10px">
-      <span>描边色: </span>
-      <select class="standard" v-model="curColor">
-        <option v-for="color of colors" :value="color">{{ color }}</option>
-      </select>
-      &nbsp;
-      <span>辅助线: </span>
-      <input type="checkbox" v-model="guidewires" />
-      &nbsp;
-      <button class="raw-style" @click="clearAll">全部清除</button>
+      <div>
+        <span>填充: </span>
+        <input type="checkbox" v-model="isFill" />
+        &nbsp; &nbsp;
+        <span>辅助线: </span>
+        <input type="checkbox" v-model="guidewires" />
+        &nbsp; &nbsp;
+        <span>线宽: </span>
+        <select class="standard" v-model="lineWidth">
+          <option v-for="i in 6" :value="i">{{ i + ".0" }}</option>
+        </select>
+        &nbsp; &nbsp;
+        <button class="raw-style" @click="clearAll">全部清除</button>
+      </div>
+      <div style="margin-top: 5px">
+        <span>描边色: </span>
+        <select class="standard" v-model="strokeColor">
+          <option v-for="color of strokeColors" :value="color" :key="color">
+            {{ color }}
+          </option>
+        </select>
+        &nbsp; &nbsp;
+        <span>填充色: </span>
+        <select class="standard" v-model="fillColor">
+          <option value="rgba(255,0,0,0.5)">semi-transparent red</option>
+          <option value="green">green</option>
+          <option value="rgba(0,0,255,0.5)">semi-transparent blue</option>
+          <option value="orange">orange</option>
+          <option value="rgba(100,140,230,0.5)">
+            semi-transparent cornflowerblue
+          </option>
+          <option value="goldenrod" selected>goldenrod</option>
+          <option value="navy">navy</option>
+          <option value="purple">purple</option>
+        </select>
+        &nbsp; &nbsp;
+      </div>
     </div>
     <CanvasContainer
       :draw
       :width="600"
-      :height="400"
+      :height="500"
       background-color="#fafafa"
       style="cursor: pointer"
     />
@@ -26,7 +54,7 @@ import { ref } from "vue";
 import CanvasContainer from "../CanvasContainer.vue";
 import { drawGrid } from "../shared/utils";
 
-const colors = [
+const strokeColors = [
   "red",
   "green",
   "blue",
@@ -37,8 +65,11 @@ const colors = [
   "purple",
 ];
 
-const curColor = ref("red");
+const strokeColor = ref("red");
+const fillColor = ref("goldenrod");
+const lineWidth = ref(1);
 const guidewires = ref(true);
+const isFill = ref(true);
 
 let clearAll = () => {};
 
@@ -68,10 +99,22 @@ function draw(ctx: CanvasRenderingContext2D) {
     if (!startPos) return;
     ctx.putImageData(curImageData, 0, 0);
     const endPos = calcCanvasPos(e);
-    ctx.strokeStyle = curColor.value;
+    ctx.strokeStyle = strokeColor.value;
+    ctx.fillStyle = fillColor.value;
+    ctx.lineWidth = lineWidth.value;
     ctx.beginPath();
-    ctx.moveTo(startPos.x, startPos.y);
-    ctx.lineTo(endPos.x, endPos.y);
+    const deltaX = endPos.x - startPos.x;
+    const deltaY = endPos.y - startPos.y;
+    ctx.arc(
+      startPos.x,
+      startPos.y,
+      Math.sqrt(deltaX * deltaX + deltaY * deltaY),
+      0,
+      Math.PI * 2
+    );
+    if (isFill.value) {
+      ctx.fill();
+    }
     ctx.stroke();
     if (drawGuidewires ?? guidewires.value) {
       ctx.save();
