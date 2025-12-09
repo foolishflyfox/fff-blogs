@@ -19,6 +19,7 @@ import {
     LineCapDemo,
     LineJoinDemo,
     RudderCircleDrawer,
+    RoundCornerRect
 } from './codes/02';
 </script>
 
@@ -695,3 +696,42 @@ Canvas 绘图环境提供了两个用于绘制圆弧与圆形的方法：`arc()`
 下面的应用程序允许用户以拖动鼠标的方式画圆。当拖动鼠标时，该应用程序会持续地绘制圆形：
 
 <RudderCircleDrawer />
+
+### arcTo() 的用法
+
+除了 `arc()` 外，Canvas 的绘图环境对象还提供了另一个用于创建圆弧路径的方法：`arcTo()`，该方法接受 5 个参数：`arcTo(x1, y1, x2, y2, radius)`。
+
+`arcTo()` 方法的参数分别代表两个点以及圆形的半径。该方法以指定的半径来绘制一条圆弧，该圆弧与当前点到第一个点 (x1, y1) 的连线相切，且与第一个点到第二个点 (x2, y2) 的连线也相切。这种个性非常适合绘制矩形的圆角，如下图所示：
+
+<RoundCornerRect />
+
+从左到右的矩形圆角半径分别为 10、20、30 与 40 像素。下面为该应用的代码：
+
+```ts
+ctx.strokeStyle = "red";
+function drawRoundCornerRect(
+  x: number,
+  y: number,
+  size: number,
+  fillColor: string,
+  cornerR: number
+) {
+  ctx.fillStyle = fillColor;
+  ctx.beginPath();
+  ctx.moveTo(x + size - cornerR, y);
+  ctx.arcTo(x + size, y, x + size, y + cornerR, cornerR);
+  ctx.lineTo(x + size, y + size - cornerR);
+  ctx.arcTo(x + size, y + size, x + size - cornerR, y + size, cornerR);
+  ctx.lineTo(x + cornerR, y + size);
+  ctx.arcTo(x, y + size, x, y + size - cornerR, cornerR);
+  ctx.lineTo(x, y + cornerR);
+  ctx.arcTo(x, y, x + cornerR, y, cornerR);
+  ctx.closePath();
+  ctx.fill();
+  ctx.stroke();
+}
+drawRoundCornerRect(30, 30, 100, "yellow", 10);
+drawRoundCornerRect(150, 30, 100, "green", 20);
+drawRoundCornerRect(270, 30, 100, "white", 30);
+drawRoundCornerRect(390, 30, 100, "blue", 40);
+```

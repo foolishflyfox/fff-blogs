@@ -62,6 +62,7 @@
 - `moveTo`: 移动画笔
 - `lineTo`: 绘制线段路径
 - `arc`: 绘制圆弧
+- `arcTo`: 绘制圆弧
 - `rect`: 绘制矩形
 - `stroke`: 当前路径描边
 - `fill`: 当前路径填充
