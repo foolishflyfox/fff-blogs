@@ -26,8 +26,8 @@
 - `globalAlpha`: 全局透明度
 - `globalCompsiteOperation`: 全局叠加模式
 - `lineCap`: 线段端点形状
-- `lineWidth`: 线段宽度
 - `lineJoin`: 线段拐点形状
+- `lineWidth`: 线段宽度
 - `miterLimit`: 最大斜接长度
 - `shadowBlur`: 阴影模糊级数
 - `shadowColor`: 阴影颜色

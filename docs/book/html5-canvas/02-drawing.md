@@ -16,6 +16,8 @@ import {
     RudderLineDrawer,
     OldDashedLine,
     NewDashedLine,
+    LineCapDemo,
+    LineJoinDemo,
 } from './codes/02';
 </script>
 
@@ -652,3 +654,27 @@ ctx.stroke();
 ```
 
 可以通过 `getLineDash()` 函数获取虚线的模式设置。另外，还可以通过 `lineDashOffset` 属性设置虚线绘制的偏移。
+
+### 线段端点与连接点的绘制
+
+在绘制线段时，你可以控制线段端点，即“线帽”(line cap) 的样子。如下图所示：
+
+<LineCapDemo />
+
+在 Canvas 的绘图环境对象中，控制线段端点绘制的属性也叫 `lineCap`。
+
+线段端点样式的默认值是 `butt`，也就是将端点原模原样地绘制出来。`round` 和 `square` 样式都会给线段的端点画上一顶“帽子”。`round` 是给端点处多画一个半圆，其半径等于线段宽度的一半，而 `square` 则是向端点处多画出一个矩形，其长度与线宽一致，宽度等于线宽的一半。
+
+在绘制线段或矩形时，你可以控制拐角处线段连接点的样式，由 `lineJoin` 属性控制，如下图所示:
+
+<LineJoinDemo />
+
+如果 `lineJoin` 属性设置为 `bevel`，那么在两个线段相交的时候，将会用一条直线来连接两个拐角外部的点，使之构成一个三角形；如果设置为 `miter`，将延伸两条线的外边沿，使之交于一点；如果设置为 `round`，两个线段的拐角处将画上一段填充好的圆弧，如下所示是连接点绘制的示例：
+
+<img src="./codes/shared/images/2-29.png" width="500"/>
+
+当 `lineJoin` 为 `miter` 时，还可以再定 `miterLimit`，它表示斜接线的长度与二分之一线宽的比值，如下图所示：
+
+<img src="./codes/shared/images/2-30.png" width="500"/>
+
+可以看到，如果两个线段的夹角很小的话，那么斜接线长度可能非常长。如果斜接线的长度太长，其比值超过了指定的 miterLimit 属性的话，那么浏览器将会以 `bevel` 样式来处理两个线段的结合处，`miterLimit` 默认值为 10。
