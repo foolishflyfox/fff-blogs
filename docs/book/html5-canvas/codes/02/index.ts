@@ -10,3 +10,4 @@ export { default as CutoutTwoCircle } from "./CutoutTwoCircle.vue";
 export { default as MultiCutout } from "./MultiCutout.vue";
 export { default as SimpleLine } from "./SimpleLine.vue";
 export { default as OnePixelGrid } from "./OnePixelGrid.vue";
+export { default as CoordinateAxis } from "./CoordinateAxis.vue";
