@@ -12,7 +12,8 @@ import {
     MultiCutout,
     SimpleLine,
     OnePixelGrid,
-    CoordinateAxis
+    CoordinateAxis,
+    RudderLineDrawer
 } from './codes/02';
 </script>
 
@@ -556,3 +557,7 @@ for (
   ctx.stroke();
 }
 ```
+
+### 橡皮筋式线条绘制
+
+<RudderLineDrawer />

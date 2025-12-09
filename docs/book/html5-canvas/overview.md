@@ -40,6 +40,8 @@
 #### 状态
 - `save`: 保存 canvas 状态
 - `restore`: 恢复 canvas 状态
+- `getImageData`: 获取绘图数据
+- `putImageData`: 恢复绘图数据
 #### 创建
 ##### `createLinearGradient`: 线性渐变
 - `addColorStop`: 添加颜色停止点
