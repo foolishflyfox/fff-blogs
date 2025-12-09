@@ -48,9 +48,12 @@ function draw(ctx: CanvasRenderingContext2D) {
   const { width: cw, height: ch } = ctx.canvas;
   drawGrid(ctx, "lightgray", 10);
   ctx.lineWidth = 1;
-  const initImageData = ctx.getImageData(0, 0, cw, ch);
+  const initImageData = getCanvasImage();
   let curImageData = initImageData;
   let startPos: Pos | null = null;
+  function getCanvasImage() {
+    return ctx.getImageData(0, 0, cw, ch);
+  }
   function windowPosToCanvasPos(windowPos: Pos) {
     const { left, top } = canvas.getBoundingClientRect();
     return { x: windowPos.x - left, y: windowPos.y - top };
@@ -93,7 +96,7 @@ function draw(ctx: CanvasRenderingContext2D) {
     drawingNewLine(e, false);
     startPos = null;
     // 更新快照
-    curImageData = ctx.getImageData(0, 0, cw, ch);
+    curImageData = getCanvasImage();
   };
   clearAll = () => {
     curImageData = initImageData;
