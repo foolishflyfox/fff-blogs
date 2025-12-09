@@ -16,6 +16,7 @@
       :width="600"
       :height="400"
       background-color="#fafafa"
+      style="cursor: pointer"
     />
   </div>
 </template>
@@ -24,6 +25,7 @@
 import { ref } from "vue";
 import CanvasContainer from "../CanvasContainer.vue";
 import { drawGrid } from "../shared/utils";
+import { cursorTo } from "readline";
 
 const colors = [
   "red",
@@ -71,14 +73,15 @@ function draw(ctx: CanvasRenderingContext2D) {
     ctx.stroke();
     if (drawGuidewires ?? guidewires.value) {
       ctx.save();
-      ctx.beginPath();
       ctx.strokeStyle = "#00f";
-      ctx.lineWidth = 1;
-      ctx.moveTo(0, endPos.y);
-      ctx.lineTo(cw, endPos.y);
+      ctx.lineWidth = 0.5;
+      ctx.beginPath();
+      ctx.moveTo(0, endPos.y + 0.5);
+      ctx.lineTo(cw, endPos.y + 0.5);
       ctx.stroke();
-      ctx.moveTo(endPos.x, 0);
-      ctx.lineTo(endPos.x, ch);
+      ctx.beginPath();
+      ctx.moveTo(endPos.x + 0.5, 0);
+      ctx.lineTo(endPos.x + 0.5, ch);
       ctx.stroke();
       ctx.restore();
     }
