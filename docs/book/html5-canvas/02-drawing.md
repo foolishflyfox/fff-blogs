@@ -19,7 +19,8 @@ import {
     LineCapDemo,
     LineJoinDemo,
     RudderCircleDrawer,
-    RoundCornerRect
+    RoundCornerRect,
+    DialDemo,
 } from './codes/02';
 </script>
 
@@ -735,3 +736,9 @@ drawRoundCornerRect(150, 30, 100, "green", 20);
 drawRoundCornerRect(270, 30, 100, "white", 30);
 drawRoundCornerRect(390, 30, 100, "blue", 40);
 ```
+
+### 刻度仪表盘的绘制
+
+下面是一个圆形的钟表盘的实现，该应用中使用了 5 个圆实现了一个仪表盘，仪表盘上的刻度代表了圆周上的角度值。
+
+<DialDemo />
