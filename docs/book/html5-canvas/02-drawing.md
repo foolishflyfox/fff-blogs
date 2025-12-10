@@ -21,6 +21,8 @@ import {
     RudderCircleDrawer,
     RoundCornerRect,
     DialDemo,
+    CheckedMark,
+    RoundTriangle,
 } from './codes/02';
 </script>
 
@@ -751,4 +753,109 @@ drawRoundCornerRect(390, 30, 100, "blue", 40);
 
 Canvas 支持平方及立方贝塞尔曲线。
 
-### 二次方贝塞尔曲线
+### 二次贝塞尔曲线
+
+二次贝塞尔曲线是只向一个方向弯曲的简单曲线，如下所示，是用三条二次贝塞尔曲线拼合而成的一个复选框勾选标记。
+
+<CheckedMark />
+
+对应代码如下所示：
+
+```ts
+ctx.strokeStyle = "yellow";
+ctx.shadowColor = "rgba(50, 50, 50, 1.0)";
+ctx.shadowOffsetX = 2;
+ctx.shadowOffsetY = 2;
+ctx.shadowBlur = 4;
+ctx.lineWidth = 20;
+ctx.lineCap = "round";
+
+ctx.beginPath();
+ctx.moveTo(20.5, 80);
+ctx.quadraticCurveTo(50.8, 80, 60.6, 100.5);
+ctx.quadraticCurveTo(90, 200, 110.5, 110.5);
+ctx.quadraticCurveTo(140, 50.5, 190, 30.5);
+ctx.stroke();
+```
+
+可以通过 `quadraticCurveTo()` 方法来绘制二次贝塞尔曲线，该函数接受四个参数，分别表示两个点的 X 与 Y 坐标。第一个点是曲线的控制点，用于决定该曲线的形状，第二个点是锚点。
+
+`quadraticCurveTo()` 方法所绘制的贝塞尔曲线，会将锚点与当前路径中的最后一个点连接起来。
+
+二次贝塞尔曲线的用途非常多，例如下面的示例，使用二次贝塞尔曲线绘制箭头形状的三个尖端。该示例还将每条曲线的控制点与锚点也标注出来了，其中白色为控制点，蓝色为锚点。
+
+<RoundTriangle />
+
+对应代码为：
+
+```ts
+ctx.fillStyle = "#6e95e6";
+ctx.strokeStyle = "#fff";
+const { width: cw, height: ch } = ctx.canvas;
+const cx = cw / 2 + 60;
+const cy = ch / 2;
+const longR = 260;
+const roundR = 60;
+// 计算三个控制点
+const ctrlPts: Pos[] = [];
+for (const rt of [-1 / 3, 1 / 3, 1]) {
+  const radian = Math.PI * rt;
+  const x = cx + Math.cos(radian) * longR;
+  const y = cy + Math.sin(radian) * longR;
+  ctrlPts.push({ x, y });
+}
+// 计算锚点
+const archPts: Pos[] = [];
+archPts.push({
+  x: ctrlPts[0].x + Math.cos((Math.PI * 5) / 6) * roundR,
+  y: ctrlPts[0].y + Math.sin((Math.PI * 5) / 6) * roundR,
+});
+archPts.push({
+  x: ctrlPts[0].x,
+  y: ctrlPts[0].y + roundR,
+});
+archPts.push({
+  x: ctrlPts[1].x,
+  y: ctrlPts[1].y - roundR,
+});
+archPts.push({
+  x: ctrlPts[1].x + Math.cos((Math.PI * 7) / 6) * roundR,
+  y: ctrlPts[1].y + Math.sin((Math.PI * 7) / 6) * roundR,
+});
+archPts.push({
+  x: ctrlPts[2].x + Math.cos(Math.PI / 6) * roundR,
+  y: ctrlPts[2].y + Math.sin(Math.PI / 6) * roundR,
+});
+archPts.push({
+  x: ctrlPts[2].x + Math.cos(-Math.PI / 6) * roundR,
+  y: ctrlPts[2].y + Math.sin(-Math.PI / 6) * roundR,
+});
+// 绘制三角
+ctx.beginPath();
+ctx.moveTo(archPts[5].x, archPts[5].y);
+for (let i = 0; i < 3; i++) {
+  ctx.lineTo(archPts[i * 2].x, archPts[i * 2].y);
+  ctx.quadraticCurveTo(
+    ctrlPts[i].x,
+    ctrlPts[i].y,
+    archPts[i * 2 + 1].x,
+    archPts[i * 2 + 1].y
+  );
+}
+ctx.closePath();
+ctx.fill();
+ctx.stroke();
+// 绘制控制点
+ctx.fillStyle = "#fff";
+for (const pt of ctrlPts) {
+  ctx.beginPath();
+  ctx.arc(pt.x, pt.y, 5, 0, Math.PI * 2);
+  ctx.fill();
+}
+ctx.fillStyle = "#00f";
+for (let i = 1; i < archPts.length; i += 2) {
+  ctx.beginPath();
+  ctx.arc(archPts[i].x, archPts[i].y, 5, 0, Math.PI * 2);
+  ctx.fill();
+}
+```

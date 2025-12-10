@@ -61,9 +61,10 @@
 - `closePath`: 闭合当前路径
 - `moveTo`: 移动画笔
 - `lineTo`: 绘制线段路径
+- `rect`: 绘制矩形
 - `arc`: 绘制圆弧
 - `arcTo`: 绘制圆弧
-- `rect`: 绘制矩形
+- `quadraticCurveTo`: 二次贝塞尔
 - `stroke`: 当前路径描边
 - `fill`: 当前路径填充
 ## 渐变色
