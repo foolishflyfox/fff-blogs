@@ -86,6 +86,49 @@ const startAngle = ref(0);
 
 let clearAll = () => {};
 
+class Polygon {
+  constructor(
+    public ctx: CanvasRenderingContext2D,
+    public initRadian: number,
+    public sids: number,
+    public x: number,
+    public y: number,
+    public radius: number,
+    public fillColor: string,
+    public strokeColor: string,
+    public isFill: boolean
+  ) {}
+  drawImage() {
+    this.ctx.save();
+    this.ctx.strokeStyle = this.strokeColor;
+    this.ctx.fillStyle = this.fillColor;
+    this.ctx.shadowBlur = 5;
+    this.ctx.shadowColor = "#0006";
+    this.ctx.shadowOffsetX = 3;
+    this.ctx.shadowOffsetY = 3;
+    this.ctx.beginPath();
+
+    const subRadian = (Math.PI * 2) / this.sids;
+    for (let i = 0; i < this.sids; i++) {
+      const radian = this.initRadian + subRadian * i;
+      const currentX = this.x + this.radius * Math.cos(radian);
+      const currentY = this.y + this.radius * Math.sin(radian);
+      if (i) {
+        this.ctx.lineTo(currentX, currentY);
+      } else {
+        this.ctx.beginPath();
+        this.ctx.moveTo(currentX, currentY);
+      }
+    }
+    this.ctx.closePath();
+    if (this.isFill) {
+      this.ctx.fill();
+    }
+    this.ctx.stroke();
+    this.ctx.restore();
+  }
+}
+
 function draw(ctx: CanvasRenderingContext2D) {
   const canvas = ctx.canvas;
   const { width: cw, height: ch } = ctx.canvas;
@@ -111,33 +154,30 @@ function draw(ctx: CanvasRenderingContext2D) {
       startPos = calcCanvasPos(e);
     }
   };
+
+  function createPolygon(startPos: Pos, endPos: Pos) {
+    const deltaX = endPos.x - startPos.x;
+    const deltaY = endPos.y - startPos.y;
+    const radius = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+    return new Polygon(
+      ctx,
+      startAngle.value,
+      sideCount.value,
+      startPos.x,
+      startPos.y,
+      radius,
+      fillColor.value,
+      strokeColor.value,
+      isFill.value
+    );
+  }
+
   function drawingNewPolygon(e: MouseEvent, guidewire = true) {
     if (!startPos) return;
     ctx.putImageData(curImageData, 0, 0);
     const endPos = calcCanvasPos(e);
-    ctx.strokeStyle = strokeColor.value;
-    ctx.fillStyle = fillColor.value;
-    ctx.beginPath();
-    const deltaX = endPos.x - startPos.x;
-    const deltaY = endPos.y - startPos.y;
-    const radius = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
-    const subRadian = (Math.PI * 2) / sideCount.value;
-    for (let i = 0; i < sideCount.value; i++) {
-      const radian = startAngle.value + subRadian * i;
-      const currentX = startPos.x + radius * Math.cos(radian);
-      const currentY = startPos.y + radius * Math.sin(radian);
-      if (i) {
-        ctx.lineTo(currentX, currentY);
-      } else {
-        ctx.beginPath();
-        ctx.moveTo(currentX, currentY);
-      }
-    }
-    ctx.closePath();
-    if (isFill.value) {
-      ctx.fill();
-    }
-    ctx.stroke();
+    const polygon = createPolygon(startPos, endPos);
+    polygon.drawImage();
     // 绘制辅助线
     if (guidewire) {
       ctx.save();
