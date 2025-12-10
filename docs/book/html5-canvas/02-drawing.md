@@ -24,6 +24,7 @@ import {
     CheckedMark,
     RoundTriangle,
     CubicBezierDemo,
+    RegularPolygonDrawer,
 } from './codes/02';
 </script>
 
@@ -899,3 +900,7 @@ ctx.fill();
 ```
 
 ## 多边形绘制
+
+下面的例子演示了如何创建任意的正多边形。
+
+<RegularPolygonDrawer />
