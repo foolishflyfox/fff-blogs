@@ -65,6 +65,7 @@
 - `arc`: 绘制圆弧
 - `arcTo`: 绘制圆弧
 - `quadraticCurveTo`: 二次贝塞尔
+- `bezierCurveTo`: 三次贝塞尔
 - `stroke`: 当前路径描边
 - `fill`: 当前路径填充
 ## 渐变色

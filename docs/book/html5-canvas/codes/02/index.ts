@@ -21,3 +21,4 @@ export { default as RoundCornerRect } from "./RoundCornerRect.vue";
 export { default as DialDemo } from "./DialDemo.vue";
 export { default as CheckedMark } from "./CheckedMark.vue";
 export { default as RoundTriangle } from "./RoundTriangle.vue";
+export { default as CubicBezierDemo } from "./CubicBezierDemo.vue";

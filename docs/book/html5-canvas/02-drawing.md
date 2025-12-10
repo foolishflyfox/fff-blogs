@@ -23,6 +23,7 @@ import {
     DialDemo,
     CheckedMark,
     RoundTriangle,
+    CubicBezierDemo,
 } from './codes/02';
 </script>
 
@@ -859,3 +860,42 @@ for (let i = 1; i < archPts.length; i += 2) {
   ctx.fill();
 }
 ```
+
+### 三次贝塞尔曲线
+
+二次贝塞尔曲线只能向一个方向弯曲，如果要创建能向两个方向弯曲的曲线，就需要三次贝塞尔曲线了。
+
+下面的例子使用 `bezierCurveTo()` 方法创建了一条代表三次贝塞尔曲线的路径：
+
+<CubicBezierDemo />
+
+该示例使用红点绘制曲线锚点，使用蓝点绘制曲线控制点，代码如下：
+
+```ts
+drawGrid(ctx, "lightgray", 10);
+const anchor1 = { x: 40, y: 20 };
+const anchor2 = { x: 360, y: 280 };
+const ctrl1 = { x: 40, y: 250 };
+const ctrl2 = { x: 360, y: 50 };
+// 绘制三次贝塞尔曲线
+ctx.strokeStyle = "#00f";
+ctx.beginPath();
+ctx.moveTo(anchor1.x, anchor1.y);
+ctx.bezierCurveTo(ctrl1.x, ctrl1.y, ctrl2.x, ctrl2.y, anchor2.x, anchor2.y);
+ctx.stroke();
+// 绘制锚点
+const circleR = 6;
+ctx.fillStyle = "red";
+ctx.beginPath();
+ctx.arc(anchor1.x, anchor1.y, circleR, 0, Math.PI * 2);
+ctx.arc(anchor2.x, anchor2.y, circleR, 0, Math.PI * 2);
+ctx.fill();
+// 绘制控制点
+ctx.fillStyle = "blue";
+ctx.beginPath();
+ctx.arc(ctrl1.x, ctrl1.y, circleR, 0, Math.PI * 2);
+ctx.arc(ctrl2.x, ctrl2.y, circleR, 0, Math.PI * 2);
+ctx.fill();
+```
+
+## 多边形绘制
