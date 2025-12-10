@@ -26,6 +26,7 @@ import {
     CubicBezierDemo,
     RegularPolygonDrawer,
     BezierDrawer,
+    OriginTranslate,
 } from './codes/02';
 </script>
 
@@ -913,3 +914,44 @@ ctx.fill();
 下面的示例使用说明：当用户不再拖动鼠标后，应用会显示如何编辑画好的曲线，在关闭这个操作提示对话框之后，用户可以通过拖动锚点或控制点来调整曲线：
 
 <BezierDrawer />
+
+## 坐标变换
+
+你可以对 Canvas 坐标系统进行移动、旋转、缩放等操作。
+
+将坐标原点从其默认的屏幕左上角位置移动到其他地方，通常是非常有用的。最重要的是，在计算 canvas 之中的图形与文本位置时，通过移动坐标原点，可以简化计算过程。比如可以通过如下代码在 canvas 的中心画一个矩形。
+
+```js
+const RECTANGLE_WIDTH = 100;
+const RECTANGLE_HEIGHT = 100;
+
+context.strokeRect(
+  canvas.width / 2 - RECTANGLE_WIDTH / 2,
+  canvas.height / 2 - RECTANGLE_HEIGHT / 2,
+  RECTANGLE_WIDTH,
+  RECTANGLE_HEIGHT
+);
+```
+
+上述代码在计算矩形左上角的 X、Y 坐标时，分别从 canvas 的中心点坐标中减去该矩形的一半宽度及一半高度。
+
+如果我们将坐标原点移动到刚才算出来的地方，就可以简化对 `strokeRect()` 方法的调用了：
+
+```js
+const RECTANGLE_WIDTH = 100;
+const RECTANGLE_HEIGHT = 100;
+
+ctx.translate(
+  canvas.width / 2 - RECTANGLE_WIDTH / 2,
+  canvas.height / 2 - RECTANGLE_HEIGHT / 2
+);
+ctx.strokeRect(0, 0, RECTANGLE_WIDTH, RECTANGLE_HEIGHT);
+```
+
+如果要在 canvas 的中心绘制很多图案的话，移动原点坐标可以极大地简化接下来在绘制其他图形时所需的计算了。
+
+<OriginTranslate />
+
+**注意，`translate()` 平移操作，也受 `save` / `restore` 的管理。**
+
+### 坐标系的平移、缩放与旋转

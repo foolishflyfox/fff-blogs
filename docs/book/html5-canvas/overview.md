@@ -68,6 +68,8 @@
 - `bezierCurveTo`: 三次贝塞尔
 - `stroke`: 当前路径描边
 - `fill`: 当前路径填充
+#### 变换
+- `translate`: 平移
 #### 计算
 - `isPointInPath`: 是否包含点
 ## 渐变色
