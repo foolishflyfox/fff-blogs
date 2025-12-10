@@ -1,6 +1,7 @@
 import { DefaultTheme, defineConfig } from "vitepress";
 import { posix } from "path";
 import { Transformer } from "markmap-lib";
+import { fileURLToPath } from "url";
 
 type SidebarItemX = DefaultTheme.SidebarItem & {
   prefix?: string;
@@ -184,6 +185,12 @@ export default defineConfig({
       port: 6011,
       // 允许局域网访问
       host: true,
+    },
+    resolve: {
+      alias: {
+        // 指定 docs 表示的根目录为 docs
+        "@docs": fileURLToPath(new URL("../", import.meta.url)),
+      },
     },
   },
 });

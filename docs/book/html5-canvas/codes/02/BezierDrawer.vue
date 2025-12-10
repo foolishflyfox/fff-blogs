@@ -40,6 +40,7 @@
 import { ref } from "vue";
 import CanvasContainer from "../CanvasContainer.vue";
 import { drawGrid } from "../shared/utils";
+import { posDistance } from "@docs/utils";
 
 const colors = [
   "red",
@@ -59,6 +60,7 @@ const tipsStyle = ref({
   position: "absolute",
   display: "none",
   visibility: "visible",
+  // visibility: "hidden",
   top: "0px",
   left: "0px",
   backgroundColor: "#00e3",
@@ -74,6 +76,9 @@ function draw(ctx: CanvasRenderingContext2D) {
   const initImageData = getCanvasImage();
   let curImageData = initImageData;
   let startPos: Pos | null = null;
+  let bezierPts: Pos[] = [];
+  let bezierPtR = 5;
+  let optBezierPtIndex = -1;
   function getCanvasImage() {
     return ctx.getImageData(0, 0, cw, ch);
   }
@@ -85,50 +90,141 @@ function draw(ctx: CanvasRenderingContext2D) {
     return windowPosToCanvasPos({ x: e.clientX, y: e.clientY });
   }
   canvas.onmousedown = (e) => {
-    // 记录起始点
-    startPos = calcCanvasPos(e);
+    optBezierPtIndex = -1;
+    if (bezierPts.length) {
+      const pos = calcCanvasPos(e);
+      for (let i = 0; i < bezierPts.length; i++) {
+        const deltaX = bezierPts[i].x - pos.x;
+        const deltaY = bezierPts[i].y - pos.y;
+        if (deltaX * deltaX + deltaY * deltaY <= bezierPtR * bezierPtR) {
+          optBezierPtIndex = i;
+          break;
+        }
+      }
+      if (optBezierPtIndex === -1) {
+        // 清空锚点与控制点
+        drawingBezier(bezierPts, false);
+        bezierPts.length = 0;
+      }
+    }
+    if (optBezierPtIndex === -1) {
+      // 更新快照
+      curImageData = getCanvasImage();
+      // 记录起始点
+      startPos = calcCanvasPos(e);
+    }
   };
-  function drawingNewLine(e: MouseEvent, drawGuidewires?: boolean) {
-    if (!startPos) return;
+  function doDrawGruidwires(pos: Pos) {
+    if (!guidewires.value) return;
+    ctx.save();
+    ctx.strokeStyle = "#00f";
+    ctx.lineWidth = 0.5;
+    ctx.beginPath();
+    ctx.moveTo(0, pos.y + 0.5);
+    ctx.lineTo(cw, pos.y + 0.5);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(pos.x + 0.5, 0);
+    ctx.lineTo(pos.x + 0.5, ch);
+    ctx.stroke();
+    ctx.restore();
+  }
+  function drawingBezier(pts: Pos[], drawPts = true) {
     ctx.putImageData(curImageData, 0, 0);
-    const endPos = calcCanvasPos(e);
     ctx.strokeStyle = curColor.value;
     ctx.beginPath();
-    ctx.moveTo(startPos.x, startPos.y);
-    ctx.lineTo(endPos.x, endPos.y);
+    ctx.moveTo(pts[0].x, pts[0].y);
+    ctx.bezierCurveTo(
+      pts[1].x,
+      pts[1].y,
+      pts[2].x,
+      pts[2].y,
+      pts[3].x,
+      pts[3].y
+    );
     ctx.stroke();
-    if (drawGuidewires ?? guidewires.value) {
+    if (drawPts) {
       ctx.save();
-      ctx.strokeStyle = "#00f";
-      ctx.lineWidth = 0.5;
+      ctx.strokeStyle = "blue";
+      ctx.fillStyle = "green";
       ctx.beginPath();
-      ctx.moveTo(0, endPos.y + 0.5);
-      ctx.lineTo(cw, endPos.y + 0.5);
+      ctx.arc(pts[0].x, pts[0].y, bezierPtR, 0, Math.PI * 2);
+      ctx.fill();
       ctx.stroke();
       ctx.beginPath();
-      ctx.moveTo(endPos.x + 0.5, 0);
-      ctx.lineTo(endPos.x + 0.5, ch);
+      ctx.arc(pts[3].x, pts[3].y, bezierPtR, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.stroke();
+      ctx.fillStyle = "orange";
+      ctx.beginPath();
+      ctx.arc(pts[1].x, pts[1].y, bezierPtR, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.arc(pts[2].x, pts[2].y, bezierPtR, 0, Math.PI * 2);
+      ctx.fill();
       ctx.stroke();
       ctx.restore();
     }
   }
+  function getInitBezierPts(pos1: Pos, pos2: Pos) {
+    const left = Math.min(pos1.x, pos2.x);
+    const top = Math.min(pos1.y, pos2.y);
+    const right = Math.max(pos1.x, pos2.x);
+    const bottom = Math.max(pos1.y, pos2.y);
+    const pts: Pos[] = [
+      { x: left, y: top },
+      { x: left, y: bottom },
+      { x: right, y: top },
+      { x: right, y: bottom },
+    ];
+    return pts;
+  }
+  function drawInitBezier(pos1: Pos, pos2: Pos) {
+    const pts = getInitBezierPts(pos1, pos2);
+    drawingBezier(pts, true);
+  }
   canvas.onmousemove = (e) => {
-    drawingNewLine(e);
+    const endPos = calcCanvasPos(e);
+    if (optBezierPtIndex !== -1) {
+      // 调整形状模式
+      bezierPts[optBezierPtIndex].x += e.movementX;
+      bezierPts[optBezierPtIndex].y += e.movementY;
+      drawingBezier(bezierPts, true);
+      doDrawGruidwires(endPos);
+    } else if (startPos) {
+      // 新建曲线模式
+      drawInitBezier(startPos, endPos);
+      doDrawGruidwires(endPos);
+    }
   };
   canvas.onmouseup = (e) => {
-    drawingNewLine(e, false);
-    startPos = null;
-    // 更新快照
-    curImageData = getCanvasImage();
-    if (tipsStyle.value.visibility === "visible") {
-      tipsStyle.value.left = e.offsetX + "px";
-      tipsStyle.value.top = e.offsetY + "px";
-      tipsStyle.value.display = "block";
+    const endPos = calcCanvasPos(e);
+    if (startPos) {
+      // 排除点击，但没有拖动的动作
+      if (posDistance(startPos, endPos) > 3) {
+        drawInitBezier(startPos, endPos);
+        bezierPts = getInitBezierPts(startPos, endPos);
+        startPos = null;
+        if (tipsStyle.value.visibility === "visible") {
+          tipsStyle.value.left = e.offsetX + "px";
+          tipsStyle.value.top = e.offsetY + "px";
+          tipsStyle.value.display = "block";
+        }
+      } else {
+        startPos = null;
+      }
+    } else if (optBezierPtIndex !== -1) {
+      drawingBezier(bezierPts, true);
+      optBezierPtIndex = -1;
     }
   };
   clearAll = () => {
     curImageData = initImageData;
     ctx.putImageData(curImageData, 0, 0);
+    startPos = null;
+    optBezierPtIndex = -1;
+    bezierPts.length = 0;
   };
 }
 </script>
