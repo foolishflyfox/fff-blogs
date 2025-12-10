@@ -141,3 +141,5 @@ vite.config.ts.timestamp-*
 .vite/
 docs/.vitepress/graphs/*.svg.mmd
 tmp.*
+
+**/.DS_Store
