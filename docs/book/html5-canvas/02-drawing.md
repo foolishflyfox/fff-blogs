@@ -25,6 +25,7 @@ import {
     RoundTriangle,
     CubicBezierDemo,
     RegularPolygonDrawer,
+    BezierDrawer,
 } from './codes/02';
 </script>
 
@@ -908,3 +909,7 @@ ctx.fill();
 <RegularPolygonDrawer />
 
 ### 编辑贝塞尔曲线
+
+下面的示例使用说明：当用户不再拖动鼠标后，应用会显示如何编辑画好的曲线，在关闭这个操作提示对话框之后，用户可以通过拖动锚点或控制点来调整曲线：
+
+<BezierDrawer />
