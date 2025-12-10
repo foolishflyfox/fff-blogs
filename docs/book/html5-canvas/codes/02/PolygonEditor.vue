@@ -89,6 +89,7 @@ interface MovePos extends Pos {
 
 class Polygon {
   constructor(
+    public parent: MyCanvas,
     public ctx: CanvasRenderingContext2D,
     public initRadian: number,
     public sids: number,
@@ -139,11 +140,21 @@ class Polygon {
     return this.ctx.isPointInPath(pos.x, pos.y);
   }
 
-  public onmousedown(e: Pos): boolean {
+  public onmousedown(pos: Pos): boolean {
+    if (this.isPosInPolygon(pos)) {
+      this.parent.optTarget = this;
+      this.parent.optType = "move";
+      return true;
+    }
     return false;
   }
 
-  public ondrag(e: MovePos, optType: "rotate" | "move"): boolean {
+  public ondrag(e: MovePos): boolean {
+    if (this.parent.optType === "move") {
+      this.x += e.moveX;
+      this.y += e.moveY;
+      return true;
+    }
     return false;
   }
 
@@ -157,8 +168,8 @@ class MyCanvas {
   private polygons: Polygon[] = [];
   private cw: number;
   private ch: number;
-  private optType: "new" | "move" | "rotate" | null = null;
-  private optTarget: Polygon | null = null;
+  public optType: "new" | "move" | "rotate" | null = null;
+  public optTarget: Polygon | null = null;
   private newOptStatus: { start: Pos; end?: Pos } | null = null;
   constructor(private ctx: CanvasRenderingContext2D) {
     this.canvas = ctx.canvas;
@@ -190,6 +201,7 @@ class MyCanvas {
   private createPolygon(start: Pos, end: Pos) {
     const r = posDistance(start, end);
     return new Polygon(
+      this,
       this.ctx,
       startAngle.value,
       sideCount.value,
@@ -230,7 +242,7 @@ class MyCanvas {
         this.ondrag(pos);
         this.redraw();
       } else if (this.optTarget && this.optType) {
-        this.optTarget.ondrag(pos, this.optType);
+        this.optTarget.ondrag(pos);
         this.redraw();
       }
     }
@@ -266,8 +278,10 @@ class MyCanvas {
     if (this.newOptStatus?.start) {
       const polygon = this.createPolygon(this.newOptStatus.start, e);
       this.polygons.push(polygon);
+      this.newOptStatus = null;
+      this.optType = null;
     }
-    return false;
+    return true;
   }
 }
 
