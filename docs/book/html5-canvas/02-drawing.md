@@ -27,6 +27,7 @@ import {
     RegularPolygonDrawer,
     BezierDrawer,
     OriginTranslate,
+    PolygonEditor,
 } from './codes/02';
 </script>
 
@@ -959,3 +960,5 @@ ctx.strokeRect(0, 0, RECTANGLE_WIDTH, RECTANGLE_HEIGHT);
 下面的示例可以让用户交互式地旋转多边形，以此来演示坐标系的平移与旋转。
 
 如果你选中 “Edit” 复选框，并点击某个多边形的话，就会在该多边形周围画出一个用于表示旋转角度的仪表盘，并增加一条用于指示当前旋转角度的辅助线。按住辅助线末端的点，进行拖动，就能改变多边形的初始角度。
+
+<PolygonEditor />
