@@ -49,7 +49,7 @@
 - `createLinearGradient`: 线性渐变
 - `createRadialGradient`: 放射渐变
 - `createConicGradient`: 锥形渐变
-##### `createPattern`: 创建图案
+- `createPattern`: 创建图案
 #### 绘制
 - `fillText`: 填充文本
 - `strokeText`: 描边文本
@@ -68,6 +68,8 @@
 - `bezierCurveTo`: 三次贝塞尔
 - `stroke`: 当前路径描边
 - `fill`: 当前路径填充
+#### 计算
+- `isPointInPath`: 是否包含点
 ## 渐变色
 - `addColorStop`: 添加颜色停止点
 ```

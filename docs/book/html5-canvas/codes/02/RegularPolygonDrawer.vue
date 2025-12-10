@@ -98,14 +98,8 @@ class Polygon {
     public strokeColor: string,
     public isFill: boolean
   ) {}
-  drawImage() {
-    this.ctx.save();
-    this.ctx.strokeStyle = this.strokeColor;
-    this.ctx.fillStyle = this.fillColor;
-    this.ctx.shadowBlur = 5;
-    this.ctx.shadowColor = "#0006";
-    this.ctx.shadowOffsetX = 3;
-    this.ctx.shadowOffsetY = 3;
+
+  private drawPath() {
     this.ctx.beginPath();
 
     const subRadian = (Math.PI * 2) / this.sids;
@@ -121,11 +115,27 @@ class Polygon {
       }
     }
     this.ctx.closePath();
+  }
+
+  drawImage() {
+    this.ctx.save();
+    this.ctx.strokeStyle = this.strokeColor;
+    this.ctx.fillStyle = this.fillColor;
+    this.ctx.shadowBlur = 5;
+    this.ctx.shadowColor = "#0006";
+    this.ctx.shadowOffsetX = 3;
+    this.ctx.shadowOffsetY = 3;
+    this.drawPath();
     if (this.isFill) {
       this.ctx.fill();
     }
     this.ctx.stroke();
     this.ctx.restore();
+  }
+
+  isPosInPolygon(pos: Pos) {
+    this.drawPath();
+    return this.ctx.isPointInPath(pos.x, pos.y);
   }
 }
 
@@ -137,6 +147,8 @@ function draw(ctx: CanvasRenderingContext2D) {
   const initImageData = getCanvasImage();
   let curImageData = initImageData;
   let startPos: Pos | null = null;
+  let dragIndex = -1;
+  const polygons: Polygon[] = [];
   function getCanvasImage() {
     return ctx.getImageData(0, 0, cw, ch);
   }
@@ -148,7 +160,15 @@ function draw(ctx: CanvasRenderingContext2D) {
     return windowPosToCanvasPos({ x: e.clientX, y: e.clientY });
   }
   canvas.onmousedown = (e) => {
+    const curPos = calcCanvasPos(e);
     if (isEdit.value) {
+      for (let i = polygons.length - 1; i >= 0; i--) {
+        const tPolygon = polygons[i];
+        if (tPolygon.isPosInPolygon(curPos)) {
+          dragIndex = i;
+          break;
+        }
+      }
     } else {
       // 记录起始点
       startPos = calcCanvasPos(e);
@@ -193,19 +213,40 @@ function draw(ctx: CanvasRenderingContext2D) {
       ctx.stroke();
       ctx.restore();
     }
+    return polygon;
   }
   canvas.onmousemove = (e) => {
-    drawingNewPolygon(e);
+    if (startPos) {
+      drawingNewPolygon(e);
+    }
+    if (dragIndex !== -1) {
+      const tPolygon = polygons[dragIndex];
+      tPolygon.x += e.movementX;
+      tPolygon.y += e.movementY;
+      ctx.putImageData(initImageData, 0, 0);
+      for (const tp of polygons) {
+        tp.drawImage();
+      }
+    }
   };
   canvas.onmouseup = (e) => {
-    drawingNewPolygon(e, false);
-    startPos = null;
+    if (startPos) {
+      const newPolygon = drawingNewPolygon(e, false);
+      startPos = null;
+      if (newPolygon) {
+        polygons.push(newPolygon);
+      }
+    }
+    if (dragIndex !== -1) {
+      dragIndex = -1;
+    }
     // 更新快照
     curImageData = getCanvasImage();
   };
   clearAll = () => {
     curImageData = initImageData;
     ctx.putImageData(curImageData, 0, 0);
+    polygons.length = 0;
   };
 }
 </script>
