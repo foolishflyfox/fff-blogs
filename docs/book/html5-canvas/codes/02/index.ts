@@ -31,3 +31,4 @@ export { default as MirrorTriangle } from "./MirrorTriangle.vue";
 export { default as TranslateVsTransform } from "./TranslateVsTransform.vue";
 export { default as ScaleVsTransform } from "./ScaleVsTransform.vue";
 export { default as RotateVsTransform } from "./RotateVsTransform.vue";
+export { default as TransformWork } from "./TransformWork.vue";

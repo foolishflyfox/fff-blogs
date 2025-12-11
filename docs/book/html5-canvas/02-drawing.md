@@ -33,6 +33,7 @@ import {
     TranslateVsTransform,
     ScaleVsTransform,
     RotateVsTransform,
+    TransformWork,
 } from './codes/02';
 </script>
 
@@ -1176,6 +1177,74 @@ function draw2(ctx: CanvasRenderingContext2D) {
   const sinV = Math.sin(theta);
   ctx.transform(cosV, sinV, -sinV, cosV, 0, 0);
   ctx.fillRect(60, 20, 50, 50);
+}
+```
+
+在真正绘图时，本质上是取出 a/b/c/d/e/f 参数值，计算新的 x/y，并绘制到画布上，如下图所示，右边的图是手动计算 x,y 实现的效果，与左图完全一致：
+
+<TransformWork />
+
+代码为：
+
+```ts
+function draw1(ctx: CanvasRenderingContext2D) {
+  ctx.fillStyle = "orange";
+  ctx.translate(20, 30);
+  ctx.rotate(Math.PI / 6);
+  ctx.translate(50, 0);
+  ctx.scale(0.8, 1.6);
+  ctx.rotate(-Math.PI / 4);
+
+  ctx.beginPath();
+  const poses = [
+    { x: 0, y: 0 },
+    { x: 50, y: 0 },
+    { x: 50, y: 50 },
+    { x: 0, y: 50 },
+  ];
+  for (let i = 0; i < poses.length; i++) {
+    const { x, y } = poses[i];
+    if (i === 0) {
+      ctx.moveTo(x, y);
+    } else {
+      ctx.lineTo(x, y);
+    }
+  }
+  ctx.closePath();
+  ctx.fill();
+}
+
+function draw2(ctx: CanvasRenderingContext2D) {
+  const canvas = document.createElement("canvas");
+  const offlineCtx = canvas.getContext("2d")!;
+  ctx.fillStyle = "orange";
+  offlineCtx.translate(20, 30);
+  offlineCtx.rotate(Math.PI / 6);
+  offlineCtx.translate(50, 0);
+  offlineCtx.scale(0.8, 1.6);
+  offlineCtx.rotate(-Math.PI / 4);
+  const t = offlineCtx.getTransform();
+  const { a, b, c, d, e, f } = t;
+  ctx.beginPath();
+  const poses = [
+    { x: 0, y: 0 },
+    { x: 50, y: 0 },
+    { x: 50, y: 50 },
+    { x: 0, y: 50 },
+  ];
+  for (let i = 0; i < poses.length; i++) {
+    const pos = poses[i];
+    // 不变换坐标系，手动计算新的坐标位置
+    const x = a * pos.x + c * pos.y + e;
+    const y = b * pos.x + d * pos.y + f;
+    if (i === 0) {
+      ctx.moveTo(x, y);
+    } else {
+      ctx.lineTo(x, y);
+    }
+  }
+  ctx.closePath();
+  ctx.fill();
 }
 ```
 

@@ -74,6 +74,7 @@
 - `scale`: 缩放
 - `transform`: 叠加变换
 - `setTransform`: 设置变换
+- `getTransform`: 获取变换
 #### 计算
 - `isPointInPath`: 是否包含点
 ## 渐变色
