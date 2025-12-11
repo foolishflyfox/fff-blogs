@@ -27,3 +27,4 @@ export { default as BezierDrawer } from "./BezierDrawer.vue";
 export { default as OriginTranslate } from "./OriginTranslate.vue";
 export { default as PolygonEditor } from "./PolygonEditor.vue";
 export { default as RotateScaleTranslate } from "./RotateScaleTranslate.vue";
+export { default as MirrorTriangle } from "./MirrorTriangle.vue";

@@ -29,6 +29,7 @@ import {
     OriginTranslate,
     PolygonEditor,
     RotateScaleTranslate,
+    MirrorTriangle,
 } from './codes/02';
 </script>
 
@@ -987,3 +988,20 @@ ctx.fillRect(0, 0, 100, 100);
 ```
 
 其中桔黄色为变换前绘制的矩形，绿色为变换后绘制的矩形。
+
+#### 镜像
+
+坐标系的变换可以用于实现很多不同的效果，例如在绘制了某个图形后，可以调用 `scale(-1, 1)` 来绘制其水平镜像(或调用 `scale(1, -1)` 来绘制其垂直镜像)。如下图所示：
+
+<MirrorTriangle />
+
+代码为：
+
+```ts
+drawArrow();
+ctx.translate(ctx.canvas.width, 0);
+ctx.scale(-1, 1);
+drawArrow();
+```
+
+### 自定义的坐标变换
