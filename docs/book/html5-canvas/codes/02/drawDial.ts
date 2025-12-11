@@ -10,14 +10,14 @@ export function drawDial(ctx: CanvasRenderingContext2D, dialInfo: DialInfo) {
   // 绘制最外层环
   ctx.fillStyle = "#aaa5";
   ctx.beginPath();
-  ctx.arc(dialInfo.x, dialInfo.y, 200, 0, Math.PI * 2);
+  ctx.arc(dialInfo.x, dialInfo.y, dialInfo.r, 0, Math.PI * 2);
   ctx.moveTo(dialInfo.x + outR, dialInfo.y);
   ctx.arc(dialInfo.x, dialInfo.y, outR, 0, Math.PI * 2, true);
   ctx.fill();
 
   ctx.strokeStyle = "#00f8";
   ctx.beginPath();
-  ctx.arc(dialInfo.x, dialInfo.y, 200, 0, Math.PI * 2);
+  ctx.arc(dialInfo.x, dialInfo.y, dialInfo.r, 0, Math.PI * 2);
   ctx.stroke();
 
   ctx.strokeStyle = "#ccc";

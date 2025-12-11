@@ -62,6 +62,7 @@ import { ref } from "vue";
 import CanvasContainer from "../CanvasContainer.vue";
 import { drawGrid } from "../shared/utils";
 import { posDistance } from "@docs/utils";
+import { drawDial } from "./drawDial";
 
 const strokeColors = [
   "red",
@@ -91,7 +92,7 @@ class Polygon {
   constructor(
     public parent: MyCanvas,
     public ctx: CanvasRenderingContext2D,
-    public initRadian: number,
+    public radian: number,
     public sids: number,
     public x: number,
     public y: number,
@@ -106,7 +107,7 @@ class Polygon {
 
     const subRadian = (Math.PI * 2) / this.sids;
     for (let i = 0; i < this.sids; i++) {
-      const radian = this.initRadian + subRadian * i;
+      const radian = this.radian + subRadian * i;
       const currentX = this.x + this.radius * Math.cos(radian);
       const currentY = this.y + this.radius * Math.sin(radian);
       if (i) {
@@ -133,6 +134,16 @@ class Polygon {
     }
     this.ctx.stroke();
     this.ctx.restore();
+  }
+  drawCtrl() {
+    if (this.parent.optTarget === this) {
+      drawDial(this.ctx, {
+        x: this.x,
+        y: this.y,
+        r: this.radius,
+        radian: this.radian,
+      });
+    }
   }
 
   isPosInPolygon(pos: Pos) {
@@ -184,6 +195,9 @@ class MyCanvas {
     drawGrid(this.ctx, "lightgray", 10);
     for (const p of this.polygons) {
       p.drawImage();
+    }
+    for (const p of this.polygons) {
+      p.drawCtrl();
     }
     if (
       this.optType === "new" &&
