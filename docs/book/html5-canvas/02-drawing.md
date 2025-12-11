@@ -30,6 +30,7 @@ import {
     PolygonEditor,
     RotateScaleTranslate,
     MirrorTriangle,
+    TranslateVsTransform,
 } from './codes/02';
 </script>
 
@@ -1005,3 +1006,129 @@ drawArrow();
 ```
 
 ### 自定义的坐标变换
+
+`scale()`、`rotate()` 及 `translate()` 方法来变换坐标系，只是提供了用于操作绘图环境对象变换矩阵(transformation matrix)的简便手段而已。
+
+不论你向 canvas 之中绘制的是图形、文本还是图像，浏览器都会在绘制的对象上运用变换矩阵。默认情况下，这个变换矩阵就是“单位矩阵”(identity matrix)，它并不会影响所要绘制的物体。当调用了 `scale()`、`rotate()` 或 `translate()` 方法后，变换矩阵就会被修改，从而影响后续的绘图操作。
+
+多数情况下，这三个方法就够了，不过有些时候需要自己来操作变换矩阵。比如，要对所绘对象矩形“错切”（shear），那么就没办法组合运用这三个方法来达成此效果。这种情况下就必须直接操作变换矩阵了。
+
+Canvas 绘图环境对象提供了两个可以直接操作变换矩阵的方法：`transform()` 可以在当前的变换矩阵之上叠加另外的变换效果，另一个则是 `setTransform()` 则会将当前的变换矩阵设置为默认的单位矩阵，然后在单位矩阵之上运用用户指定的变换效果。
+
+要点是：多次调用 `transform()` 方法所造成的变换效果是累积的，而每次只要调用 `setTransform()` 方法，他就会将上一次的变换矩阵彻底清除。
+
+由于 `translate()` / `rotate()` / `scale()` 方法都是通过操作变换矩阵来实现其功能的，所以也可以直接用 `transform()` 及 `setTransform()` 方法来操作变换矩阵，以做出平移、旋转及缩放等效果。
+
+直接调用 `transform()` 及 `setTransform()` 方法操作变换矩阵，有两个好处：
+
+1. 可以做出一些诸如 “错切” 的效果；
+2. 只需调用一次 `transform()` 或 `setTransform()`，就可以做出结合了缩放、旋转、平移及错切等诸多操作的效果。
+
+主要缺点是不直观。
+
+`transform()` 与 `setTransform()` 方法均接受 6 个参数，后续会介绍这些参数的含义。
+
+#### 坐标变换所用的代数方程
+
+下面是用于执行平移、缩放及旋转操作所用的简单代数方程。
+
+下面的等式列出了将平移前的旧坐标 $(x, y)$ 换算到平移后的新坐标 $(x', y')$ 所用的等式：
+
+$$
+\begin{align}
+x' = x + dx \\
+y' = y + dy
+\end{align}
+$$
+
+这组等式中，新旧坐标的横向距离差记为 $dx$，将其加到旧的 $x$ 坐标值中，就可以得到新的横坐标了，$y$ 同理。
+
+例如，将原来坐标系的 $(5, 10)$ 这个点移动到 $(10, 20)$ 着额位置，那么坐标系的横向移动距离为 5，纵向移动距离为 10，等式如下：
+
+$$
+\begin{align}
+  x' = 5 + 5 \\
+  y' = 10 + 10
+\end{align}
+$$
+
+计算缩放后新坐标所用的等式为：
+
+$$
+\begin{align}
+  x' = x \times sx \\
+  y' = y \times sy
+\end{align}
+$$
+
+这组等式中，坐标轴的横向缩放倍数记为 $sx$，将原 $x$ 坐标乘以它的到新的横坐标，纵向同理。例如，要将原来坐标系中的 $(5, 10)$ 这个点放大至 $(40, 60)$，那么横向放大倍数就是 8，而纵向放大倍数则是 6，等式为：
+
+$$
+\begin{align}
+  x' = 5 \times 8 \\
+  y' = 10 \times 6
+\end{align}
+$$
+
+进行坐标系旋转操作的等式需要用到一些三角函数，例如：
+
+$$
+\begin{align}
+  x' = x \times \cos(\theta) - y \times \sin(\theta) \\
+  y' = y \times \cos(\theta) + x \times \sin(\theta)
+\end{align}
+$$
+
+如果将原有坐标系中的 $(5, 10)$ 这个点以 $(0, 0)$ 为中心，旋转 45 度，那该点将落在 $(3.5, 10.6)$ 的位置，等式为：
+
+$$
+\begin{align}
+  x' = 5\times \cos(\pi/4) - 10\times\sin(\pi/4) \\
+  y' = 10\times\cos(\pi/4) + 5\times\sin(\pi/4)
+\end{align}
+$$
+
+#### transform() 与 setTransform() 用法
+
+`transform` 和 `setTransform` 方法有如下的参数：
+
+- `transform(a, b, c, d, e, f)`
+- `setTransform(a, b, c, d, e, f)`
+
+这 6 个参数将会在如下的等式中用到：
+
+$$
+\begin{align}
+  x' = ax + cy + e \\
+  y' = bx + dy + f
+\end{align}
+$$
+
+如果 $a=d=1$，切 $b=c=0$，那么通过 e, f 就可以进行单纯的平移操作，等式变为：
+
+$$
+\begin{align}
+  x' = x + e \\
+  y' = y + f
+\end{align}
+$$
+
+因此，如果要通过 `transform()` 或 `setTransform()` 方法来平移坐标系的话，参数为 `(1, 0, 0, 1, e, f)`，如下示例，是分别用 `translate` 和 `transform` 函数实现的效果：
+
+<TranslateVsTransform />
+
+对应的代码为：
+
+```ts
+function draw1(ctx: CanvasRenderingContext2D) {
+  ctx.fillStyle = "orange";
+  ctx.translate(60, 30);
+  ctx.fillRect(0, 0, 50, 50);
+}
+
+function draw2(ctx: CanvasRenderingContext2D) {
+  ctx.fillStyle = "orange";
+  ctx.transform(1, 0, 0, 1, 60, 30);
+  ctx.fillRect(0, 0, 50, 50);
+}
+```
