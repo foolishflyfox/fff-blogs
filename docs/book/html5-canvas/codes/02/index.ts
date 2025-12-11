@@ -26,3 +26,4 @@ export { default as RegularPolygonDrawer } from "./RegularPolygonDrawer.vue";
 export { default as BezierDrawer } from "./BezierDrawer.vue";
 export { default as OriginTranslate } from "./OriginTranslate.vue";
 export { default as PolygonEditor } from "./PolygonEditor.vue";
+export { default as RotateScaleTranslate } from "./RotateScaleTranslate.vue";

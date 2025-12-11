@@ -70,6 +70,8 @@
 - `fill`: 当前路径填充
 #### 变换
 - `translate`: 平移
+- `rotate`: 旋转
+- `scale`: 缩放
 #### 计算
 - `isPointInPath`: 是否包含点
 ## 渐变色

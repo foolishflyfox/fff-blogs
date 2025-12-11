@@ -28,6 +28,7 @@ import {
     BezierDrawer,
     OriginTranslate,
     PolygonEditor,
+    RotateScaleTranslate,
 } from './codes/02';
 </script>
 
@@ -962,3 +963,27 @@ ctx.strokeRect(0, 0, RECTANGLE_WIDTH, RECTANGLE_HEIGHT);
 如果你选中 “Edit” 复选框，并点击某个多边形的话，就会在该多边形周围画出一个用于表示旋转角度的仪表盘，并增加一条用于指示当前旋转角度的辅助线。按住辅助线末端的点，进行拖动，就能改变多边形的初始角度。
 
 <PolygonEditor />
+
+下面是 CanvasRenderingContext2D 对象中用于平移、旋转坐标系的方法：
+
+- `rotate(double angleInRadians)`: 安装给定的弧度来旋转坐标系
+- `scale(double x, double y)`: 在 X 与 Y 方向上分别按照给定的数值来缩放坐标系
+- `translate(double x, double y)`: 将坐标系平移到给定的 X、Y 坐标处
+
+如下所示，是这 3 个函数的使用：
+
+<RotateScaleTranslate />
+
+代码如下：
+
+```ts
+ctx.fillStyle = "orange";
+ctx.fillRect(0, 0, 100, 100);
+ctx.translate(150, 30);
+ctx.rotate(Math.PI / 6);
+ctx.scale(1.3, 0.7);
+ctx.fillStyle = "green";
+ctx.fillRect(0, 0, 100, 100);
+```
+
+其中桔黄色为变换前绘制的矩形，绿色为变换后绘制的矩形。
