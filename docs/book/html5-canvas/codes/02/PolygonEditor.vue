@@ -61,7 +61,7 @@
 import { ref } from "vue";
 import CanvasContainer from "../CanvasContainer.vue";
 import { drawGrid } from "../shared/utils";
-import { posDistance } from "@docs/utils";
+import { isDistanceLessEqual, posDistance } from "@docs/utils";
 import { drawDial } from "./drawDial";
 
 const strokeColors = [
@@ -89,6 +89,7 @@ interface MovePos extends Pos {
 }
 
 class Polygon {
+  private rotateCtrlR = 5;
   constructor(
     public parent: MyCanvas,
     public ctx: CanvasRenderingContext2D,
@@ -142,6 +143,7 @@ class Polygon {
         y: this.y,
         r: this.radius,
         radian: this.radian,
+        ctrlR: this.rotateCtrlR,
       });
     }
   }
@@ -152,6 +154,17 @@ class Polygon {
   }
 
   public onmousedown(pos: Pos): boolean {
+    if (this.parent.optTarget === this) {
+      // 选中的状态，判断是否操作目标旋转
+      const ctrlPos = {
+        x: this.x + this.radius * Math.cos(this.radian),
+        y: this.y + this.radius * Math.sin(this.radian),
+      };
+      if (isDistanceLessEqual(pos, ctrlPos, this.rotateCtrlR)) {
+        this.parent.optType = "rotate";
+        return true;
+      }
+    }
     if (this.isPosInPolygon(pos)) {
       this.parent.optTarget = this;
       this.parent.optType = "move";
@@ -160,10 +173,17 @@ class Polygon {
     return false;
   }
 
-  public ondrag(e: MovePos): boolean {
+  public ondrag(pos: MovePos): boolean {
     if (this.parent.optType === "move") {
-      this.x += e.moveX;
-      this.y += e.moveY;
+      this.x += pos.moveX;
+      this.y += pos.moveY;
+      return true;
+    }
+    if (this.parent.optType === "rotate") {
+      const vectX = pos.x - this.x;
+      const vectY = pos.y - this.y;
+      const cosV = vectX / posDistance({ x: this.x, y: this.y }, pos);
+      this.radian = (vectY < 0 ? -1 : 1) * Math.acos(cosV);
       return true;
     }
     return false;
@@ -236,6 +256,9 @@ class MyCanvas {
   private mousedownHandler(e: MouseEvent) {
     const pos = this.calcCanvasPos(e);
     let eProcessed = false;
+    if (this.optTarget) {
+      eProcessed = this.optTarget.onmousedown(pos);
+    }
     for (let i = this.polygons.length - 1; i >= 0 && !eProcessed; --i) {
       eProcessed = this.polygons[i].onmousedown(pos);
     }
@@ -299,7 +322,6 @@ class MyCanvas {
   }
 
   clearAll() {
-    console.log("#@@", this.polygons);
     this.polygons.length = 0;
     this.newOptStatus = null;
     this.optTarget = null;

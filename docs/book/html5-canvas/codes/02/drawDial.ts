@@ -3,9 +3,11 @@ interface DialInfo {
   y: number;
   r: number;
   radian: number;
+  ctrlR?: number;
 }
 export function drawDial(ctx: CanvasRenderingContext2D, dialInfo: DialInfo) {
   const outR = dialInfo.r - 20;
+  const ctrlR = dialInfo.ctrlR ?? 5;
   ctx.save();
   // 绘制最外层环
   ctx.fillStyle = "#aaa5";
@@ -79,7 +81,7 @@ export function drawDial(ctx: CanvasRenderingContext2D, dialInfo: DialInfo) {
   const targetX = dialInfo.x + (outR + 20) * Math.cos(targetRadian);
   const targetY = dialInfo.y + (outR + 20) * Math.sin(targetRadian);
   ctx.beginPath();
-  ctx.arc(targetX, targetY, 5, 0, Math.PI * 2);
+  ctx.arc(targetX, targetY, ctrlR, 0, Math.PI * 2);
   ctx.fill();
   ctx.stroke();
   ctx.beginPath();
