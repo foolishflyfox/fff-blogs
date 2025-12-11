@@ -79,4 +79,11 @@
 - `isPointInPath`: 是否包含点
 ## 渐变色
 - `addColorStop`: 添加颜色停止点
+## window
+
+### 方法
+- `requestAnimationFrame`: 一次动画帧请求
+## document
+### 属性
+- hidden: 文档未激活
 ```
