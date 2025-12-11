@@ -1308,3 +1308,5 @@ function draw(ctx: CanvasRenderingContext2D) {
   requestAnimationFrame(redraw);
 }
 ```
+
+## 图像合成

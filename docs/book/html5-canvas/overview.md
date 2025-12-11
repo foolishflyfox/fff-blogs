@@ -80,7 +80,6 @@
 ## 渐变色
 - `addColorStop`: 添加颜色停止点
 ## window
-
 ### 方法
 - `requestAnimationFrame`: 一次动画帧请求
 ## document
