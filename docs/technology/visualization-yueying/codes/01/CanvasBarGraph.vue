@@ -12,7 +12,6 @@
 <script setup lang="ts">
 import { onMounted } from "vue";
 
-console.log("dpr", window.devicePixelRatio);
 onMounted(() => {
   const dataset = {
     total: [25, 26, 40, 45, 68],

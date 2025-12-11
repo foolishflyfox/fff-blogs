@@ -6,7 +6,7 @@ import {
   BouncingBalls, 
   RubberArea, 
   SimpleClockSnapshot,
-  SimpleClockOfflineScreen 
+  SimpleClockOfflineScreen,
 } from "./codes/01";
 </script>
 
