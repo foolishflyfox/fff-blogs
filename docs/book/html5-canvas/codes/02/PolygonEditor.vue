@@ -297,11 +297,21 @@ class MyCanvas {
     }
     return true;
   }
+
+  clearAll() {
+    console.log("#@@", this.polygons);
+    this.polygons.length = 0;
+    this.newOptStatus = null;
+    this.optTarget = null;
+    this.optType = null;
+    this.redraw();
+  }
 }
 
 function draw(ctx: CanvasRenderingContext2D) {
   const myCanvas = new MyCanvas(ctx);
   myCanvas.redraw();
+  clearAll = myCanvas.clearAll.bind(myCanvas);
 }
 </script>
 
