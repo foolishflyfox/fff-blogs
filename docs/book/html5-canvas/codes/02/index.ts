@@ -29,3 +29,5 @@ export { default as PolygonEditor } from "./PolygonEditor.vue";
 export { default as RotateScaleTranslate } from "./RotateScaleTranslate.vue";
 export { default as MirrorTriangle } from "./MirrorTriangle.vue";
 export { default as TranslateVsTransform } from "./TranslateVsTransform.vue";
+export { default as ScaleVsTransform } from "./ScaleVsTransform.vue";
+export { default as RotateVsTransform } from "./RotateVsTransform.vue";

@@ -31,6 +31,8 @@ import {
     RotateScaleTranslate,
     MirrorTriangle,
     TranslateVsTransform,
+    ScaleVsTransform,
+    RotateVsTransform,
 } from './codes/02';
 </script>
 
@@ -1075,7 +1077,7 @@ $$
 $$
 \begin{align}
   x' = x \times \cos(\theta) - y \times \sin(\theta) \\
-  y' = y \times \cos(\theta) + x \times \sin(\theta)
+  y' = x \times \sin(\theta) + y \times \cos(\theta)
 \end{align}
 $$
 
@@ -1132,3 +1134,49 @@ function draw2(ctx: CanvasRenderingContext2D) {
   ctx.fillRect(0, 0, 50, 50);
 }
 ```
+
+`scale(sx, sy)` 表示缩放，对应 `transform(sx, 0, 0, sy, 0, 0)`，下图是缩放的一个例子：
+
+<ScaleVsTransform />
+
+对应的代码为：
+
+```ts
+function draw1(ctx: CanvasRenderingContext2D) {
+  ctx.fillStyle = "orange";
+  ctx.scale(2, 1.2);
+  ctx.fillRect(10, 10, 50, 50);
+}
+
+function draw2(ctx: CanvasRenderingContext2D) {
+  ctx.fillStyle = "orange";
+  ctx.transform(2, 0, 0, 1.2, 0, 0);
+  ctx.fillRect(10, 10, 50, 50);
+}
+```
+
+$rotate(\theta)$ 表示旋转，对应 $transform(\cos\theta, \sin\theta, -\sin\theta, \cos\theta, 0, 0)$，下面是旋转的一个例子：
+
+<RotateVsTransform />
+
+对应的代码为：
+
+```ts
+function draw1(ctx: CanvasRenderingContext2D) {
+  ctx.fillStyle = "orange";
+  const theta = Math.PI / 6;
+  ctx.rotate(theta);
+  ctx.fillRect(60, 20, 50, 50);
+}
+
+function draw2(ctx: CanvasRenderingContext2D) {
+  ctx.fillStyle = "orange";
+  const theta = Math.PI / 6;
+  const cosV = Math.cos(theta);
+  const sinV = Math.sin(theta);
+  ctx.transform(cosV, sinV, -sinV, cosV, 0, 0);
+  ctx.fillRect(60, 20, 50, 50);
+}
+```
+
+#### 通过 transform 与 setTransform 进行平移、旋转与缩放
