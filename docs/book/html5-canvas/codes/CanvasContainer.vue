@@ -1,5 +1,10 @@
 <template>
-  <canvas ref="canvasRef" :width :height :style="{ backgroundColor }" />
+  <canvas
+    ref="canvasRef"
+    :width
+    :height
+    :style="{ backgroundColor, width: width + 'px', height: height + 'px' }"
+  />
 </template>
 
 <script setup lang="ts">

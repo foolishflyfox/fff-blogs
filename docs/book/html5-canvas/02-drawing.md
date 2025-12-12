@@ -36,6 +36,7 @@ import {
     TransformWork,
     SpinningDemo,
     CompositeOperationDemo,
+    SpotLightDemo,
 } from './codes/02';
 </script>
 
@@ -1317,3 +1318,9 @@ function draw(ctx: CanvasRenderingContext2D) {
 可以通过 Canvas 绘图对象的 `globalCompositeOperation` 属性来改变默认的图像合成行为。下面演示和不同合成的效果：
 
 <CompositeOperationDemo />
+
+下面的示例演示了通过 `globalCompositeOperation` 属性来实现的各种特效。该合成操作使得橙色的圆形在文本上移动的时候，看起来像是一盏聚光灯。
+
+<SpotLightDemo />
+
+## 剪辑区域
