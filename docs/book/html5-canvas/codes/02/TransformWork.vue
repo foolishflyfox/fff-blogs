@@ -74,9 +74,10 @@ function draw2(ctx: CanvasRenderingContext2D) {
 }
 
 class Transform2D {
-  // matrix in canvas form: [ a c e ]
-  //                      [ b d f ]
-  //                      [ 0 0 1 ]
+  // matrix in canvas form:
+  // [ a c e ]
+  // [ b d f ]
+  // [ 0 0 1 ]
   a: number;
   b: number;
   c: number;
@@ -93,8 +94,8 @@ class Transform2D {
     this.f = f;
   }
 
-  // multiply current matrix on the right by the given matrix (same param style)
-  // this = this * M where M = [a2 c2 e2; b2 d2 f2; 0 0 1]
+  // 当前矩阵乘上新的变换矩阵，表示变换
+  // this = this * M，其中 M = [a2 c2 e2; b2 d2 f2; 0 0 1]
   multiplyRight(
     a2: number,
     b2: number,
@@ -102,59 +103,53 @@ class Transform2D {
     d2: number,
     e2: number,
     f2: number
+  ): Transform2D;
+  // 重载形式
+  multiplyRight(other: Transform2D): Transform2D;
+  multiplyRight(
+    ...args: [number, number, number, number, number, number] | [Transform2D]
   ): this {
-    const a = this.a,
-      b = this.b,
-      c = this.c,
-      d = this.d,
-      e = this.e,
-      f = this.f;
-    const na = a * a2 + c * b2;
-    const nc = a * c2 + c * d2;
-    const ne = a * e2 + c * f2 + e;
-    const nb = b * a2 + d * b2;
-    const nd = b * c2 + d * d2;
-    const nf = b * e2 + d * f2 + f;
-    this.a = na;
-    this.b = nb;
-    this.c = nc;
-    this.d = nd;
-    this.e = ne;
-    this.f = nf;
+    if (args.length === 6) {
+      const { a, b, c, d, e, f } = this;
+      const [a2, b2, c2, d2, e2, f2] = args;
+      const na = a * a2 + c * b2!;
+      const nc = a * c2! + c * d2!;
+      const ne = a * e2! + c * f2! + e;
+      const nb = b * a2! + d * b2!;
+      const nd = b * c2! + d * d2!;
+      const nf = b * e2! + d * f2! + f;
+      this.a = na;
+      this.b = nb;
+      this.c = nc;
+      this.d = nd;
+      this.e = ne;
+      this.f = nf;
+    } else {
+      const other = args[0];
+      const { a, b, c, d, e, f } = other;
+      this.multiplyRight(a, b, c, d, e, f);
+    }
     return this;
   }
 
-  // convenience multiply by another Transformer2D on the right
-  multiplyRightBy(other: Transform2D): this {
-    return this.multiplyRight(
-      other.a,
-      other.b,
-      other.c,
-      other.d,
-      other.e,
-      other.f
-    );
-  }
-
-  // translate (right-multiply by translation)
-  translate(tx: number, ty: number): this {
+  // 平移操作
+  translate(tx: number, ty: number): Transform2D {
     return this.multiplyRight(1, 0, 0, 1, tx, ty);
   }
 
-  // rotate angle in radians (right-multiply)
-  rotate(theta: number): this {
+  // 旋转操作
+  rotate(theta: number): Transform2D {
     const cos = Math.cos(theta);
     const sin = Math.sin(theta);
-    // Note mapping: transform(a,b,c,d,e,f) where a=cos, b=sin, c=-sin, d=cos
     return this.multiplyRight(cos, sin, -sin, cos, 0, 0);
   }
 
-  // scale (right-multiply)
-  scale(sx: number, sy: number = sx): this {
+  // 缩放操作
+  scale(sx: number, sy: number = sx): Transform2D {
     return this.multiplyRight(sx, 0, 0, sy, 0, 0);
   }
 
-  // reset to identity
+  // 重置为单位矩阵
   reset(): this {
     this.a = 1;
     this.b = 0;
@@ -165,7 +160,7 @@ class Transform2D {
     return this;
   }
 
-  // set directly like ctx.setTransform(a,b,c,d,e,f)
+  // 指定变换矩阵
   setTransform(
     a: number,
     b: number,
@@ -183,7 +178,7 @@ class Transform2D {
     return this;
   }
 
-  // apply this transform to a point (x,y)
+  // 将变换作用于一个点的坐标
   applyToPoint(x: number, y: number): { x: number; y: number } {
     return {
       x: this.a * x + this.c * y + this.e,
@@ -191,7 +186,7 @@ class Transform2D {
     };
   }
 
-  // transform an array-like of points in-place (flat x,y,x,y,...)
+  // 批量转换多个点的坐标
   applyToPointsFlat(data: number[]): void {
     for (let i = 0; i + 1 < data.length; i += 2) {
       const x = data[i],
@@ -201,24 +196,22 @@ class Transform2D {
     }
   }
 
-  // return the 6-tuple for canvas setTransform/transform usage
+  // 返回一个包含6个元素的数组，供 canvas 的 setTransform/transform 使用
   toCanvasParams(): [number, number, number, number, number, number] {
     return [this.a, this.b, this.c, this.d, this.e, this.f];
   }
 
-  // apply this transform to a CanvasRenderingContext2D (setTransform)
+  // 将变换设置到 canvas 绘图环境中
   applyToContextAsSet(ctx: CanvasRenderingContext2D): void {
     ctx.setTransform(this.a, this.b, this.c, this.d, this.e, this.f);
   }
 
-  // multiply the canvas context's current transform by this transform (ctx.transform)
-  // Note: CanvasRenderingContext2D.transform multiplies current by given matrix on the right,
-  // so we can call ctx.transform with our params.
+  // 将变换叠加到 canvas 绘图环境的变换中
   applyToContextAsTransform(ctx: CanvasRenderingContext2D): void {
     ctx.transform(this.a, this.b, this.c, this.d, this.e, this.f);
   }
 
-  // compute and return inverse transform; throws if non-invertible
+  // 计算变换的逆，如果没有逆变换，抛出错误
   inverse(): Transform2D {
     const det = this.a * this.d - this.b * this.c;
     if (Math.abs(det) < 1e-12) {
