@@ -37,6 +37,8 @@ import {
     SpinningDemo,
     CompositeOperationDemo,
     SpotLightDemo,
+    ClipSimpleDemo,
+    EraserDemo,
 } from './codes/02';
 </script>
 
@@ -1337,4 +1339,12 @@ function draw(ctx: CanvasRenderingContext2D) {
 
 :::
 
+下面是 `clip` 方法的使用示例。左边的图正常绘制了一个正方形和一个圆；中间的图表示以正方形为剪辑区域，绘制圆；右边的图表示在绘制了一个圆后，再以正方形为剪辑区域，清空与画布同等大小的矩形。
+
+<ClipSimpleDemo />
+
 ### 通过剪辑区域来擦除图像
+
+下面的示例演示了橡皮擦的功能：
+
+<EraserDemo />

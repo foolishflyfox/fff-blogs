@@ -35,3 +35,5 @@ export { default as TransformWork } from "./TransformWork.vue";
 export { default as SpinningDemo } from "./SpinningDemo.vue";
 export { default as CompositeOperationDemo } from "./CompositeOperationDemo.vue";
 export { default as SpotLightDemo } from "./SpotLightDemo.vue";
+export { default as ClipSimpleDemo } from "./ClipSimpleDemo.vue";
+export { default as EraserDemo } from "./EraserDemo.vue";
