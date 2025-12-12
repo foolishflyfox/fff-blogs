@@ -33,3 +33,4 @@ export { default as ScaleVsTransform } from "./ScaleVsTransform.vue";
 export { default as RotateVsTransform } from "./RotateVsTransform.vue";
 export { default as TransformWork } from "./TransformWork.vue";
 export { default as SpinningDemo } from "./SpinningDemo.vue";
+export { default as CompositeOperationDemo } from "./CompositeOperationDemo.vue";

@@ -51,6 +51,7 @@
 - `createConicGradient`: 锥形渐变
 - `createPattern`: 创建图案
 #### 绘制
+- `globalCompositeOperation`: [合成](./02-drawing.html#图像合成)
 - `fillText`: 填充文本
 - `strokeText`: 描边文本
 - `drawImage`: 绘制图片

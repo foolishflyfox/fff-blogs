@@ -35,6 +35,7 @@ import {
     RotateVsTransform,
     TransformWork,
     SpinningDemo,
+    CompositeOperationDemo,
 } from './codes/02';
 </script>
 
@@ -1310,3 +1311,9 @@ function draw(ctx: CanvasRenderingContext2D) {
 ```
 
 ## 图像合成
+
+在默认情况下，如果在 canvas 之中将某个物体绘制在另一个物体(目标)之上，那么浏览器就会简单地将源物体叠放在目标物体的图像之上，这称为图像合成(compositing)。
+
+可以通过 Canvas 绘图对象的 `globalCompositeOperation` 属性来改变默认的图像合成行为。下面演示和不同合成的效果：
+
+<CompositeOperationDemo />
