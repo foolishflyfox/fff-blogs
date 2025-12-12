@@ -39,6 +39,7 @@ import {
     SpotLightDemo,
     ClipSimpleDemo,
     EraserDemo,
+    ClipTextDemo,
 } from './codes/02';
 </script>
 
@@ -1348,3 +1349,61 @@ function draw(ctx: CanvasRenderingContext2D) {
 下面的示例演示了橡皮擦的功能：
 
 <EraserDemo />
+
+### 利用剪辑区域来制作伸缩式动画
+
+下面的例子实现了伸缩式动画效果。点击画布，将展示通过操作剪辑区域逐渐“吞食”文本的过程，等 canvas 全部变黑后，应用程序恢复到原始状态。
+
+<ClipTextDemo />
+
+实现代码如下：
+
+```ts
+function draw(ctx: CanvasRenderingContext2D) {
+  const { width: cw, height: ch } = ctx.canvas;
+  let clipR = 0;
+  function drawText() {
+    ctx.save();
+    ctx.beginPath();
+    ctx.fillStyle = "#fafafa";
+    ctx.fillRect(0, 0, cw, ch);
+    ctx.fillStyle = "#6d94e4";
+    ctx.strokeStyle = "yellow";
+    ctx.font = "bold 128pt Arial";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillText("HTML5", cw / 2, ch / 2);
+    ctx.strokeText("HTML5", cw / 2, ch / 2);
+    ctx.restore();
+  }
+  function redraw() {
+    if (clipR > 0) {
+      ctx.fillStyle = "black";
+      ctx.fillRect(0, 0, cw, ch);
+      ctx.save();
+      ctx.beginPath();
+      ctx.arc(cw / 2, ch / 2, clipR, 0, Math.PI * 2);
+      ctx.clip();
+      drawText();
+      ctx.restore();
+    } else {
+      drawText();
+    }
+  }
+  function animate() {
+    if (clipR > 0) {
+      redraw();
+      clipR -= 3;
+      requestAnimationFrame(animate);
+    } else {
+      clipR = 0;
+      redraw();
+    }
+  }
+  redraw();
+  ctx.canvas.onmousedown = () => {
+    clipR = cw / 2;
+    animate();
+  };
+}
+```

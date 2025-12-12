@@ -37,3 +37,4 @@ export { default as CompositeOperationDemo } from "./CompositeOperationDemo.vue"
 export { default as SpotLightDemo } from "./SpotLightDemo.vue";
 export { default as ClipSimpleDemo } from "./ClipSimpleDemo.vue";
 export { default as EraserDemo } from "./EraserDemo.vue";
+export { default as ClipTextDemo } from "./ClipTextDemo.vue";
