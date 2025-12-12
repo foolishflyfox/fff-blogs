@@ -1319,7 +1319,7 @@ function draw(ctx: CanvasRenderingContext2D) {
 
 <CompositeOperationDemo />
 
-下面的示例演示了通过 `globalCompositeOperation` 属性来实现的各种特效。该合成操作使得橙色的圆形在文本上移动的时候，看起来像是一盏聚光灯。
+下面的示例演示了通过 `globalCompositeOperation` 属性来实现的各种特效。该合成操作使得橙色的圆形在文本上移动的时候，看起来像是一盏聚光灯，可在左侧选择要使用的图像合成模式。
 
 <SpotLightDemo />
 
