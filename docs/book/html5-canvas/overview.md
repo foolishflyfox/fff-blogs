@@ -22,7 +22,7 @@
 ### 属性
 - `canvas`: 所属 canvas 对象
 - `fillStyle`: 填充色
-- `font`: 字体
+- `font`: [字体](./03-text#%E8%AE%BE%E7%BD%AE%E5%AD%97%E5%9E%8B)
 - `globalAlpha`: 全局透明度
 - `globalCompsiteOperation`: 全局叠加模式
 - `lineCap`: 线段端点形状

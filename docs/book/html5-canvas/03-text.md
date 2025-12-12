@@ -3,6 +3,7 @@ import {
     TextStrokeFill,
     TextMaxWidthDemo,
     TextFillStyle,
+    FontFamilyDemo,
 } from './codes/03';
 </script>
 
@@ -136,3 +137,24 @@ ctx.strokeStyle = "blue";
 drawColorGradientText();
 drawImageText();
 ```
+
+## 设置字型
+
+可以通过绘图环境对象的 font 属性，来设置绘制在 canvas 中的文本所采用的字型。该属性是一个 CSS3 格式的字型字符串，它的各分量如下所示，开发者在设置绘图环境的 `font` 属性时，需要按照该表从上至下所列的顺序来依次指定这些分量的值：
+
+- `font-style`: 可以取 `normal` / `italic` / `oblique`
+- `font-variant`: 可以取 `normal` / `small-caps`
+- `font-weight`: 决定了字体粗细，可取 `normal`、`bold`、`bolder`、`lighter`、100、200、300、...、900，其中 `normal` 相当于 400，而 `bold` 相当于 700
+- `font-size`: 字型大小，可取 `xx-small`、`x-small`、`medium`、`large`、`x-large`、`xx-large`、`smaller`、`larger`、长度(如`24px`、`3em`...)、与父元素字型的百分比
+- `line-height`: 浏览器会将该属性强制设置为 `normal`，如果你设置了该值，浏览器将忽略你所设定的值
+- `font-family`: 可以用两种方式设置字体集(font family)，一种方式以 “family-name” 格式来指定该属性，此时可取的值为 `helvetic`、`verdana`、`palatino`等等，另一种方式是以 “generic-family” 格式来指定该属性，其值可取 `sans-serif`、`monospace`、`cursive`及`fantasy`等等，在设置 `font-family` 分量时，可以仅指定 family-name 或 generic-family 格式来指定其值，也可以同时使用这两种格式。
+
+Canvas 默认字型是 `10px sans-serif`。
+
+下面的例子是以各种指定字体来绘制的文本：
+
+<FontFamilyDemo />
+
+左边一列字符串所使用的字型都是 Palatino 字体集的变种，右边一列是网页安全字型的绘制效果。
+
+如果 font 属性的取值无效的话，浏览器就不会修改该属性的值，而会保持其原有值不变。比方说，你在指定 font-style 或 font-family 等分量值时弄错了顺序，或是将一个非法值指定给了 font-style 分量。
