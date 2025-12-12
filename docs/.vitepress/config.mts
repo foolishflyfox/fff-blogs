@@ -95,6 +95,7 @@ export default defineConfig({
                 { text: "预览", link: "overview" },
                 { text: "基础知识", link: "01-essentials" },
                 { text: "绘制", link: "02-drawing" },
+                { text: "文本", link: "03-text" },
               ],
             },
           ],

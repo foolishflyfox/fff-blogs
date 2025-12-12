@@ -78,6 +78,7 @@
 - `getTransform`: 获取变换
 #### 计算
 - `isPointInPath`: 是否包含点
+- `measureText`: 计算文本信息
 ## 渐变色
 - `addColorStop`: 添加颜色停止点
 ## window
