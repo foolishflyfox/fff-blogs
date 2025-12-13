@@ -4,6 +4,7 @@ import {
     TextMaxWidthDemo,
     TextFillStyle,
     FontFamilyDemo,
+    AlignBaselineDemo,
 } from './codes/03';
 </script>
 
@@ -158,3 +159,92 @@ Canvas 默认字型是 `10px sans-serif`。
 左边一列字符串所使用的字型都是 Palatino 字体集的变种，右边一列是网页安全字型的绘制效果。
 
 如果 font 属性的取值无效的话，浏览器就不会修改该属性的值，而会保持其原有值不变。比方说，你在指定 font-style 或 font-family 等分量值时弄错了顺序，或是将一个非法值指定给了 font-style 分量。
+
+## 文本的定位
+
+### 水平与垂直定位
+
+在 canvas 中使用 `strokeText()` 或 `fillText()` 绘制文本时，需要指定所绘文本的 X 与 Y 坐标。而浏览器具体会将文本绘制在何处，则要看 `textAlign` 和 `textBaseline` 这两个绘图环境对象的属性。
+
+下面的示例演示了使用这些属性的各种取值组合来绘制文本时的效果。
+
+<AlignBaselineDemo />
+
+例子中的那个实心矩形表示应用程序传递给 `fillText()` 方法的 X 与 Y 坐标。图中所显示的每个字符串都表示了一种 `textAlign`/`textBaseLine` 的组合。
+
+`textAlign` 属性可以取的值有：
+
+- `start`
+- `center`
+- `end`
+- `left`
+- `right`
+
+`textAlign` 属性的默认值是 `start`，当 canvas 元素的 `direction` 属性是 `ltr` 时，也就是说浏览器是按从左往右的方向显示文本时，`left` 的效果与 `start` 相同，而 `right` 的效果则与 `end` 相同。同理，如果 `direction` 属性时 `rtl` 时，也就是说浏览器是从右往左来显示文本的，那么 `right` 的效果与 `start` 一致，而 `left` 的效果与 `end` 一致。
+
+`textBaseline` 属性可以取的值有：
+
+- `top`
+- `middle`
+- `bottom`
+- `alphabetic`
+- `ideographic`
+- `hanging`
+
+`textBaseline` 属性的默认值为 `alphabetic`，该值用于绘制由基于拉丁字母的语言所组成的字符串。`ideographic` 值则用于绘制日语或中文字符串，`hangding` 值用于绘制各种印度语字符串。`top`、`middle`、`bottom` 这三个值与特定的语言不相关，它们代表文本周围的边界框之内的某个位置，这个边界框也称为“字符方框”.
+
+该显示字符定位的代码如下：
+
+```ts
+const textAlign: CanvasTextAlign[] = [
+  "start",
+  // "left",
+  "center",
+  // "right",
+  "end",
+];
+
+const textBaseline: CanvasTextBaseline[] = [
+  "top",
+  "middle",
+  "bottom",
+  "alphabetic",
+  "ideographic",
+  "hanging",
+];
+const { width: cw } = ctx.canvas;
+drawGrid(ctx, "lightgray", 10);
+
+for (let i = 0; i < textBaseline.length; i++) {
+  const y = 20 + i * 70;
+  // 绘制横线
+  ctx.save();
+  ctx.strokeStyle = "#aaa";
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(20, y);
+  ctx.lineTo(cw, y);
+  ctx.stroke();
+  ctx.restore();
+  ctx.font = "24px Arial";
+  ctx.fillStyle = "#6e95e6";
+  for (let j = 0; j < textAlign.length; j++) {
+    const x = 20 + j * 320;
+    // 绘制文本
+    ctx.save();
+    ctx.textBaseline = textBaseline[i];
+    ctx.textAlign = textAlign[j];
+    ctx.fillText(`${textAlign[j]}/${textBaseline[i]}`, x, y);
+    ctx.restore();
+    // 绘制定位点
+    ctx.save();
+    ctx.strokeStyle = "#888";
+    ctx.fillStyle = "yellow";
+    ctx.beginPath();
+    ctx.rect(x, y, 5, 5);
+    ctx.fill();
+    ctx.stroke();
+    ctx.restore();
+  }
+}
+```

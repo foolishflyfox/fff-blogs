@@ -21,6 +21,7 @@
 ## context 绘图环境
 ### 属性
 - `canvas`: 所属 canvas 对象
+- `direction`: 文本方向
 - `fillStyle`: 填充色
 - `font`: [字体](./03-text#%E8%AE%BE%E7%BD%AE%E5%AD%97%E5%9E%8B)
 - `globalAlpha`: 全局透明度
@@ -34,8 +35,8 @@
 - `shadowOffsetX`: 阴影 x 偏移
 - `shadowOffsetY`: 阴影 y 偏移
 - `strokeStyle`: 描边色
-- `textAlign`: 文本水平对齐方式
-- `textBaseline`: 文本垂直对齐方式
+- `textAlign`: [文本水平对齐方式](./03-text#水平与垂直定位)
+- `textBaseline`: [文本垂直对齐方式](./03-text#水平与垂直定位)
 - `lineDashOffset`: 虚线绘制偏移
 ### 方法
 #### 状态
