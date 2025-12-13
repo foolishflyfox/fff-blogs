@@ -8,6 +8,7 @@ import {
     TextInputCursor,
     TextCoordinate,
     RoundTextDemo,
+    TextEditor,
 } from './codes/03';
 </script>
 
@@ -404,3 +405,5 @@ drawRoundText("Clockwise around the circle ", 450, 150, 120, 0, Math.PI * 2);
 4. 进行文本填充与描边
 
 ## 实现文本编辑控件
+
+<TextEditor />
