@@ -5,7 +5,9 @@ import {
     TextFillStyle,
     FontFamilyDemo,
     AlignBaselineDemo,
-    TextInputCursor
+    TextInputCursor,
+    TextCoordinate,
+    RoundTextDemo,
 } from './codes/03';
 </script>
 
@@ -277,3 +279,128 @@ Canvas 绘图环境对象提供了一个名为 `measureText()` 的方法，用�
 :::
 
 ### 绘制坐标轴旁边的文本标签
+
+下面示例是一个带文本标记的坐标系：
+
+<TextCoordinate />
+
+实现代码如下：
+
+```ts
+const { width: cw, height: ch } = ctx.canvas;
+const margin = 50;
+const x0 = margin;
+const y0 = ch - margin;
+drawGrid(ctx, "lightgray", 10);
+ctx.strokeStyle = "#9b9dcb";
+ctx.lineWidth = 1.5;
+// 绘制主轴
+ctx.beginPath();
+ctx.moveTo(margin, margin - 10);
+ctx.lineTo(x0, y0);
+ctx.lineTo(cw - margin + 10, y0);
+ctx.stroke();
+
+ctx.font = "bold 12px Arial";
+ctx.shadowBlur = 10;
+ctx.shadowColor = "#0008";
+ctx.shadowOffsetX = 5;
+ctx.shadowOffsetY = 5;
+ctx.strokeStyle = "brown";
+ctx.lineWidth = 1;
+ctx.fillStyle = "blue";
+ctx.textAlign = "center";
+ctx.textBaseline = "top";
+// 绘制横轴
+for (let i = 0; i + margin <= cw - margin; i += 10) {
+  if (i !== 0) {
+    ctx.beginPath();
+    let markLen = 10;
+    if ((i / 10) % 5 === 0) {
+      markLen = 20;
+    }
+    ctx.moveTo(x0 + i, y0 - markLen / 2);
+    ctx.lineTo(x0 + i, y0 + markLen / 2);
+    ctx.stroke();
+  }
+  if ((i / 10) % 5 === 0) {
+    ctx.fillText(String(i / 10), x0 + i, y0 + 20);
+  }
+}
+// 绘制纵轴
+ctx.textAlign = "right";
+ctx.textBaseline = "middle";
+for (let i = 0; y0 - i >= margin; i += 10) {
+  if (i !== 0) {
+    ctx.beginPath();
+    let markLen = 10;
+    if ((i / 10) % 5 === 0) {
+      markLen = 20;
+    }
+    ctx.moveTo(x0 - markLen / 2, y0 - i);
+    ctx.lineTo(x0 + markLen / 2, y0 - i);
+    ctx.stroke();
+  }
+  if ((i / 10) % 5 === 0) {
+    ctx.fillText(String(i / 10), x0 - 20, y0 - i);
+  }
+}
+```
+
+### 在圆弧周围绘制文本
+
+下面的示例演示了将文本绘制在某段圆弧周围。
+
+<RoundTextDemo />
+
+代码如下：
+
+```ts
+function drawRoundText(
+  content: string, // 绘制文本
+  x0: number, // 中心位置x坐标
+  y0: number, // 中心位置y坐标
+  r: number, // 圆弧半径
+  startRadian: number, // 起始弧度
+  endRadian: number // 终止弧度
+) {
+  ctx.save();
+  ctx.font = "bold 32px Arial";
+  ctx.fillStyle = "#73b4d580";
+  ctx.strokeStyle = "#0008";
+  ctx.beginPath();
+  ctx.arc(x0, y0, 10, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.stroke();
+  ctx.textAlign = "left";
+  ctx.textBaseline = "middle";
+  ctx.fillStyle = "#888fcb";
+  ctx.strokeStyle = "red";
+  ctx.lineWidth = 0.5;
+  const deltaRadian = (endRadian - startRadian) / content.length;
+  for (let i = 0; i < content.length; i++) {
+    ctx.save();
+    const radian = startRadian + deltaRadian * i;
+    const x = x0 + r * Math.cos(radian);
+    const y = y0 + r * Math.sin(radian);
+    ctx.translate(x, y);
+    ctx.rotate(radian + Math.PI / 2);
+    ctx.fillText(content.substring(i, i + 1), 0, 0);
+    ctx.strokeText(content.substring(i, i + 1), 0, 0);
+    ctx.restore();
+  }
+  ctx.restore();
+}
+drawGrid(ctx, "lightgray", 10);
+drawRoundText("Left Middle Right", 150, 150, 120, Math.PI, Math.PI * 2);
+drawRoundText("Clockwise around the circle ", 450, 150, 120, 0, Math.PI * 2);
+```
+
+这段代码通过如下步骤来绘制坐标：
+
+1. 计算圆弧周围每个字符的绘制坐标
+2. 将坐标系平移至绘制字符的位置
+3. 将坐标系旋转
+4. 进行文本填充与描边
+
+## 实现文本编辑控件
