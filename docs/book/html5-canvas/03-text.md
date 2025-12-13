@@ -5,6 +5,7 @@ import {
     TextFillStyle,
     FontFamilyDemo,
     AlignBaselineDemo,
+    TextInputCursor
 } from './codes/03';
 </script>
 
@@ -248,3 +249,31 @@ for (let i = 0; i < textBaseline.length; i++) {
   }
 }
 ```
+
+### 文本的度量
+
+主要你做的事情与文本有关，你就得设法取得某个字符串的像素宽度与高度。如下图所示的带有光表的简单文本编辑器，它就必须知道应该把光标绘制在 canvas 中的哪个位置，因而还要知道文本的尺寸。
+
+<TextInputCursor />
+
+要将光标放在这行文本的末尾，就必须先算出文本的宽度。
+
+Canvas 绘图环境对象提供了一个名为 `measureText()` 的方法，用以度量某个字符串的像素宽度。该方法所返回的 `TextMatrics` 对象中包含了一个名为 `width` 的属性，这个属性就是字符串的宽度。
+
+:::warning
+
+在使用 `measureText` 方法时，最常见的错误时在调用完该方法后，才去设置字型。`measureText` 方法时基于当前字型来计算字符串宽度的，因此如果你在调用 `measureText()` 方法之后才去改变字型，那么该方法所返回的宽度并不能反映出那种字型来度量的实际文本宽度。
+
+:::
+
+:::warning
+
+通过 `measureText` 方法所返回的 `TextMetrics` 对象中 `width` 属性表示字符串的像素宽度。但是 `TextMetrics` 并没有提供对应的 `height` 属性用于获取高度，而且 Canvas 规范中的一句话又使得文本的尺寸计算变得更加复杂：
+
+> 使用 `fillText` 与 `strokeText` 方法来渲染字形时，绘制范围有可能超出由字型大小所定义的范围框，绘制的宽度也有可能超出由 `measureText` 方法所返回的宽度。
+
+上文引述的规范表明：由 `measureText` 方法所返回的文本宽度并不精确。通常情况下，就算该值不精确也无关紧要。
+
+:::
+
+### 绘制坐标轴旁边的文本标签
