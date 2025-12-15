@@ -1,6 +1,6 @@
 <script setup>
 import { 
-    CanvasDrawImage,
+  CanvasDrawImage,
 } from './codes/04';
 </script>
 
@@ -42,3 +42,13 @@ image.src = imageUrl;
 ```
 
 代码中首先创建了一幅图像，设置了它的数据源，然后等待浏览器加载图片，在图片加载完成后，将其绘制到 canvas 左上角。
+
+这就是 `drawImage` 最简单的用法了。采用这种方式，可以把一整张未经缩放的图像绘制到 canvas 之中，该方式的唯一缺点则是你必须等待图像加载完毕之后才能对其进行绘制，如果在图片尚未完成时就进行绘制，那么根据 Canvas 规范，`drawImage` 方法的执行会失败，而且没有任何提示。
+
+:::tip
+
+`drawImage` 方法在绘制图像时，不会考虑当前路径，然而，它却会将 `globalAlpha` 设置、阴影效果、剪辑区域，以及全局图像合成操作符等属性运用到图像的绘制中。
+
+:::
+
+### drawImage 方法的用法
