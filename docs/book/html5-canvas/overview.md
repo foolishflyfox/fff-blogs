@@ -46,6 +46,7 @@
 - `getLineDash`: 获取虚线模式
 - `getImageData`: 获取绘图数据
 - `putImageData`: 恢复绘图数据
+- `createImageData`: 创建空白绘图
 #### 创建
 - `createLinearGradient`: 线性渐变
 - `createRadialGradient`: 放射渐变
