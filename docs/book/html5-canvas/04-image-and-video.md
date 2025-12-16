@@ -52,3 +52,13 @@ image.src = imageUrl;
 :::
 
 ### drawImage 方法的用法
+
+`drawImage` 方法会将一幅图像绘制到一个 canvas 中，所绘的图像叫做“源图像”(source image)，而绘制到的地方则叫“目标 canvas”(destination canvas)。以字母 `s` 开头的变量名代表源图像，以字母 `d` 开头的变量用于指示目标 canvas。`drawImage()` 方法可以接受以下 3 套参数：
+
+- `drawImage(image, dx, dy)`: 将整幅图像绘制到目标 canvas 的指定位置
+- `drawImage(image, dx, dy, dw, dh)`: 将图像完整地绘制到指定的位置上，并且会在绘制时根据目标区域的宽度与高度进行缩放
+- `drawImage(image, sx, sy, sw, sh, dx, dy, dw, dh)`: 将图像的部分绘制到目标 canvas 的制定位置，在绘制时根据目标区域的宽度与高度进行缩放。
+
+上述三种情况，第一个参数都是 `HTMLImageElement` 类型的图像对象，不过它也可以是一个 `HTMLCanvasElement` 类型的 `canvas` 对象，或是 `HTMLVideoElement` 类型的视频对象。所以，开发者也可以将 canvas 或视频对象当成图像来用，这样一来，便催生了诸如视频编辑器这样的一大批应用程序。
+
+## 图像的缩放
