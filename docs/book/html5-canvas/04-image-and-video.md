@@ -1,6 +1,7 @@
 <script setup>
 import { 
   CanvasDrawImage,
+  ImageScaleDemo,
 } from './codes/04';
 </script>
 
@@ -62,3 +63,22 @@ image.src = imageUrl;
 上述三种情况，第一个参数都是 `HTMLImageElement` 类型的图像对象，不过它也可以是一个 `HTMLCanvasElement` 类型的 `canvas` 对象，或是 `HTMLVideoElement` 类型的视频对象。所以，开发者也可以将 canvas 或视频对象当成图像来用，这样一来，便催生了诸如视频编辑器这样的一大批应用程序。
 
 ## 图像的缩放
+
+下面示例的图像，其尺寸比 canvas 小，然而，当用户选中复选框后，应用程序则会重新绘制该图，将其放大，以符合 canvas 的尺寸。
+
+<ImageScaleDemo />
+
+上方的图片尺寸比 canvas 小，当用户选中复选框后，应用程序会重新绘制该图，将其放大，以符合 canvas 的尺寸。代码如下：
+
+```ts
+if (scaleImage) {
+  // 如果选中了缩放图片
+  ctx.drawImage(image, 0, 0, cw, ch);
+} else {
+  // 不缩放图片
+  ctx.clearRect(0, 0, cw, ch);
+  ctx.drawImage(image, 0, 0);
+}
+```
+
+### 在 Canvas 边界之外绘制图像

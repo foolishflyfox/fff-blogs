@@ -1,5 +1,10 @@
 <template>
-  <CanvasContainer :draw :width="798" :height="563" style="width: 100%" />
+  <CanvasContainer
+    :draw
+    :width="798"
+    :height="563"
+    style="width: 100%; height: auto"
+  />
 </template>
 
 <script setup lang="ts">
