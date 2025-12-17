@@ -4,6 +4,7 @@ import {
   ImageScaleDemo,
   ImageScaleSlider,
   WatermarkDemo,
+  WatermarkDemo2,
 } from './codes/04';
 </script>
 
@@ -140,3 +141,82 @@ ctx.drawImage(
   drawH
 );
 ```
+
+## 离屏 canvas
+
+离屏 canvas 经常用于存放临时性的图像信息，这在很多情况下都非常有用。
+
+下面的例子是用离屏 canvas 实现的水印显示功能。
+
+<WatermarkDemo2 />
+
+在本例中，离屏 canvas 存储的是未经放大的图像与水印。当用户拖动滑动条时，应用程序会将离屏 canvas 里面的内容复制到正在显示的 canvas 中，这个过程中也会根据用户指定的数值对所绘内容进行放大。
+
+实现的主要代码为：
+
+```ts
+function draw(ctx: CanvasRenderingContext2D) {
+  const { width: cw, height: ch } = ctx.canvas;
+  const image = new Image();
+  const offlineCanvas = document.createElement("canvas") as HTMLCanvasElement;
+  offlineCanvas.width = cw;
+  offlineCanvas.height = ch;
+  const offlineCtx = offlineCanvas.getContext("2d")!;
+
+  image.onload = () => {
+    offlineCtx.drawImage(image, 0, 0, cw, ch);
+    offlineCtx.strokeStyle = "yellow";
+    offlineCtx.fillStyle = "#000";
+    const fontSize = 96;
+    offlineCtx.font = fontSize + "px Arial";
+    offlineCtx.textBaseline = "middle";
+    offlineCtx.textAlign = "center";
+    offlineCtx.shadowColor = "#0008";
+    offlineCtx.shadowBlur = 10;
+    const content1 = "Copyright";
+    const content2 = "Acme Inc.";
+    offlineCtx.fillText(content1, cw / 2, ch / 2 - fontSize / 2);
+    offlineCtx.fillText(content2, cw / 2, ch / 2 + fontSize / 2);
+    offlineCtx.strokeText(content1, cw / 2, ch / 2 - fontSize / 2);
+    offlineCtx.strokeText(content2, cw / 2, ch / 2 + fontSize / 2);
+    watchEffect(() => {
+      const { width, height } = image;
+      const drawW = width * scaleValue.value;
+      const drawH = height * scaleValue.value;
+
+      ctx.restore();
+      ctx.drawImage(
+        offlineCanvas,
+        0,
+        0,
+        cw,
+        ch,
+        cw / 2 - drawW / 2,
+        ch / 2 - drawH / 2,
+        drawW,
+        drawH
+      );
+    });
+  };
+  image.src = lonelybeachUrl;
+}
+```
+
+要使用离屏 canvas，通常要遵循如下四个步骤：
+
+1. 创建用于做离屏 canvas 的元素
+2. 设置离屏的 canvas 的宽度与高度
+3. 在离屏 canvas 中进行绘制
+4. 将离屏 canvas 的全部或一部分内容复制到正在显示的
+
+:::tip
+
+离屏 canvas 会占据一定的内存，不过它们可以显著地提高绘图效率。
+
+:::
+
+## 操作图像的像素
+
+`getImageData` 与 `putImageData` 这两个方法分别用于获取图像的像素信息，以及向图像中插入像素。如果有需要，也可以修改像素的值，所以说，这两个方法让开发者可以对图像中的像素进行任何的操作。
+
+### 获取图像数据
