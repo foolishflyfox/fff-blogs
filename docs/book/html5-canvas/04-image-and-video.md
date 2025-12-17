@@ -2,6 +2,8 @@
 import { 
   CanvasDrawImage,
   ImageScaleDemo,
+  ImageScaleSlider,
+  WatermarkDemo,
 } from './codes/04';
 </script>
 
@@ -82,3 +84,59 @@ if (scaleImage) {
 ```
 
 ### 在 Canvas 边界之外绘制图像
+
+下面的示例提供了一个滑动条，可以让用户来调整图像的放大缩小倍数。当用户拖动滑动条时，应用程序会清除 canvas 中的内容，然后以指定的放大倍数重新绘制图像，该示例总是会将图像绘制在 canvas 的中心。
+
+<ImageScaleSlider />
+
+:::tip
+
+图像可以绘制在 canvas 之内，也可以绘制在它之外。如果你向 canvas 之中绘制的图像有一部分会落在 canvas 范围之外，那么浏览器就会将 canvas 范围之外的那部分图像忽略。
+
+可以在 canvas 范围之外进行绘制，这是一项重要的功能。
+
+:::
+
+## 将一个 Canvas 绘制到另一个 Canvas 中
+
+下面的应用程序将一幅图像绘制在 canvas 中，然后在图像上方绘制了一些用作水印的文本。
+
+<WatermarkDemo />
+
+当用户通过滑动条调整放大倍数时，应用程序会同时对图像与文本进行缩放，核心代码为：
+
+```ts
+const { width, height } = image;
+// 缩放后的宽度与高度
+const drawW = width * scaleValue;
+const drawH = height * scaleValue;
+ctx.clearRect(0, 0, cw, ch);
+ctx.drawImage(image, 0, 0, cw, ch);
+ctx.save();
+ctx.strokeStyle = "yellow";
+ctx.fillStyle = "#7f9ccb80";
+const fontSize = 96;
+ctx.font = fontSize + "px Arial";
+ctx.textBaseline = "middle";
+ctx.textAlign = "center";
+ctx.shadowColor = "#0008";
+ctx.shadowBlur = 10;
+const content1 = "Copyright";
+const content2 = "Acme Inc.";
+ctx.fillText(content1, cw / 2, ch / 2 - fontSize / 2);
+ctx.fillText(content2, cw / 2, ch / 2 + fontSize / 2);
+ctx.strokeText(content1, cw / 2, ch / 2 - fontSize / 2);
+ctx.strokeText(content2, cw / 2, ch / 2 + fontSize / 2);
+ctx.restore();
+ctx.drawImage(
+  ctx.canvas,
+  0,
+  0,
+  cw,
+  ch,
+  cw / 2 - drawW / 2,
+  ch / 2 - drawH / 2,
+  drawW,
+  drawH
+);
+```
