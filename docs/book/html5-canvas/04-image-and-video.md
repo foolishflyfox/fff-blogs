@@ -5,6 +5,7 @@ import {
   ImageScaleSlider,
   WatermarkDemo,
   WatermarkDemo2,
+  RubberSelectImage,
 } from './codes/04';
 </script>
 
@@ -222,3 +223,71 @@ function draw(ctx: CanvasRenderingContext2D) {
 ### 获取图像数据
 
 如下示例是实现拖动鼠标选取图片区域进行缩放的例子。
+
+<RubberSelectImage />
+
+实现代码如下：
+
+```ts
+function draw(ctx: CanvasRenderingContext2D) {
+  const { width: cw, height: ch } = ctx.canvas;
+  const image = new Image();
+  let curImageData: ImageData;
+  let startPos: Pos | null = null;
+  function initCanvas() {
+    ctx.drawImage(image, 0, 0);
+    curImageData = ctx.getImageData(0, 0, cw, ch);
+    startPos = null;
+  }
+  image.onload = () => {
+    initCanvas();
+  };
+  ctx.canvas.onmousedown = (e) => {
+    startPos = mouseEventToPos(ctx.canvas, e);
+  };
+  ctx.canvas.onmousemove = (e) => {
+    if (startPos) {
+      ctx.putImageData(curImageData, 0, 0);
+      const endPos = mouseEventToPos(ctx.canvas, e);
+      const { left: x, top: y, width, height } = calcRectInfo(startPos, endPos);
+      ctx.save();
+      ctx.strokeStyle = "yellow";
+      ctx.lineWidth = 2;
+      ctx.strokeRect(x, y, width, height);
+      ctx.restore();
+    }
+  };
+  ctx.canvas.onmouseup = (e) => {
+    if (startPos) {
+      ctx.putImageData(curImageData, 0, 0);
+      const endPos = mouseEventToPos(ctx.canvas, e);
+      const { left: x, top: y, width, height } = calcRectInfo(startPos, endPos);
+      ctx.drawImage(ctx.canvas, x, y, width, height, 0, 0, cw, ch);
+      curImageData = ctx.getImageData(0, 0, cw, ch);
+      startPos = null;
+    }
+  };
+  resetCanvas = () => {
+    initCanvas();
+  };
+  image.src = archUrl;
+}
+```
+
+:::tip
+
+在使用 `putImageData` 方法向 canvas 中绘制图像数据时，诸如 `globalAlpha` 与 `globalCompositeOption` 这样的全局 canvas 属性值不会影响到所绘的图像。浏览器也不会在绘制时运用图像合成、透明混合或阴影效果。`drawImage` 会受上述所有全局属性的影响。
+
+:::
+
+`putImageData` 的声明为 `putImageData(imageData, dx, dy, dirtyX, dirtyY, dirtyWidth, dirtyHeight)` ，参数的含义为：
+
+- `imageData`: 要绘制的 ImageData 对象，必需
+- `dx`: 目标画布中放置图像的 x 坐标
+- `dy`: 目标画布中放置图像的 y 坐标
+- `dirtyX`: 源图像数据中矩形区域的 x 坐标
+- `dirtyY`: 源图像数据中矩形区域的 y 坐标
+- `dirtyWidth`: 源图像数据中矩形区域的宽度
+- `dirtyHeight`: 源图像数据中矩形区域的高度
+
+### 修改图像数据

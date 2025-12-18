@@ -1,6 +1,6 @@
 <template>
   <div>
-    <button class="raw-style">重置</button>
+    <button class="raw-style" @click="resetCanvas">重置</button>
     <CanvasContainer
       :draw
       :width="600"
@@ -25,6 +25,7 @@ function draw(ctx: CanvasRenderingContext2D) {
   function initCanvas() {
     ctx.drawImage(image, 0, 0);
     curImageData = ctx.getImageData(0, 0, cw, ch);
+    startPos = null;
   }
   image.onload = () => {
     initCanvas();
@@ -37,9 +38,26 @@ function draw(ctx: CanvasRenderingContext2D) {
       ctx.putImageData(curImageData, 0, 0);
       const endPos = mouseEventToPos(ctx.canvas, e);
       const { left: x, top: y, width, height } = calcRectInfo(startPos, endPos);
+      ctx.save();
+      ctx.strokeStyle = "yellow";
+      ctx.lineWidth = 2;
+      ctx.strokeRect(x, y, width, height);
+      ctx.restore();
     }
   };
-  ctx.canvas.onmouseup = (e) => {};
+  ctx.canvas.onmouseup = (e) => {
+    if (startPos) {
+      ctx.putImageData(curImageData, 0, 0);
+      const endPos = mouseEventToPos(ctx.canvas, e);
+      const { left: x, top: y, width, height } = calcRectInfo(startPos, endPos);
+      ctx.drawImage(ctx.canvas, x, y, width, height, 0, 0, cw, ch);
+      curImageData = ctx.getImageData(0, 0, cw, ch);
+      startPos = null;
+    }
+  };
+  resetCanvas = () => {
+    initCanvas();
+  };
   image.src = archUrl;
 }
 </script>
