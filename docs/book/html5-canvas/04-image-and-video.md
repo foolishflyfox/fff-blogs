@@ -8,6 +8,8 @@ import {
   RubberSelectImage,
   RubberSelectImage2,
   FilterDemo,
+  EmbossFilterDemo,
+  SunglassFilterDemo,
 } from './codes/04';
 </script>
 
@@ -407,3 +409,109 @@ function generateBlackwhiteData() {
 ```
 
 #### 设备像素与 CSS 像素的区别
+
+某些滤镜，例如下面示例所示的浮雕滤镜(embossing filter)，在计算滤镜效果时需要获取图像数据的宽度。举例来说，如果滤镜需要一个简单的等式来计算某个像素值，而该等式要用到当前像素右方及下一行的对应像素值，那么此时必须知道图像的宽度，才能计算下一行的那个像素在数组中的位置。
+
+<EmbossFilterDemo />
+
+核心代码如下：
+
+```ts
+ctx.drawImage(image, 0, 0);
+const imageData = ctx.getImageData(0, 0, cw, ch);
+function generateEmbossData() {
+  const result = ctx.createImageData(cw, ch);
+  // 忽略最下方的像素点
+  for (let i = 0; i < imageData.data.length - image.width * 4; i += 4) {
+    if ((i / 4) % image.width === image.width - 1) {
+      for (let j = 0; j < 4; j++) {
+        result.data[i + j] = imageData.data[i + j - 4];
+      }
+      continue;
+    }
+    for (let j = 0; j < 3; j++) {
+      result.data[i + j] =
+        128 +
+        2 * imageData.data[i + j] -
+        imageData.data[i + j + 4] -
+        imageData.data[i + j + image.width * 4];
+    }
+    result.data[i + 3] = imageData.data[i + 3];
+  }
+  return result;
+}
+```
+
+上述代码会将所有像素都染成泥灰色，并且使用一种名为“边缘检测”的技术使得位于颜色边界处的像素灰度更浓。这里所说的颜色边界是指像素颜色值发生突变的地方。实现边缘检测技术所用的算法需要计算当前像素值，及其右方与下方像素的值。
+
+本章讲的图像操作所采用的都是小图像，因而不会引发性能问题。然而，如果在相对大一些的图像上运用复杂的算法，浏览器可能会因为等待计算完成而陷入无响应的状态。接下来我们就讲讲如何应对这种状况。
+
+#### 用工作线程处理图片
+
+在处理图像时，很可能遭遇性能瓶颈，比如在一个配置不高的手机上处理大幅图像时。如果程序出现了性能问题，可以考虑讲图像处理的任务交给工作线程(Web Worker)来做。
+
+浏览器在执行 JavaScript 代码时，使用的是主线程，这意味着某些较为耗时的脚本可能会让应用程序变得很迟钝。幸好我们可以在 HTML5 开发中使用工作线程技术将某些代码放在主线程之外执行。
+
+如下示例，会对图像运用墨镜滤镜(sunglass filter)效果，它把实际的图像处理放在工作线程中执行。
+
+<SunglassFilterDemo />
+
+代码如下：
+
+```ts
+const isNormal = ref(true);
+
+const worker = new Worker(new URL("./sunglass-filter.ts", import.meta.url), {
+  type: "module",
+});
+
+function draw(ctx: CanvasRenderingContext2D) {
+  const { width: cw, height: ch } = ctx.canvas;
+  const image = new Image();
+  image.onload = () => {
+    ctx.drawImage(image, 0, 0);
+    const imageData = ctx.getImageData(0, 0, cw, ch);
+
+    worker.onmessage = (e: MessageEvent<ImageData>) => {
+      ctx.putImageData(e.data, 0, 0);
+    };
+
+    watch(isNormal, (nv) => {
+      if (nv) {
+        ctx.putImageData(imageData, 0, 0);
+      } else {
+        worker.postMessage(ctx.getImageData(0, 0, cw, ch));
+      }
+    });
+  };
+  image.src = curvedRoudUrl;
+}
+```
+
+其中 sunglass-filter.ts 的代码如下：
+
+```ts
+// src/workers/calc.worker.ts
+/// <reference lib="webworker" />
+
+self.onmessage = (event: MessageEvent<ImageData>) => {
+  const imagedata = event.data;
+  const data = imagedata.data;
+  console.log("window type: ", typeof window);
+  for (let i = 0; i < data.length; i += 4) {
+    if ((i / 4) % imagedata.width === imagedata.width - 1) {
+      // 一行中的最后一列
+      for (let j = 0; j < 4; j++) {
+        data[i + j] = data[i + j - 4];
+      }
+    } else {
+      for (let j = 0; j < 4; j++) {
+        data[i + j] = 2 * data[i + j] - data[i + j + 4] * 1.5;
+      }
+    }
+  }
+  postMessage(imagedata);
+};
+```
+
+## 结合剪辑区域来绘制图像
