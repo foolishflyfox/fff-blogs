@@ -7,6 +7,7 @@ import {
   WatermarkDemo2,
   RubberSelectImage,
   RubberSelectImage2,
+  FilterDemo,
 } from './codes/04';
 </script>
 
@@ -367,3 +368,42 @@ function draw(ctx: CanvasRenderingContext2D) {
 #### 图像滤镜
 
 在学会了如何操作图像中的单个像素之后，我们来讲讲图像滤镜(image filtering)的实现。下面的例子展示了两种滤镜，分别是负片滤镜(negative filter)与黑白滤镜(black-and-white filter)。
+
+<FilterDemo />
+
+负片滤镜与黑白滤镜会对图像数据进行遍历，每个循环会处理 4 个整数值，所以说每次循环结束后，数组下标总是会指向某个像素的红色分量。在循环体中，滤镜的代码会修改每个像素的红、绿、蓝分量值。滤镜算法不会改变像素的 alpha 值。
+
+负片滤镜会从 255 中减去每个像素的红、绿、蓝分量值，再将差值设置回去，这样也就等于“反转”了该像素的颜色，代码为：
+
+```ts
+function generateNegativeData() {
+  const result = ctx.createImageData(cw, ch);
+  for (let i = 0; i < imageData.data.length; i += 4) {
+    result.data[i] = 255 - imageData.data[i];
+    result.data[i + 1] = 255 - imageData.data[i + 1];
+    result.data[i + 2] = 255 - imageData.data[i + 2];
+    result.data[i + 3] = imageData.data[i + 3];
+  }
+  return result;
+}
+```
+
+黑白滤镜会计算每个像素红、绿、蓝分量的平均值，然后将三个分量都设置为这一均值，于是图像就由彩色变为了黑白，代码为：
+
+```ts
+function generateBlackwhiteData() {
+  const result = ctx.createImageData(cw, ch);
+  for (let i = 0; i < imageData.data.length; i += 4) {
+    const data = imageData.data;
+    const [r, g, b, a] = [data[i], data[i + 1], data[i + 2], data[i + 3]];
+    const v = Math.floor((r + g + b) / 3);
+    result.data[i] = v;
+    result.data[i + 1] = v;
+    result.data[i + 2] = v;
+    result.data[i + 3] = a;
+  }
+  return result;
+}
+```
+
+#### 设备像素与 CSS 像素的区别
