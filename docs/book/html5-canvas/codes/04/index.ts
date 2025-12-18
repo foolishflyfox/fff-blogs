@@ -4,3 +4,4 @@ export { default as ImageScaleSlider } from "./ImageScaleSlider.vue";
 export { default as WatermarkDemo } from "./WatermarkDemo.vue";
 export { default as WatermarkDemo2 } from "./WatermarkDemo2.vue";
 export { default as RubberSelectImage } from "./RubberSelectImage.vue";
+export { default as RubberSelectImage2 } from "./RubberSelectImage2.vue";

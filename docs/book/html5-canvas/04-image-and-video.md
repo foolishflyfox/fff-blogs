@@ -6,6 +6,7 @@ import {
   WatermarkDemo,
   WatermarkDemo2,
   RubberSelectImage,
+  RubberSelectImage2,
 } from './codes/04';
 </script>
 
@@ -291,3 +292,78 @@ function draw(ctx: CanvasRenderingContext2D) {
 - `dirtyHeight`: 源图像数据中矩形区域的高度
 
 ### 修改图像数据
+
+下面的程序通过修改 ImageData 中 data 数组中的 alpha 颜色分量，实现框选部分的通量减半，增加透明度：
+
+<RubberSelectImage2 />
+
+实现代码为：
+
+```ts
+function draw(ctx: CanvasRenderingContext2D) {
+  const { width: cw, height: ch } = ctx.canvas;
+  const image = new Image();
+  let curImageData: ImageData;
+  let curSelectedImageData: ImageData;
+  let startPos: Pos | null = null;
+  function saveImageData() {
+    curImageData = ctx.getImageData(0, 0, cw, ch);
+    // curSelectedImageData 为修改了 curImageData 透明度的图片数据
+    curSelectedImageData = ctx.createImageData(cw, ch);
+    for (let i = 0; i < curImageData.data.length; i++) {
+      if (i % 4 === 3) {
+        curSelectedImageData.data[i] = Math.floor(curImageData.data[i] / 2);
+      } else {
+        curSelectedImageData.data[i] = curImageData.data[i];
+      }
+    }
+  }
+  function initCanvas() {
+    ctx.drawImage(image, 0, 0);
+    saveImageData();
+    startPos = null;
+  }
+  image.onload = () => {
+    initCanvas();
+  };
+  ctx.canvas.onmousedown = (e) => {
+    startPos = mouseEventToPos(ctx.canvas, e);
+  };
+  ctx.canvas.onmousemove = (e) => {
+    if (startPos) {
+      ctx.putImageData(curImageData, 0, 0);
+      const endPos = mouseEventToPos(ctx.canvas, e);
+      const { left: x, top: y, width, height } = calcRectInfo(startPos, endPos);
+      // 绘制修改了透明度的部分图片数据
+      ctx.putImageData(curSelectedImageData, 0, 0, x, y, width, height);
+      ctx.save();
+      ctx.strokeStyle = "yellow";
+      ctx.lineWidth = 2;
+      ctx.strokeRect(x, y, width, height);
+      ctx.restore();
+    }
+  };
+  ctx.canvas.onmouseup = (e) => {
+    if (startPos) {
+      ctx.putImageData(curImageData, 0, 0);
+      const endPos = mouseEventToPos(ctx.canvas, e);
+      const { left: x, top: y, width, height } = calcRectInfo(startPos, endPos);
+      ctx.drawImage(ctx.canvas, x, y, width, height, 0, 0, cw, ch);
+      saveImageData();
+      startPos = null;
+    }
+  };
+  resetCanvas = () => {
+    initCanvas();
+  };
+  image.src = archUrl;
+}
+```
+
+代码中会调用 `createImageData` 方法来创建 `ImageData` 对象。
+
+`ImageData` 对象中的 `data` 属性指向一个包含 8 位二进制整数的数组，这些指数的值位于 0 ~ 255 之间，分别表示一个像素的红、绿、蓝及透明度分量。
+
+#### 图像滤镜
+
+在学会了如何操作图像中的单个像素之后，我们来讲讲图像滤镜(image filtering)的实现。下面的例子展示了两种滤镜，分别是负片滤镜(negative filter)与黑白滤镜(black-and-white filter)。
