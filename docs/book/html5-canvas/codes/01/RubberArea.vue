@@ -5,8 +5,8 @@
       <div :style="rubberStyle as any"></div>
       <CanvasContainer
         :draw
-        :width="800"
-        :height="520"
+        :width="600"
+        :height="427"
         style="cursor: crosshair"
       />
     </div>

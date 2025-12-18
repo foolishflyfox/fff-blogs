@@ -220,3 +220,5 @@ function draw(ctx: CanvasRenderingContext2D) {
 `getImageData` 与 `putImageData` 这两个方法分别用于获取图像的像素信息，以及向图像中插入像素。如果有需要，也可以修改像素的值，所以说，这两个方法让开发者可以对图像中的像素进行任何的操作。
 
 ### 获取图像数据
+
+如下示例是实现拖动鼠标选取图片区域进行缩放的例子。
