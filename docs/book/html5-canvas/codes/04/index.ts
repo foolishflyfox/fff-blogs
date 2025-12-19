@@ -8,3 +8,4 @@ export { default as RubberSelectImage2 } from "./RubberSelectImage2.vue";
 export { default as FilterDemo } from "./FilterDemo.vue";
 export { default as EmbossFilterDemo } from "./EmbossFilterDemo.vue";
 export { default as SunglassFilterDemo } from "./SunglassFilterDemo.vue";
+export { default as SunglassDemo } from "./SunglassDemo.vue";

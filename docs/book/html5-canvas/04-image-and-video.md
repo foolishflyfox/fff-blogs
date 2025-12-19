@@ -10,6 +10,7 @@ import {
   FilterDemo,
   EmbossFilterDemo,
   SunglassFilterDemo,
+  SunglassDemo,
 } from './codes/04';
 </script>
 
@@ -515,3 +516,7 @@ self.onmessage = (event: MessageEvent<ImageData>) => {
 ```
 
 ## 结合剪辑区域来绘制图像
+
+下面的例子用到了工作线程、图像处理、离屏 canvas、剪辑区域，以及 Canvas 绘图 API 等技术。
+
+<SunglassDemo />
