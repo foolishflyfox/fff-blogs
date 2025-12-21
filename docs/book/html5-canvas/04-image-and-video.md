@@ -11,7 +11,7 @@ import {
   EmbossFilterDemo,
   SunglassFilterDemo,
   SunglassDemo,
-  FadeoutDemo,
+  FadeOutDemo,
 } from './codes/04';
 </script>
 
@@ -526,7 +526,7 @@ self.onmessage = (event: MessageEvent<ImageData>) => {
 
 在某段时间内持续向一幅图片运用滤镜，就可以实现动画效果了。如下面的示例，实现了图片渐渐淡出的动画。
 
-<FadeoutDemo />
+<FadeOutDemo />
 
 该示例通过在每次 `requestAnimationFrame` 持续地降低每个像素的 alpha 值，直到图像从视窗中淡出。
 

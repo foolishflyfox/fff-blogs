@@ -9,4 +9,4 @@ export { default as FilterDemo } from "./FilterDemo.vue";
 export { default as EmbossFilterDemo } from "./EmbossFilterDemo.vue";
 export { default as SunglassFilterDemo } from "./SunglassFilterDemo.vue";
 export { default as SunglassDemo } from "./SunglassDemo.vue";
-export { default as FadeOutDemo } from "./FadeoutDemo.vue";
+export { default as FadeOutDemo } from "./FadeOutDemo.vue";
