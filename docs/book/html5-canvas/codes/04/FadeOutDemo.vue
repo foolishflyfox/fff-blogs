@@ -20,7 +20,7 @@ function draw(ctx: CanvasRenderingContext2D) {
   }
   let initCount = -120;
   // 淡出动画的帧数
-  let animateFrameCount = 25;
+  let animateFrameCount = 250;
   let count = initCount;
   function redraw() {
     if (count < initCount) {
@@ -48,7 +48,7 @@ function draw(ctx: CanvasRenderingContext2D) {
   }
 
   // 点击图片淡出按钮执行的回调
-  function startFadeout() {
+  function startFadeOut() {
     count = animateFrameCount;
   }
 
@@ -59,7 +59,7 @@ function draw(ctx: CanvasRenderingContext2D) {
   };
   image.src = logCrossingUrl;
 
-  clickButton = startFadeout;
+  clickButton = startFadeOut;
 }
 </script>
 

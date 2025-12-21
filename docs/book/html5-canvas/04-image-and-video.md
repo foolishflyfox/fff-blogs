@@ -12,6 +12,7 @@ import {
   SunglassFilterDemo,
   SunglassDemo,
   FadeOutDemo,
+  FadeInDemo,
 } from './codes/04';
 </script>
 
@@ -530,7 +531,7 @@ self.onmessage = (event: MessageEvent<ImageData>) => {
 
 该示例通过在每次 `requestAnimationFrame` 持续地降低每个像素的 alpha 值，直到图像从视窗中淡出。
 
-用户点击“Fade Out”按钮后，应用程序即开始播放共 25 帧的动画。动画中的每幅画面的播放速率都是 60 帧/秒，所以整个动画持续大约 1/2 秒。
+用户点击“Fade Out”按钮后，应用程序即开始播放共 250 帧的动画。动画中的每幅画面的播放速率都是 60 帧/秒，所以整个动画持续大约 4 秒。
 
 淡出动画效果的难点在于，每个像素起始的 alpha 值各不相同，因此，在每一帧中，应用程序都必须根据其初始值来降低每个像素的 alpha 值。为了便于执行这种“动态降低 alpha 值”的算法，程序把 `getImageData` 方法返回的所有原始像素数据都保存起来，在其后的每一帧动画中，程序都会根据每个像素的初始值来决定的钱这一步要减少的 alpha 值。
 
@@ -545,7 +546,7 @@ function drawImage() {
 }
 let initCount = -120;
 // 淡出动画的帧数
-let animateFrameCount = 25;
+let animateFrameCount = 250;
 let count = initCount;
 function redraw() {
   if (count < initCount) {
@@ -592,3 +593,15 @@ image.src = logCrossingUrl;
 :::
 
 ### 用离屏 canvas 制作动画
+
+上面的例子通过持续地增加每个像素的透明度来实现图像的淡出效果。图像中每个像素的初始透明度可能互不相同，所以当程序将图像绘制到 canvas 后，就会调用 `getImageData` 方法捕获图像中所有像素的值。在稍后绘制动画的每一帧时，程序都会根据存放在图像数据中的像素初始透明度(以 alpha 值的形式表示)，来计算这一帧应该把每个像素的 alpha 值分别降低多少。
+
+在制作图像的淡入效果时，也可以使用相同的算法。现将图像的像素值保存在一份快照中，然后根据像素的初始 alpha 值，计算在动画的每一帧中各像素的 alpha 值增量。但是，在播放淡入动画时，图像一开始是不会显示出来的，所以不能直接从屏幕 canvas 中捕获其像素值。
+
+为了在显示图像之前能够捕获其像素，下面的示例先将图像绘制到离屏 canvas 中，然后从该 canvas 中捕获像素值。
+
+淡入效果的示例如下：
+
+<FadeInDemo />
+
+## 图像绘制的安全问题
