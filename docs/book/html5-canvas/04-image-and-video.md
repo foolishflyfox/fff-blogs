@@ -604,4 +604,17 @@ image.src = logCrossingUrl;
 
 <FadeInDemo />
 
-## 图像绘制的安全问题
+## 性能
+
+在进行图像处理时，须考虑性能问题。这里会研究三个性能测试，它们所测试的内容如下：
+
+- 遍历图像数据
+- 对比 `drawImage` 与 `putImageData` 的绘图效率；
+- 使用 `drawImage` 来绘制 canvas，而非普通的图像；
+- 使用 `drawImage` 绘图时缩放图像；
+
+### 对比 `drawImage(HTMLImage)`、`drawImage(HTMLCanvas)`与`putImageData()` 的绘图效率
+
+`drawImage` 与 `putImageData` 都可以将图像绘制到 canvas 中，不过 `drawImage` 要比 `putImageData` 快很多。
+
+除了绘制性能高这个优势外，`drawImage` 还能将 canvas 绘制到另一个 canvas，这是 `putImageData` 做不到的。另外，绘制 canvas 的速度通常不会比绘制图像慢很多。
