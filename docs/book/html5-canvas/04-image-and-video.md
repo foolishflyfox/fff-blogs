@@ -11,6 +11,7 @@ import {
   EmbossFilterDemo,
   SunglassFilterDemo,
   SunglassDemo,
+  FadeoutDemo,
 } from './codes/04';
 </script>
 
@@ -520,3 +521,74 @@ self.onmessage = (event: MessageEvent<ImageData>) => {
 下面的例子用到了工作线程、图像处理、离屏 canvas、剪辑区域，以及 Canvas 绘图 API 等技术。
 
 <SunglassDemo />
+
+## 以图像制作动画
+
+在某段时间内持续向一幅图片运用滤镜，就可以实现动画效果了。如下面的示例，实现了图片渐渐淡出的动画。
+
+<FadeoutDemo />
+
+该示例通过在每次 `requestAnimationFrame` 持续地降低每个像素的 alpha 值，直到图像从视窗中淡出。
+
+用户点击“Fade Out”按钮后，应用程序即开始播放共 25 帧的动画。动画中的每幅画面的播放速率都是 60 帧/秒，所以整个动画持续大约 1/2 秒。
+
+淡出动画效果的难点在于，每个像素起始的 alpha 值各不相同，因此，在每一帧中，应用程序都必须根据其初始值来降低每个像素的 alpha 值。为了便于执行这种“动态降低 alpha 值”的算法，程序把 `getImageData` 方法返回的所有原始像素数据都保存起来，在其后的每一帧动画中，程序都会根据每个像素的初始值来决定的钱这一步要减少的 alpha 值。
+
+上述逻辑的代码如下：
+
+```ts
+const { width: cw, height: ch } = ctx.canvas;
+const image = new Image();
+let originImageData: ImageData;
+function drawImage() {
+  ctx.drawImage(image, 0, 0);
+}
+let initCount = -120;
+// 淡出动画的帧数
+let animateFrameCount = 25;
+let count = initCount;
+function redraw() {
+  if (count < initCount) {
+    requestAnimationFrame(redraw);
+  } else {
+    if (count === initCount) {
+      ctx.putImageData(originImageData, 0, 0);
+    } else if (count >= 0) {
+      const newImageData = ctx.createImageData(cw, ch);
+      for (let i = 0; i < originImageData.data.length; i++) {
+        if ((i + 1) % 4 === 0) {
+          // 计算透明度
+          const oldAlpha = originImageData.data[i];
+          const newAlpha = Math.floor((oldAlpha * count) / animateFrameCount);
+          newImageData.data[i] = newAlpha;
+        } else {
+          newImageData.data[i] = originImageData.data[i];
+        }
+      }
+      ctx.putImageData(newImageData, 0, 0);
+    }
+    count--;
+    requestAnimationFrame(redraw);
+  }
+}
+
+// 点击图片淡出按钮执行的回调
+function startFadeout() {
+  count = animateFrameCount;
+}
+
+image.onload = (e) => {
+  drawImage();
+  originImageData = ctx.getImageData(0, 0, cw, ch);
+  redraw();
+};
+image.src = logCrossingUrl;
+```
+
+:::tip
+
+上述示例是通过修改每个像素的 alpha 值来达到图像淡出效果的。像往常一样，还有很多方式可以在 canvas 中做出相同的效果来。例如，可以在绘制每帧动画之前，先修改绘图环境对象的 globalAlpha 值，然后再绘制图像，这样也能实现淡出效果。
+
+:::
+
+### 用离屏 canvas 制作动画
