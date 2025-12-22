@@ -13,6 +13,7 @@ import {
   SunglassDemo,
   FadeOutDemo,
   FadeInDemo,
+  DrawImageVsPutImageData,
 } from './codes/04';
 </script>
 
@@ -618,3 +619,11 @@ image.src = logCrossingUrl;
 `drawImage` 与 `putImageData` 都可以将图像绘制到 canvas 中，不过 `drawImage` 要比 `putImageData` 快很多。
 
 除了绘制性能高这个优势外，`drawImage` 还能将 canvas 绘制到另一个 canvas，这是 `putImageData` 做不到的。另外，绘制 canvas 的速度通常不会比绘制图像慢很多。
+
+下面是测试的例子：
+
+<DrawImageVsPutImageData />
+
+从测试结果可以看出，`DrawImage` 的性能比 `putImageData` 快上百倍。而绘制 canvas 会比绘制图像稍慢一点点，几乎可以忽略不计。
+
+### 遍历图像数据
