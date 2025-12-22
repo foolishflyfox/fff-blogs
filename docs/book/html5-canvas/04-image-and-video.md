@@ -15,6 +15,7 @@ import {
   FadeInDemo,
   DrawImageVsPutImageData,
   ForLoopTest,
+  Magnifier,
 } from './codes/04';
 </script>
 
@@ -653,3 +654,7 @@ image.src = logCrossingUrl;
 如果按像素分量来遍历的话，那么循环计数器的步进次数将会是像素个数的 4 倍。因此，最好是每次循环体内都以相同的计数值为基准来遍历一个完整的像素，而不是每次只遍历一个像素分量。正是这个原因，在很多测试用例中，循环计数器每次的步进都是 4.
 
 ## 放大镜
+
+下面的示例演示了放大镜应用程序。可以拖动它来放大显示图像中的各个部分，也可以拖动顶部的滑动条来调整放大镜的大小及放大倍数。
+
+<Magnifier />
