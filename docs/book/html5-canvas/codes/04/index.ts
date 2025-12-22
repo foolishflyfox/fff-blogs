@@ -12,3 +12,4 @@ export { default as SunglassDemo } from "./SunglassDemo.vue";
 export { default as FadeOutDemo } from "./FadeOutDemo.vue";
 export { default as FadeInDemo } from "./FadeInDemo.vue";
 export { default as DrawImageVsPutImageData } from "./DrawImageVsPutImageData.vue";
+export { default as ForLoopTest } from "./ForLoopTest.vue";

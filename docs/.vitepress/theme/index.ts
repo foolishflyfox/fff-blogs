@@ -4,6 +4,7 @@ import "./custom.css";
 import { Markmap } from "markmap-view";
 
 import { onContentUpdated, Theme } from "vitepress";
+import { createHighlighter } from "shiki";
 
 // 思维导图支持步骤三: 渲染函数定义
 function renderMindmap() {
@@ -57,6 +58,15 @@ function renderMindmap() {
 
 export default {
   extends: DefaultTheme,
+  async enhanceApp({ app }) {
+    // 创建一个全局的 Shiki 实例
+    const highlighter = await createHighlighter({
+      themes: ["github-dark", "github-light"],
+      langs: ["js", "ts", "vue", "json", "html"],
+    });
+    // 注入到 Vue app 实例
+    app.provide("highlighter", highlighter);
+  },
   setup() {
     onContentUpdated(() => {
       // 思维导图支持步骤四: 使用渲染函数
