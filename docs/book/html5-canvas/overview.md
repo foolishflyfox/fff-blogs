@@ -86,6 +86,7 @@
 ## window
 ### 方法
 - `requestAnimationFrame`: 一次动画帧请求
+- `cancelAnimationFrame`: 取消回调函数
 ## document
 ### 属性
 - hidden: 文档未激活
