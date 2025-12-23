@@ -62,24 +62,26 @@
 
 <script setup lang="ts">
 import { HighLighterPre } from "@docs/components";
-import { Ref, ref } from "vue";
+import { onMounted, Ref, ref } from "vue";
 import logCrossingUrl from "../shared/images/log-crossing.png?url";
 import { TestInfo } from "@docs/utils";
 import TestInfoPanel from "./TestInfoPanel.vue";
 
 const startEnable = ref(true);
-
-const image = new Image();
 let imageData: ImageData;
-image.onload = () => {
-  const canvas = document.createElement("canvas");
-  canvas.width = image.width;
-  canvas.height = image.height;
-  const ctx = canvas.getContext("2d")!;
-  ctx.drawImage(image, 0, 0);
-  imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-};
-image.src = logCrossingUrl;
+
+onMounted(() => {
+  const image = new Image();
+  image.onload = () => {
+    const canvas = document.createElement("canvas");
+    canvas.width = image.width;
+    canvas.height = image.height;
+    const ctx = canvas.getContext("2d")!;
+    ctx.drawImage(image, 0, 0);
+    imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+  };
+  image.src = logCrossingUrl;
+});
 
 const allTestCount = 100;
 

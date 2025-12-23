@@ -42,16 +42,17 @@ const rangeR = 30;
 const rangeRate = ref(0.5);
 const cw = 600;
 const ch = 374;
-const offlineCanvas = document.createElement("canvas");
-offlineCanvas.width = cw;
-offlineCanvas.height = ch;
-const offlineCtx = offlineCanvas.getContext("2d")!;
 const draggingMag = ref(false);
 
 let magX = cw * 0.6;
 let magY = ch * 0.5;
 
 function draw(ctx: CanvasRenderingContext2D) {
+  const offlineCanvas = document.createElement("canvas");
+  offlineCanvas.width = cw;
+  offlineCanvas.height = ch;
+  const offlineCtx = offlineCanvas.getContext("2d")!;
+
   const image = new Image();
   image.onload = () => {
     redraw();

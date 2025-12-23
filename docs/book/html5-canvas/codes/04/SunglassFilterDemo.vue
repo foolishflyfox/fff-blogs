@@ -16,11 +16,10 @@ import curvedRoudUrl from "../shared/images/curved-road.png?url";
 
 const isNormal = ref(true);
 
-const worker = new Worker(new URL("./sunglass-filter.ts", import.meta.url), {
-  type: "module",
-});
-
 function draw(ctx: CanvasRenderingContext2D) {
+  const worker = new Worker(new URL("./sunglass-filter.ts", import.meta.url), {
+    type: "module",
+  });
   const { width: cw, height: ch } = ctx.canvas;
   const image = new Image();
   image.onload = () => {
