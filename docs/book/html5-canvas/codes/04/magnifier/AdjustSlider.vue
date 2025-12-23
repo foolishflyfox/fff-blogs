@@ -1,19 +1,26 @@
 <template>
-  <CanvasContainer :draw :width="cw" :height="ch" background-color="#0000" />
+  <CanvasContainer
+    :draw
+    :width="cw"
+    :height="ch"
+    background-color="#0000"
+    :style="{ cursor: dragging ? 'grabbing' : 'grab' }"
+  />
 </template>
 
 <script setup lang="ts">
 import { mouseEventToPos } from "@docs/utils";
 import CanvasContainer from "../../CanvasContainer.vue";
+import { nextTick, ref } from "vue";
 
 const rate = defineModel<number>("rate", { required: true });
 const cw = 200;
 const ch = 38;
 const barWidth = 24;
 const vMargin = (ch - barWidth) / 2;
+const dragging = ref(false);
 
 function draw(ctx: CanvasRenderingContext2D) {
-  let dragging = false;
   const canvas = ctx.canvas;
   const linearGradient = ctx.createLinearGradient(0, 0, 0, ch - vMargin);
   linearGradient.addColorStop(0, "#6e85c0");
@@ -22,6 +29,7 @@ function draw(ctx: CanvasRenderingContext2D) {
   ctx.strokeStyle = "#4e5eb2";
 
   function redraw() {
+    ctx.clearRect(0, 0, cw, ch);
     ctx.fillStyle = linearGradient;
     ctx.beginPath();
     // ctx.moveTo(barWidth / 2, vMargin);
@@ -60,13 +68,31 @@ function draw(ctx: CanvasRenderingContext2D) {
     ctx.stroke();
   }
 
-  ctx.canvas.onmousedown = (e) => {
+  async function updateRate(e: MouseEvent) {
     const pos = mouseEventToPos(canvas, e);
-    dragging = true;
+    let t = (pos.x - barWidth / 2) / (cw - barWidth);
+    if (t < 0) t = 0;
+    if (t > 1) t = 1;
+    rate.value = t;
+    // 等待 rate 的值真正被更新
+    await nextTick();
+    redraw();
+  }
+
+  ctx.canvas.onmousedown = (e) => {
+    updateRate(e);
+    dragging.value = true;
   };
-  ctx.canvas.onmousemove = (e) => {};
+  ctx.canvas.onmousemove = (e) => {
+    if (dragging.value) {
+      updateRate(e);
+    }
+  };
   ctx.canvas.onmouseup = (e) => {
-    dragging = false;
+    dragging.value = false;
+  };
+  ctx.canvas.onmouseout = (e) => {
+    // dragging.value = false;
   };
   redraw();
 }
