@@ -16,3 +16,4 @@ export { default as ForLoopTest } from "./ForLoopTest.vue";
 export { default as Magnifier } from "./magnifier/Magnifier.vue";
 export { default as DrawVideo } from "./DrawVideo.vue";
 export { default as CanvasVideoPlayer } from "./CanvasVideoPlayer.vue";
+export { default as VideoProcessor } from "./VideoProcessor.vue";

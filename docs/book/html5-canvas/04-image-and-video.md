@@ -18,6 +18,7 @@ import {
   Magnifier,
   DrawVideo,
   CanvasVideoPlayer,
+  VideoProcessor,
 } from './codes/04';
 </script>
 
@@ -747,3 +748,7 @@ onMounted(() => {
 ```
 
 ### 视频处理
+
+下面的示例实现了对视频进行处理的功能。
+
+<VideoProcessor />
