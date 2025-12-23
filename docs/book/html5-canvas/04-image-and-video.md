@@ -16,6 +16,8 @@ import {
   DrawImageVsPutImageData,
   ForLoopTest,
   Magnifier,
+  DrawVideo,
+  CanvasVideoPlayer,
 } from './codes/04';
 </script>
 
@@ -658,3 +660,90 @@ image.src = logCrossingUrl;
 下面的示例演示了放大镜应用程序。可以拖动它来放大显示图像中的各个部分，也可以拖动顶部的滑动条来调整放大镜的大小及放大倍数。
 
 <Magnifier />
+
+## 视频处理
+
+HTML5 提供的 `video` 元素可以控制视频文件的播放，而且 Canvas API 也允许开发者在播放视频时以逐帧的方式处理其内容。
+
+下面是一个获取视频信息，并绘制到 canvas 的一个示例：
+
+<DrawVideo />
+
+代码如下：
+
+```ts
+const videoElement = document.getElementById(
+  "drawVideoDemoVideo"
+) as HTMLVideoElement;
+ctx.drawImage(videoElement, 0, 0);
+```
+
+上述代码中，调用 `dragImage` 方法所用的 `videoElement` 变量，其类型是 `HTMLVideoElement`。有了这种将视频文件的某一帧绘制到 canvas 中的功能，我们就可以结合 video 于 canvas 元素来做即时视频处理了。
+
+为了确保所有浏览器都能播放视频，通常我们需要指定多种格式文件，在 video 元素中嵌入的 source 元素，就可以支持多种格式了，例如：
+
+```html
+<video>
+  <source src="video.ogg" />
+  <source src="video.mp4" />
+</video>
+```
+
+### 在 Canvas 中播放视频
+
+我们研究 Canvas 视频功能的最终目标是实现即时视频处理。下面的示例是使用 canvas 来播放一段视频，其中 video 元素是不可见的，示例中将视频文件的每一帧绘制到可见的 canvas 元素中，并在绘制时将其缩放至与 canvas 相同的大小。
+
+<CanvasVideoPlayer />
+
+其中 HTML 代码为：
+
+```html
+<div>
+  <button class="raw-style" @click="clickStart">开始播放</button>
+  <video id="canvasVideoPlayerVideo" style="display: none">
+    <source :src="videoUrl" />
+  </video>
+  <canvas
+    style="background-color: #eee8"
+    id="canvasVideoPlayerCanvas"
+    width="600"
+    height="400"
+  >
+    Canvas not supported
+  </canvas>
+</div>
+```
+
+TypeScript 代码为：
+
+```ts
+import { onMounted } from "vue";
+import videoUrl from "../shared/images/movie.mp4?url";
+
+let clickStart = () => {};
+
+onMounted(() => {
+  const canvas = document.getElementById(
+    "canvasVideoPlayerCanvas"
+  ) as HTMLCanvasElement;
+  const ctx = canvas.getContext("2d")!;
+  const video = document.getElementById(
+    "canvasVideoPlayerVideo"
+  ) as HTMLVideoElement;
+  function animate() {
+    if (!video.ended) {
+      ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+      window.requestAnimationFrame(animate);
+    }
+  }
+
+  function start() {
+    video.play();
+    window.requestAnimationFrame(animate);
+  }
+
+  clickStart = start;
+});
+```
+
+### 视频处理

@@ -14,3 +14,5 @@ export { default as FadeInDemo } from "./FadeInDemo.vue";
 export { default as DrawImageVsPutImageData } from "./DrawImageVsPutImageData.vue";
 export { default as ForLoopTest } from "./ForLoopTest.vue";
 export { default as Magnifier } from "./magnifier/Magnifier.vue";
+export { default as DrawVideo } from "./DrawVideo.vue";
+export { default as CanvasVideoPlayer } from "./CanvasVideoPlayer.vue";
