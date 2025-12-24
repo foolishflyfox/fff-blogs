@@ -48,12 +48,12 @@
 - `putImageData`: 恢复绘图数据
 - `createImageData`: 创建空白绘图
 #### 创建
-- `createLinearGradient`: 线性渐变
-- `createRadialGradient`: 放射渐变
-- `createConicGradient`: 锥形渐变
+- `createLinearGradient`: [线性渐变](./02-drawing#渐变色与图案)
+- `createRadialGradient`: [放射渐变](./02-drawing#放射渐变)
+- `createConicGradient`: [锥形渐变](./02-drawing#锥形渐变)
 - `createPattern`: 创建图案
 #### 绘制
-- `globalCompositeOperation`: [合成](./02-drawing.html#图像合成)
+- `globalCompositeOperation`: [合成](./02-drawing#图像合成)
 - `fillText`: 填充文本
 - `strokeText`: 描边文本
 - `drawImage`: 绘制图片

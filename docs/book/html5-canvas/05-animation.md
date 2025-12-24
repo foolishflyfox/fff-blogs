@@ -1,6 +1,7 @@
 <script setup>
 import {
   RequestAnimationFrameFps,
+  ElasticBallDemo,
 } from './codes/05';
 </script>
 
@@ -106,3 +107,7 @@ W3C 也提供了 `cancelAnimationFrame` 方法，用于取消回调函数。`req
 :::
 
 ### 可移植于各浏览器平台的动画循环逻辑
+
+下面是一个动画的示例：
+
+<ElasticBallDemo />
