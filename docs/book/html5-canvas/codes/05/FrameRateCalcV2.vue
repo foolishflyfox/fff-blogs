@@ -82,7 +82,6 @@ function update() {
     return;
   }
   const now = Date.now();
-  console.log("lastTime =", lastTime);
   if (lastTime && now - lastUpdateFps >= 1000) {
     frameRate = Math.round(1000 / (now - lastTime));
     lastUpdateFps = now;
