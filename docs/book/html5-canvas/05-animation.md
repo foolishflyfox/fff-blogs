@@ -2,6 +2,7 @@
 import {
   RequestAnimationFrameFps,
   ElasticBallDemo,
+  FrameRateCalc,
 } from './codes/05';
 </script>
 
@@ -111,3 +112,13 @@ W3C 也提供了 `cancelAnimationFrame` 方法，用于取消回调函数。`req
 下面是一个动画的示例：
 
 <ElasticBallDemo />
+
+## 帧速率的计算
+
+动画是由一系列叫做“帧”的图像组成的，这些图像的显示频率就叫做“帧速率”(frame rate)。通常来说，有必要计算一下帧速率。
+
+下面的例子显示了帧速率：
+
+<FrameRateCalc />
+
+## 以不同的帧速率来执行各种任务
