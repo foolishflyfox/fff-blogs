@@ -3,6 +3,7 @@ import {
   RequestAnimationFrameFps,
   ElasticBallDemo,
   FrameRateCalc,
+  FrameRateCalcV2,
 } from './codes/05';
 </script>
 
@@ -122,3 +123,11 @@ W3C 也提供了 `cancelAnimationFrame` 方法，用于取消回调函数。`req
 <FrameRateCalc />
 
 ## 以不同的帧速率来执行各种任务
+
+很多动画持续在播放动画时，还要执行其他任务。例如，在播放动画时，可能还要显示剧情文本、播放音乐或是更新游戏分数。此类任务大多不需要以每秒 60 帧的速度执行。所以说，要学会将不同的任务安排在不同的帧速率上执行，这一点很重要。
+
+下面的例子是对上一个帧速率计算的改进，更新动画帧速率数值这个任务，其运行速度没必要与动画更新速率保持一致。
+
+<FrameRateCalcV2 />
+
+## 恢复动画背景
