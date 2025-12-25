@@ -4,6 +4,7 @@ import {
   ElasticBallDemo,
   FrameRateCalc,
   FrameRateCalcV2,
+  TestDoubleCache,
 } from './codes/05';
 </script>
 
@@ -149,3 +150,94 @@ W3C 也提供了 `cancelAnimationFrame` 方法，用于取消回调函数。`req
 :::
 
 ### 利用剪辑区域来处理动画背景
+
+如果背景图像很简单，那么先擦掉背景然后再重绘下一帧动画这个办法效果还不错。不过如果背景很复杂，那么在画每帧之前都重绘背景，其耗时就太长了。这种情况下，可以考虑将重绘操作限制在 canvas 中的某个特定区域内。
+
+利用剪辑区域，可以将所有的绘制操作都限定在由某条路径所定义的范围内。设置好剪辑区域后，接下来执行的绘制命令就只会在改区域内生效。
+
+利用剪辑区域技术来恢复上一帧动画所占背景图像的执行步骤：
+
+1. 调用 `context.save` 保存屏幕 canvas 的状态；
+2. 通过调用 `beginPath` 开始一段新的路径
+3. 在 context 对象上调用 `acr`、`rect` 等方法来设置路径
+4. 调用 `context.clip` 方法，将当前路径设置为屏幕 canvas 的剪辑区域
+5. 擦除屏幕 canvas 中的图像(实际只会擦除剪辑区域所在的这一块范围)
+6. 将背景图像绘制到屏幕 canvas 中
+7. 恢复屏幕 canvas 的状态参数，该操作主要是为了重置剪辑区域
+
+### 利用图块复制技术处理动画背景
+
+将整个背景一次性地绘制到离屏 canvas 中，稍后从离屏 canvas 中只将修复动画背景所需的那一块图像复制到屏幕上即可。
+
+## 利用双缓冲技术绘制动画
+
+目前为止，本章所用的动画逻辑如下：
+
+```js
+const canvas = document.getElementById('canvas');
+const context = canvas.getContext('2d');
+...
+function animation(time) {
+  context.clearRect(0, 0, canvas.width, canvas.height);
+  // 更新并绘制动画对象
+  requestAnimationFrame(animation);
+}
+requestAnimationFrame(animation);
+```
+
+上述代码线清除 canvas，然后绘制下一帧动画。假如动画是单缓冲的(single buffered)，那么就意味着其内容会被立刻绘制到屏幕 canvas 中。这样的话，擦除背景的那一瞬间所造成的空白可能会使动画看起来有些闪烁。
+
+防止闪烁的一种办法是使用双缓冲(double buffering)，如果用双缓冲，那么就不是将动画内容直接绘制到屏幕 canvas 中，而是先将所有东西都绘制到离屏 canvas 中，然后将该离屏 canvas 中的全部内容一次性复制到屏幕 canvas 中。逻辑如下：
+
+```js
+const canvas = document.getElementById('canvas');
+const context = canvas.getContext('2d');
+
+// 创建离屏 canvas
+const offscreenCanvas = document.createElement('canvas');
+const offscreenContext = offscreenCanvas.getContext('2d');
+...
+offscreenCanvas.width = canvas.width;
+offscreenCanvas.height = canvas.height;
+...
+function animate(now) {
+  offscreenContext.clearRect(0, 0, offscreenCanvas.width, offscreenCanvas.height);
+  // 在离屏 canvas 上更新绘制动画
+  ...
+  // 清除屏幕画布，并将离屏画布内容绘制到屏幕画布
+  context.clearRect(0, 0, canvas.width, canvas.height);
+  context.drawImage(offlineCanvas, 0, 0);
+}
+```
+
+双缓冲技术可以有效消除动画绘制时的闪烁，所以浏览器会自动采用双缓冲来实现 canvas 元素，开发者并不需要自己来实现它。而且如果按上述代码来手工实现双缓冲的话，反倒降低了动画的绘制效率。
+
+如果你曾经在调试器中单步执行过与 Canvas 有关的代码，那么可能会怀疑浏览器到底有没有自动运用双缓冲来绘制 canvas 元素。毕竟我们在调试器中单步执行代码时，对 canvas API 的调用是立即生效的。但实际上，它们还是通过双缓冲机制运作的。
+
+可以通过如下代码来验证，浏览器确实是使用双缓冲技术来绘制 canvas 元素的：
+
+```js
+const canvas = document.getElementById("canvas");
+const context = canvas.getContext("2d");
+let sum = 0;
+
+function animation(now) {
+  // 擦除屏幕画布
+  eraseBackground();
+  // 擦除背景，模拟繁忙操作
+  for (let i = 0; i < 500000; ++i) {
+    sum += i;
+  }
+  drawBackground();
+  draw();
+  requestAnimationRequest(animate);
+}
+```
+
+示例如下：
+
+<TestDoubleCache />
+
+可以看到，没有出现灰色背景，说明浏览器的确有双缓冲。
+
+## 基于时间的运动
