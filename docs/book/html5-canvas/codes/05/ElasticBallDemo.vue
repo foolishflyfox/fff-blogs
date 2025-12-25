@@ -14,7 +14,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from "vue";
+import { ref, watch, nextTick } from "vue";
 import CanvasContainer from "../CanvasContainer.vue";
 import { drawTextBackground } from "../03/utils";
 
@@ -70,6 +70,8 @@ const discs: BallData[] = [
 let ctx: CanvasRenderingContext2D;
 function draw(inCtx: CanvasRenderingContext2D) {
   ctx = inCtx;
+  isRunning.value = true;
+  nextTick(() => (isRunning.value = false));
 }
 
 function update() {
@@ -121,6 +123,7 @@ function update() {
 }
 
 watch(isRunning, (v) => {
+  console.log("####");
   if (v) {
     update();
   }
