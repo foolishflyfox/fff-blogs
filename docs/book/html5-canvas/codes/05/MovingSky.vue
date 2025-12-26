@@ -10,7 +10,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 import skyUrl from "../shared/images/sky.png?url";
 import CanvasContainer from "../CanvasContainer.vue";
 
@@ -21,49 +21,52 @@ const cw = 600;
 const ch = 300;
 let translate = 0;
 let lastDrawTime = 0;
+let clickBtn = () => {};
 
-const image = new Image();
-image.onload = () => {
-  ctx?.drawImage(image, 0, 0);
-};
-image.src = skyUrl;
+onMounted(() => {
+  const image = new Image();
+  image.onload = () => {
+    ctx?.drawImage(image, 0, 0);
+  };
+  image.src = skyUrl;
 
-function redraw() {
-  if (!running.value) return;
-  const now = Date.now();
-  const deltaMs = now - lastDrawTime;
-  const deltaPixel = (deltaMs * skyVelocity) / 1000;
-  translate += deltaPixel;
-  if (translate >= cw) translate %= cw;
-  if (ctx) {
-    ctx.save();
-    ctx.translate(-translate, 0);
-    ctx.drawImage(image, 0, 0);
-    ctx.drawImage(image, cw - 1, 0);
-    ctx.restore();
+  function redraw() {
+    if (!running.value) return;
+    const now = Date.now();
+    const deltaMs = now - lastDrawTime;
+    const deltaPixel = (deltaMs * skyVelocity) / 1000;
+    translate += deltaPixel;
+    if (translate >= cw) translate %= cw;
+    if (ctx) {
+      ctx.save();
+      ctx.translate(-translate, 0);
+      ctx.drawImage(image, 0, 0);
+      ctx.drawImage(image, cw - 1, 0);
+      ctx.restore();
+    }
+    lastDrawTime = now;
+    requestAnimationFrame(redraw);
   }
-  lastDrawTime = now;
-  requestAnimationFrame(redraw);
-}
 
-function start() {
-  lastDrawTime = Date.now();
-  running.value = true;
-  redraw();
-}
-
-function stop() {
-  running.value = false;
-  lastDrawTime = 0;
-}
-
-function clickBtn() {
-  if (running.value) {
-    stop();
-  } else {
-    start();
+  function start() {
+    lastDrawTime = Date.now();
+    running.value = true;
+    redraw();
   }
-}
+
+  function stop() {
+    running.value = false;
+    lastDrawTime = 0;
+  }
+
+  clickBtn = () => {
+    if (running.value) {
+      stop();
+    } else {
+      start();
+    }
+  };
+});
 </script>
 
 <style scoped></style>
