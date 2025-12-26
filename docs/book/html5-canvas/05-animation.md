@@ -241,3 +241,52 @@ function animation(now) {
 可以看到，没有出现灰色背景，说明浏览器的确有双缓冲。
 
 ## 基于时间的运动
+
+不论底层的帧速率如何，动画都应该以稳定的速度播放才对。
+
+想让动画以稳定的速度运行，而不受帧速率的影响，那就要根据物体的速度计算出它在两帧之间所移动的像素数。计算公式如下：
+
+$$
+\frac{像素}{帧}=\frac{像素}{秒} / \frac{帧}{秒}
+$$
+
+该公式页可以写成如下形式：
+
+$$
+\frac{像素}{帧}=\frac{像素}{秒} \times \frac{秒}{帧}
+$$
+
+上述公式可以算出问题每一帧应该移动多少像素。代码如下：
+
+```js
+function updateTimeBased(time) {
+  let disc = null;
+  let elapsedTime = time - lastTime;
+  for (let i = 0; i < discs.length; ++i) {
+    disc = discs[i];
+    // 基于时间的移动速度
+    deltaX = disc.velocityX * (elapsedTime / 1000);
+    deltaY = disc.velocityY * (elapsedTime / 1000);
+
+    if (
+      disc.x + deltaX + disc.radius > topContext.canvas.width ||
+      disc.x + deltaX - disc.radius < 0
+    ) {
+      disc.velocityX = -disc.velocityX;
+      deltaX = -deltaX;
+    }
+    if (
+      disc.y + deltay + disc.radius > topContext.canvas.height ||
+      disc.y + deltaY - disc.radius < 0
+    ) {
+      disc.velocityY = -disc.velocityY;
+      deltaY = -deltaY;
+    }
+    disc.x = disc.x + deltaX;
+    disc.y = disc.y + deltaY;
+    lastTime = time;
+  }
+}
+```
+
+## 背景的滚动
