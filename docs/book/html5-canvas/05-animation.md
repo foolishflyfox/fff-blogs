@@ -5,6 +5,7 @@ import {
   FrameRateCalc,
   FrameRateCalcV2,
   TestDoubleCache,
+  MovingSky,
 } from './codes/05';
 </script>
 
@@ -290,3 +291,25 @@ function updateTimeBased(time) {
 ```
 
 ## 背景的滚动
+
+很多动画的背景本身也是移动的，如下示例所示，以流动的云彩作为背景，你也可以实现一幅动画，将其用作某款横向卷轴电子游戏的背景。
+
+<MovingSky />
+
+该示例通过移动 canvas 绘图环境对象的原点坐标来实现背景滚动效果，代码如下：
+
+```ts
+cosnt SKY_VELOCITY = 30; // 每秒移动30个像素
+let skyOffset = 0; // 移动偏移量
+...
+function draw() {
+  skyOffset = skyOffset < canvas.width ? skyOffset + SKY_VELOCITY / fps : 0;
+  context.save();
+  context.translate(-skyOffset, 0);
+  context.drawImage(sky, 0, 0);
+  context.drawImage(sky, sky.width, 0);
+  context.restore();
+}
+```
+
+## 视差动画
