@@ -10,7 +10,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
+import { onMounted, ref, nextTick } from "vue";
 import skyUrl from "../shared/images/sky.png?url";
 import CanvasContainer from "../CanvasContainer.vue";
 
@@ -18,7 +18,7 @@ const running = ref(false);
 let ctx: CanvasRenderingContext2D | undefined;
 const skyVelocity = 30;
 const cw = 600;
-const ch = 300;
+const ch = 270;
 let translate = 0;
 let lastDrawTime = 0;
 let clickBtn = () => {};
@@ -66,6 +66,7 @@ onMounted(() => {
       start();
     }
   };
+  nextTick(clickBtn);
 });
 </script>
 

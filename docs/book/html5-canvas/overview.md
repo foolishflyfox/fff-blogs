@@ -51,7 +51,7 @@
 - `createLinearGradient`: [线性渐变](./02-drawing#渐变色与图案)
 - `createRadialGradient`: [放射渐变](./02-drawing#放射渐变)
 - `createConicGradient`: [锥形渐变](./02-drawing#锥形渐变)
-- `createPattern`: 创建图案
+- `createPattern`: [创建图案](./02-drawing#图案)
 #### 绘制
 - `globalCompositeOperation`: [合成](./02-drawing#图像合成)
 - `fillText`: 填充文本
