@@ -8,6 +8,7 @@ import {
   MovingSky,
   ParallaxDemo,
   DragMagnifier,
+  TimerDemo,
 } from './codes/05';
 </script>
 
@@ -329,3 +330,9 @@ function draw() {
 <DragMagnifier />
 
 ## 定时动画
+
+### 秒表
+
+下面的示例模拟了一块秒表，可以可以在程序的文本框中输入倒计时的秒数，然后按下 “开始” 按钮来启动它。启动后，其指针会随着时间的流逝平缓地绕回 0 点。
+
+<TimerDemo />

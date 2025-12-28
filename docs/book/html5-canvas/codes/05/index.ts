@@ -6,3 +6,4 @@ export { default as TestDoubleCache } from "./TestDoubleCache.vue";
 export { default as MovingSky } from "./MovingSky.vue";
 export { default as ParallaxDemo } from "./ParallaxDemo.vue";
 export { default as DragMagnifier } from "./magnifier/DragMagnifier.vue";
+export { default as TimerDemo } from "./TimerDemo.vue";
