@@ -123,7 +123,6 @@ function update() {
 }
 
 watch(isRunning, (v) => {
-  console.log("####");
   if (v) {
     update();
   }
