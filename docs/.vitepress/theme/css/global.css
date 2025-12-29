@@ -143,6 +143,57 @@ button.raw-style:active {
   background: #ddd !important;
 }
 
+input.raw-style {
+  /* 重置默认样式 */
+  -webkit-appearance: none;
+  -moz-appearance: textfield;
+  appearance: none;
+
+  /* 盒模型 */
+  /* width: 120px; */
+  /* height: 36px; */
+  padding: 0 3px;
+
+  /* 边框和背景 */
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  background-color: #ffffff;
+
+  /* 文字样式 */
+  font-size: 14px;
+  /* line-height: 1.5; */
+  color: #333333;
+  text-align: left;
+
+  /* 其他 */
+  outline: none;
+  box-sizing: border-box;
+  transition: all 0.3s ease;
+}
+
+/* 焦点状态 */
+input.raw-style:focus {
+  border-color: #4caf50;
+  box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.2);
+}
+
+/* 悬停状态 */
+input.raw-style:hover {
+  border-color: #999999;
+}
+
+/* 禁用状态 */
+input.raw-style:disabled {
+  background-color: #f5f5f5;
+  color: #999999;
+  cursor: not-allowed;
+}
+
+/* 无效状态 */
+input.raw-style:invalid {
+  border-color: #f44336;
+}
+
 /* 标准化 select 样式 */
 select.standard {
   /* 盒模型 */
