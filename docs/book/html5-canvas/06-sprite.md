@@ -3,6 +3,7 @@ import {
   BallSprite,
   ClockSprite,
   BombSprite,
+  SpriteRunning,
 } from './codes/06';
 </script>
 
@@ -246,3 +247,62 @@ function animate() {
 }
 requestAnimationFrame(animate);
 ```
+
+### 精灵表绘制器
+
+为了节省磁盘空间、减少下载次数，如果用于制作动画的精灵对象，其每帧所用的图像都比较小，那么就可以把它们都放在一张图片中。
+
+如下所示，是包含动画每一帧图像的图片，称为精灵表(sprite sheet)。
+
+![精灵表](./codes/shared/images/sprite-sheet.jpg)
+
+在绘制动画的某一帧时，我们从精灵表中将该帧图像所对应的矩形区域复制到屏幕上，即可将其显示出来。
+
+从一张图片中复制多个矩形区域中的图像，要比直接复制多张图像到屏幕上快得多。而且，将许多小图像存放在一个图形文件中，可以极大地减小应用程序所发送的 HTTP 请求数，所以不论从哪个方面看，使用精灵表来制作动画都是不错的选择。
+
+精灵表绘制器(sprite sheet painter)会把精灵表中表示当前动画帧的那个单元格画出来。绘制器对象中还有一个数组索引，该数组中的元素对应于精灵表中每个单元格的信息。调用 `advance()` 方法可以将索引加 1.下面列出了精灵表绘制器的代码。
+
+```ts
+interface Cell {
+  x: number;
+  y: number;
+  w: number;
+  h: number;
+}
+
+export class SpriteSheetPainter {
+  cells: Cell[];
+  cellIndex: number;
+  spriteSheet: HTMLImageElement;
+  constructor(spriteSheet: HTMLImageElement, cells?: Cell[]) {
+    this.spriteSheet = spriteSheet;
+    this.cells = cells || [];
+    this.cellIndex = 0;
+  }
+  advance() {
+    if (this.cellIndex === this.cells.length - 1) {
+      this.cellIndex = 0;
+    } else {
+      this.cellIndex++;
+    }
+  }
+  paint(sprite: Sprite, context: CanvasRenderingContext2D) {
+    const cell = this.cells[this.cellIndex];
+    context.drawImage(
+      this.spriteSheet,
+      cell.x,
+      cell.y,
+      cell.w,
+      cell.h,
+      sprite.left,
+      sprite.top,
+      cell.w,
+      cell.h
+    );
+  }
+}
+```
+
+实现的效果如下：
+
+<SpriteRunning />

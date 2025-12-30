@@ -57,3 +57,43 @@ export class ImagePainter {
     }
   }
 }
+
+export interface Cell {
+  x: number;
+  y: number;
+  w: number;
+  h: number;
+}
+
+export class SpriteSheetPainter {
+  cells: Cell[];
+  cellIndex: number;
+  spriteSheet: HTMLImageElement;
+  constructor(spriteSheet: HTMLImageElement, cells?: Cell[]) {
+    this.spriteSheet = spriteSheet;
+    this.cells = cells || [];
+    this.cellIndex = 0;
+  }
+  advance() {
+    if (this.cellIndex === this.cells.length - 1) {
+      this.cellIndex = 0;
+    } else {
+      this.cellIndex++;
+    }
+  }
+  paint(sprite: Sprite, context: CanvasRenderingContext2D) {
+    const cell = this.cells[this.cellIndex];
+    console.log("@@@", this.cellIndex);
+    context.drawImage(
+      this.spriteSheet,
+      cell.x,
+      cell.y,
+      cell.w,
+      cell.h,
+      sprite.left,
+      sprite.top,
+      sprite.width,
+      sprite.height
+    );
+  }
+}
