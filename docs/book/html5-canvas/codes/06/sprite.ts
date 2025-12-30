@@ -37,3 +37,23 @@ export class Sprite {
     }
   }
 }
+
+export class ImagePainter {
+  image: HTMLImageElement;
+  constructor(imageUrl: string) {
+    this.image = new Image();
+    this.image.src = imageUrl;
+  }
+
+  paint(sprite: Sprite, context: CanvasRenderingContext2D) {
+    if (this.image.complete) {
+      context.drawImage(
+        this.image,
+        sprite.left,
+        sprite.top,
+        sprite.width,
+        sprite.height
+      );
+    }
+  }
+}

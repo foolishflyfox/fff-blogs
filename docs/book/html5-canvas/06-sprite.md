@@ -2,6 +2,7 @@
 import {
   BallSprite,
   ClockSprite,
+  BombSprite,
 } from './codes/06';
 </script>
 
@@ -197,3 +198,51 @@ function drawHands() {
 :::
 
 ### 图像绘制器
+
+图像绘制器对象含有一个指向图像对象的引用，它会将此图像绘制到经由 `paint()` 方法所传入的绘图环境对象之上。图形绘制器实现起来很简单，如下代码所示：
+
+```ts
+class ImagePainter {
+  image: HTMLImageElement;
+  constructor(imageUrl: string) {
+    this.image = new Image();
+    this.image.src = imageUrl;
+  }
+
+  paint(sprite: Sprite, context: CanvasRenderingContext2D) {
+    if (this.image.complete) {
+      context.drawImage(
+        this.image,
+        sprite.left,
+        sprite.top,
+        sprite.width,
+        sprite.height
+      );
+    }
+  }
+}
+```
+
+在创建图像绘制器时，需要将指向 URL 的引用传给 `ImagePainter` 构造器。只有当图像完全载入后，图像绘制器的 `paint` 方法才会将其绘制出来。
+
+如下所示的这个精灵，就是用图像绘制器来构建的。
+
+<BombSprite />
+
+代码如下，演示了一幅简单的动画，它反复地绘制一个含有炸弹图像的精灵。
+
+```ts
+const canvas = document.getElementById("canvas");
+const ctx = canvas.getContext("2d");
+const bomb = new Sprite("bomb", new ImagePainter(bombUrl));
+bomb.left = 220;
+bomb.top = 80;
+bomb.width = 180;
+bomb.height = 130;
+function animate() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  bomb.paint(ctx);
+  requestAnimationFrame(animate);
+}
+requestAnimationFrame(animate);
+```
