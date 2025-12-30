@@ -1,6 +1,7 @@
 <script setup>
 import {
   BallSprite,
+  ClockSprite,
 } from './codes/06';
 </script>
 
@@ -135,6 +136,8 @@ Painter 对象只需实现如下方法即可：`void paint(sprite, context)`。�
 ### 描边与填充绘制器
 
 描边与填充绘制器(stroe and fill painter)会调用包括 `stroe` 与 `fill` 在内的 Canvas 图形函数来绘制精灵。如下示例中的时钟，它的三个指针就是使用精灵来表示的。
+
+<ClockSprite />
 
 首先，程序创建了一个用于绘制精灵的对象，然后这个 Painter 对象传给 Sprite 构造器。
 
