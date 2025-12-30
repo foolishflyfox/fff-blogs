@@ -83,7 +83,7 @@ export class SpriteSheetPainter {
   }
   paint(sprite: Sprite, context: CanvasRenderingContext2D) {
     const cell = this.cells[this.cellIndex];
-    console.log("@@@", this.cellIndex);
+
     context.drawImage(
       this.spriteSheet,
       cell.x,
