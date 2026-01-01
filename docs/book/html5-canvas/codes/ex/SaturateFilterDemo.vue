@@ -2,9 +2,9 @@
   <div>
     <div>
       <label class="flex-y-center">
-        对比度:
-        <input type="range" :min="0" :max="300" :step="1" v-model="contrast" />
-        <div>&nbsp; contrast({{ contrast }}%)</div>
+        饱和度比例:
+        <input type="range" :min="0" :max="100" :step="1" v-model="saturate" />
+        <div>&nbsp; {{ saturateArg }}</div>
       </label>
     </div>
     <CanvasContainer :draw :width="200" :height="200" />
@@ -12,11 +12,12 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from "vue";
+import { computed, ref, watch } from "vue";
 import CanvasContainer from "../CanvasContainer.vue";
 import firefoxUrl from "../shared/images/firefox-logo.svg?url";
 
-const contrast = ref(200);
+const saturate = ref(70);
+const saturateArg = computed(() => `saturate(${saturate.value}%)`);
 const image = new Image();
 image.src = firefoxUrl;
 
@@ -25,12 +26,12 @@ function draw(ctx: CanvasRenderingContext2D) {
   function redraw() {
     ctx.clearRect(0, 0, cw, ch);
     ctx.save();
-    ctx.filter = `contrast(${contrast.value}%)`;
+    ctx.filter = saturateArg.value;
     ctx.drawImage(image, 0, 0);
     ctx.restore();
   }
   image.onload = redraw;
-  watch(contrast, redraw);
+  watch(saturate, redraw);
 }
 </script>
 

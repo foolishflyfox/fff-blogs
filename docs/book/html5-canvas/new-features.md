@@ -4,6 +4,13 @@ import {
   BrightnessFilterDemo,
   ContrastFilterDemo,
   DropShadowFilterDemo,
+  GrayscaleFilterDemo,
+  HueRotateFilterDemo,
+  InvertFilterDemo,
+  OpacityFilterDemo,
+  SaturateFilterDemo,
+  SepiaFilterDemo,
+  NoneFilterDemo,
 } from "./codes/ex";
 </script>
 
@@ -16,6 +23,12 @@ import {
 `CanvasRenderingContext2D.filter` 属性用来提供模糊、灰度等滤镜效果。它类似于 CSS 的 filter 属性，并接受相同的值。
 
 `filter` 属性接受字符串类型值，可以是 `"none"` 或者是以下一个或多个滤镜函数。
+
+#### 不应用滤镜
+
+初始值为 `none`，表示不应用滤镜，如下所示：
+
+<NoneFilterDemo />
 
 #### 高斯模糊滤镜
 
@@ -35,7 +48,7 @@ import {
 
 <ContrastFilterDemo />
 
-#### drop-shadow 阴影
+#### drop-shadow 阴影滤镜
 
 将阴影效果应用于绘图。阴影效果实际上是绘图 alpha 蒙版的模糊、偏移版本，以特定颜色绘制，位于绘图下方，此函数最多接受五个参数：
 
@@ -45,3 +58,39 @@ import {
 - `color`: 阴影颜色
 
 <DropShadowFilterDemo />
+
+#### grayscale 灰度滤镜
+
+将绘图转换为灰度，值为 `100%` 完全灰度化，值为 `0%` 保持绘图不变。
+
+<GrayscaleFilterDemo />
+
+#### hue-rotate 色相旋转滤镜
+
+对绘图应用色相旋转，值为 `0deg` 保持输入不变。
+
+<HueRotateFilterDemo />
+
+#### invert 反转滤镜
+
+反转绘图，值为 `100%` 表示完全反转，为 `0%` 表示保持绘图不变。
+
+<InvertFilterDemo />
+
+#### opacity 不透明度滤镜
+
+对绘图应用不透明度，值为 `0%` 表示完全透明，值为 `100%` 表示保持绘图不变。
+
+<OpacityFilterDemo />
+
+#### saturate 饱和度滤镜
+
+修改绘图饱和度，值为 `0%` 表示完全不饱和，值为 `100%` 表示保持绘图不变。
+
+<SaturateFilterDemo />
+
+#### sepia 深褐色滤镜
+
+将绘图转换为深褐色，值为 `100%` 表示完全深褐色，值为 `0%` 保持绘图不变。
+
+<SepiaFilterDemo />

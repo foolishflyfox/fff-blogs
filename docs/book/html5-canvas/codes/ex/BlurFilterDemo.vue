@@ -14,22 +14,23 @@ import { ref, watch } from "vue";
 import CanvasContainer from "../CanvasContainer.vue";
 import firefoxUrl from "../shared/images/firefox-logo.svg?url";
 
-const blurArg = ref(0);
+const blurArg = ref(5);
 
 function draw(ctx: CanvasRenderingContext2D) {
   const { width: cw, height: ch } = ctx.canvas;
   const image = new Image();
   image.src = firefoxUrl;
-  image.onload = () => {
-    ctx.drawImage(image, 0, 0);
-  };
-  watch(blurArg, (v) => {
+  function redraw() {
     ctx.clearRect(0, 0, cw, ch);
     ctx.save();
-    ctx.filter = `blur(${v}px)`;
+    ctx.filter = `blur(${blurArg.value}px)`;
     ctx.drawImage(image, 0, 0);
     ctx.restore();
-  });
+  }
+  image.onload = () => {
+    redraw();
+  };
+  watch(blurArg, redraw);
 }
 </script>
 

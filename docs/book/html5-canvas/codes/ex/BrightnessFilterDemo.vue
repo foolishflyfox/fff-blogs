@@ -22,7 +22,7 @@ import { ref, watch } from "vue";
 import CanvasContainer from "../CanvasContainer.vue";
 import firefoxUrl from "../shared/images/firefox-logo.svg?url";
 
-const brightness = ref(100);
+const brightness = ref(200);
 const image = new Image();
 image.src = firefoxUrl;
 

@@ -1,4 +1,11 @@
 export { default as BlurFilterDemo } from "./BlurFilterDemo.vue";
 export { default as BrightnessFilterDemo } from "./BrightnessFilterDemo.vue";
+export { default as GrayscaleFilterDemo } from "./GrayscaleFilterDemo.vue";
 export { default as ContrastFilterDemo } from "./ContrastFilterDemo.vue";
 export { default as DropShadowFilterDemo } from "./DropShadowFilterDemo.vue";
+export { default as SepiaFilterDemo } from "./SepiaFilterDemo.vue";
+export { default as HueRotateFilterDemo } from "./HueRotateFilterDemo.vue";
+export { default as InvertFilterDemo } from "./InvertFilterDemo.vue";
+export { default as OpacityFilterDemo } from "./OpacityFilterDemo.vue";
+export { default as SaturateFilterDemo } from "./SaturateFilterDemo.vue";
+export { default as NoneFilterDemo } from "./NoneFilterDemo.vue";
