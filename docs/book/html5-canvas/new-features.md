@@ -3,6 +3,7 @@ import {
   BlurFilterDemo,
   BrightnessFilterDemo,
   ContrastFilterDemo,
+  DropShadowFilterDemo,
 } from "./codes/ex";
 </script>
 
@@ -33,3 +34,14 @@ import {
 调整绘图的对比度，值为 `0%` 会生成完全黑色的绘图，值为 100% 保持绘图不变。例如 `constrast(1)`,`constrast(80%)`,`constrast(2)`。
 
 <ContrastFilterDemo />
+
+#### drop-shadow 阴影
+
+将阴影效果应用于绘图。阴影效果实际上是绘图 alpha 蒙版的模糊、偏移版本，以特定颜色绘制，位于绘图下方，此函数最多接受五个参数：
+
+- `offset-x`: 指定水平偏移距离，例如 `10px`,`2em`；
+- `offset-y`: 指定垂直偏移距离，例如 `10px`,`2em`；
+- `blur-radius`: 模糊半径，该值越大，模糊程度越高，因此阴影会变得更大更淡，不允许使用复制；
+- `color`: 阴影颜色
+
+<DropShadowFilterDemo />
