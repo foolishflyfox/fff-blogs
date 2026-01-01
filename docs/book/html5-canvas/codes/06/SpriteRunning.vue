@@ -7,10 +7,9 @@ import CanvasContainer from "../CanvasContainer.vue";
 import { Cell, Sprite, SpriteSheetPainter } from "./sprite";
 import runningSpriteSheetUrl from "../shared/images/running-sprite-sheet.png?url";
 
-const image = new Image();
-image.src = runningSpriteSheetUrl;
-
 function draw(ctx: CanvasRenderingContext2D) {
+  const image = new Image();
+  image.src = runningSpriteSheetUrl;
   const { width: cw, height: ch } = ctx.canvas;
   const runnerCells: Cell[] = [
     { x: 0, y: 0, w: 47, h: 64 },
