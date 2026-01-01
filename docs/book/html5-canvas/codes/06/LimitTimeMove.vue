@@ -32,16 +32,12 @@ function draw(ctx: CanvasRenderingContext2D) {
     ctx.save();
     ctx.fillStyle = "#7393d9";
     ctx.moveTo(cw / 2 - m * 2, bt + m * 2);
-    ctx.quadraticCurveTo(cw / 2 - m, bt + m, cw / 2 - m, bt + m * 3);
+    // ctx.quadraticCurveTo(cw / 2 - m, bt + m, cw / 2 - m, bt + m * 3);
+    ctx.arcTo(cw / 2 - m, bt + m, cw / 2 - m, bt + m * 3, 1 * m);
     ctx.lineTo(cw / 2 - m, bt + bh - m * 3);
-    ctx.quadraticCurveTo(
-      cw / 2 - m,
-      bt + bh - m,
-      cw / 2 - m * 2,
-      bt + bh - m * 2
-    );
+    ctx.arcTo(cw / 2 - m, bt + bh - m, cw / 2 - m * 2, bt + bh - m * 2, m);
     ctx.lineTo(bl + 2 * m, bt + bh / 2 + m);
-    ctx.quadraticCurveTo(bl + m, bt + bh / 2, bl + 2 * m, bt + bh / 2 - m);
+    ctx.arcTo(bl + m, bt + bh / 2, bl + 2 * m, bt + bh / 2 - m, m);
     ctx.closePath();
     ctx.fill();
     ctx.restore();

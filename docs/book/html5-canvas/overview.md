@@ -23,6 +23,7 @@
 - `canvas`: 所属 canvas 对象
 - `direction`: 文本方向
 - `fillStyle`: 填充色
+- `filter`: [滤镜](.//new-features#filter-滤镜)
 - `font`: [字体](./03-text#%E8%AE%BE%E7%BD%AE%E5%AD%97%E5%9E%8B)
 - `globalAlpha`: 全局透明度
 - `globalCompsiteOperation`: 全局叠加模式

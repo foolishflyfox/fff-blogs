@@ -99,6 +99,7 @@ export default defineConfig({
                 { text: "图像与视频", link: "04-image-and-video" },
                 { text: "动画", link: "05-animation" },
                 { text: "精灵", link: "06-sprite" },
+                { text: "新特性", link: "new-features" },
               ],
             },
           ],
