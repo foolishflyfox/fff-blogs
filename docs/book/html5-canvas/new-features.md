@@ -11,6 +11,12 @@ import {
   SaturateFilterDemo,
   SepiaFilterDemo,
   NoneFilterDemo,
+  FontStretchDemo,
+  ImageSmoothingEnableDemo,
+  LetterSpacingDemo,
+  WordSpacingDemo,
+  EllipseDemo,
+  RoundRectDemo,
 } from "./codes/ex";
 </script>
 
@@ -94,3 +100,39 @@ import {
 将绘图转换为深褐色，值为 `100%` 表示完全深褐色，值为 `0%` 保持绘图不变。
 
 <SepiaFilterDemo />
+
+<!-- ### fontStretch 字体伸缩
+
+指定绘制文本时字体如何被扩展或压缩。
+
+<FontStretchDemo /> -->
+
+### imageSmoothingEnable 图片平滑处理
+
+`imageSmoothingEnable` 属性用于设置是否对缩放后的图片矩形平滑处理，`true` 表示矩形平滑处理(默认)，`false` 表示不矩形。
+
+这个属性对像素为主的游戏或其他应用很有用。放大图像时，默认的调整大小算法都会使像素变模糊。可以将此属性设为 false 设为 false 来保证清晰度。
+
+<ImageSmoothingEnableDemo />
+
+### letterSpacing 字母间距
+
+可以使用该属性来获取或设置间距。如果设置为无效或无法解析的值，属性值将保持不变。
+
+<LetterSpacingDemo />
+
+### wordSpacing 单词间距
+
+可用于获取或设置单词间距。如果设置为无效或无法解析的值，则属性值将保持不变。
+
+<WordSpacingDemo />
+
+## 实例方法
+
+### ellipse 绘制椭圆
+
+<EllipseDemo />
+
+### roundRect 圆角矩形
+
+<RoundRectDemo />

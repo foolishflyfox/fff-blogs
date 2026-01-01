@@ -27,6 +27,9 @@
 - `font`: [字体](./03-text#%E8%AE%BE%E7%BD%AE%E5%AD%97%E5%9E%8B)
 - `globalAlpha`: 全局透明度
 - `globalCompsiteOperation`: 全局叠加模式
+- `imageSmoothingEnable`: 图片平滑处理
+- `letterSpacing`: 字母间距离
+- `wordSpacing`: 单词间距
 - `lineCap`: 线段端点形状
 - `lineJoin`: 线段拐点形状
 - `lineWidth`: 线段宽度
@@ -43,11 +46,13 @@
 #### 状态
 - `save`: 保存 canvas 状态
 - `restore`: 恢复 canvas 状态
+- `reset`: 重置上下文状态
 - `setLineDash`: 设置虚线模式
 - `getLineDash`: 获取虚线模式
 - `getImageData`: 获取绘图数据
 - `putImageData`: 恢复绘图数据
 - `createImageData`: 创建空白绘图
+- `getContextAttributes`: 获取上下文属性
 #### 创建
 - `createLinearGradient`: [线性渐变](./02-drawing#渐变色与图案)
 - `createRadialGradient`: [放射渐变](./02-drawing#放射渐变)
@@ -66,8 +71,10 @@
 - `moveTo`: 移动画笔
 - `lineTo`: 绘制线段路径
 - `rect`: 绘制矩形
+- `roundRect`: 绘制圆角矩形
 - `arc`: 绘制圆弧
 - `arcTo`: 绘制圆弧
+- `ellipse`: 绘制椭圆
 - `quadraticCurveTo`: 二次贝塞尔
 - `bezierCurveTo`: 三次贝塞尔
 - `stroke`: 当前路径描边
@@ -79,8 +86,10 @@
 - `transform`: 叠加变换
 - `setTransform`: 设置变换
 - `getTransform`: 获取变换
+- `resetTransform`: 重置变换
 #### 计算
 - `isPointInPath`: 是否包含点
+- `isPointInStroke`: 是否在描边上
 - `measureText`: 计算文本信息
 ## 渐变色
 - `addColorStop`: 添加颜色停止点
