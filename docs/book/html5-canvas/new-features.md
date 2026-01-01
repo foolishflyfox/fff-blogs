@@ -2,6 +2,7 @@
 import {
   BlurFilterDemo,
   BrightnessFilterDemo,
+  ContrastFilterDemo,
 } from "./codes/ex";
 </script>
 
@@ -26,3 +27,9 @@ import {
 将线性乘数应用于绘图，使其看起来更亮或更暗。低于 `100%` 的值会使图像变暗，高于 `100%` 的值会使其变量，值为 `0%` 会生成全黑色的图像，值为 `100%` 保持不变，例如 `brightness(1)`,`brightness(80%)`,`brightness(2)`。
 
 <BrightnessFilterDemo />
+
+#### contrast 对比度滤镜
+
+调整绘图的对比度，值为 `0%` 会生成完全黑色的绘图，值为 100% 保持绘图不变。例如 `constrast(1)`,`constrast(80%)`,`constrast(2)`。
+
+<ContrastFilterDemo />
