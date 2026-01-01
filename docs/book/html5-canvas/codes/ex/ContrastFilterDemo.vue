@@ -17,10 +17,10 @@ import CanvasContainer from "../CanvasContainer.vue";
 import firefoxUrl from "../shared/images/firefox-logo.svg?url";
 
 const contrast = ref(200);
-const image = new Image();
-image.src = firefoxUrl;
 
 function draw(ctx: CanvasRenderingContext2D) {
+  const image = new Image();
+  image.src = firefoxUrl;
   const { width: cw, height: ch } = ctx.canvas;
   function redraw() {
     ctx.clearRect(0, 0, cw, ch);

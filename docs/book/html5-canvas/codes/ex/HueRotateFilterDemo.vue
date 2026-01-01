@@ -18,10 +18,10 @@ import firefoxUrl from "../shared/images/firefox-logo.svg?url";
 
 const hueRotate = ref(180);
 const hueRotateArg = computed(() => `hue-rotate(${hueRotate.value}deg)`);
-const image = new Image();
-image.src = firefoxUrl;
 
 function draw(ctx: CanvasRenderingContext2D) {
+  const image = new Image();
+  image.src = firefoxUrl;
   const { width: cw, height: ch } = ctx.canvas;
   function redraw() {
     ctx.clearRect(0, 0, cw, ch);

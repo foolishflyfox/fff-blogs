@@ -53,14 +53,14 @@ const offsetX = ref(10);
 const offsetY = ref(10);
 const blurRadius = ref(5);
 const color = ref("#00bfff");
-const image = new Image();
 const shadow = computed(
   () =>
     `drop-shadow(${offsetX.value}px ${offsetY.value}px ${blurRadius.value}px ${color.value})`
 );
-image.src = firefoxUrl;
 
 function draw(ctx: CanvasRenderingContext2D) {
+  const image = new Image();
+  image.src = firefoxUrl;
   const { width: cw, height: ch } = ctx.canvas;
   function redraw() {
     ctx.clearRect(0, 0, cw, ch);

@@ -6,10 +6,9 @@
 import CanvasContainer from "../CanvasContainer.vue";
 import firefoxUrl from "../shared/images/firefox-logo.svg?url";
 
-const image = new Image();
-image.src = firefoxUrl;
-
 function draw(ctx: CanvasRenderingContext2D) {
+  const image = new Image();
+  image.src = firefoxUrl;
   image.onload = () => {
     ctx.save();
     ctx.filter = "none";
