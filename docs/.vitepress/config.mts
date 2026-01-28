@@ -207,5 +207,8 @@ export default defineConfig({
       },
     },
   },
-  ignoreDeadLinks: [/^http?:\/\/localhost/],
+  ignoreDeadLinks: [
+    // 以 http://localhost 开始的 url，不检查是否为 dead link
+    /^http:\/\/localhost/,
+  ],
 });
