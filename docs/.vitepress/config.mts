@@ -24,7 +24,7 @@ function escapeHtml(unsafe: any) {
  */
 function addLinkPrefix(
   item: SidebarItemX,
-  prefix = ""
+  prefix = "",
 ): DefaultTheme.SidebarItem {
   if (item.link !== undefined) {
     item.link = posix.join(prefix, item.link);
@@ -137,6 +137,15 @@ export default defineConfig({
                 },
               ],
             },
+            {
+              text: "FUXA 教程",
+              prefix: "fuxa",
+              collapsed: true,
+              items: [
+                { text: "概览", link: "overview" },
+                { text: "开始", link: "get-start" },
+              ],
+            },
           ],
         },
       ].map((e) => addLinkPrefix(e, "/technology")),
@@ -173,7 +182,7 @@ export default defineConfig({
           try {
             const { root } = transformer.transform(token.content.trim());
             return `<svg class="markmap-svg" data-json='${escapeHtml(
-              JSON.stringify(root)
+              JSON.stringify(root),
             )}'></svg>`;
           } catch (ex) {
             return `<pre>${ex}</pre>`;
