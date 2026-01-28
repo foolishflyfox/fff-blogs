@@ -207,4 +207,5 @@ export default defineConfig({
       },
     },
   },
+  ignoreDeadLinks: [/^http?:\/\/localhost/],
 });
